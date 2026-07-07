@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Report Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Inter",sans-serif;background:#F3EFF6;color:#241429;height:100vh;display:flex;overflow:hidden;}
+.sidebar{width:390px;min-width:390px;background:#FFFFFF;border-right:1px solid rgba(102,20,102,0.1);box-shadow:4px 0 28px rgba(102,20,102,0.08);display:flex;flex-direction:column;overflow:hidden;}
+.sb-hdr{padding:14px 17px;border-bottom:1px solid rgba(102,20,102,0.1);display:flex;align-items:center;gap:9px;flex-shrink:0;}
+.sb-hdr img{width:28px;height:28px;border-radius:6px;object-fit:cover;}
+.sb-hdr h1{font-family:"Montserrat",sans-serif;font-weight:700;font-size:0.74rem;color:#661466;}
+.sb-hdr span{font-size:0.6rem;color:rgba(36,20,41,0.4);font-family:"Inter",sans-serif;margin-left:auto;}
+.sb-body{overflow-y:auto;flex:1;padding:13px 15px;}
+.sb-body::-webkit-scrollbar{width:3px;}
+.sb-body::-webkit-scrollbar-thumb{background:rgba(102,20,102,0.18);border-radius:2px;}
+.s-sec{background:#FBF8FD;border:1px solid rgba(102,20,102,0.12);border-radius:12px;padding:14px 15px;margin-bottom:14px;}
+.s-ttl{font-family:"Montserrat",sans-serif;font-size:0.88rem;font-weight:700;letter-spacing:-0.01em;color:#3D1F45;margin-bottom:11px;display:flex;align-items:center;gap:8px;}
+.s-sub{font-family:"Montserrat",sans-serif;font-size:0.66rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(36,20,41,0.42);margin:11px 0 7px;display:flex;align-items:center;gap:5px;}
+.s-sub::after{content:"";flex:1;height:1px;background:rgba(102,20,102,0.12);}
+.s-sub.mb{color:#883288;}.s-sub.ol{color:#A63FA6;}.s-sub.gm{color:#661466;}.s-sub.li{color:#2E86DE;}
+.sf{display:flex;flex-direction:column;gap:3px;margin-bottom:6px;}
+.sf label{font-size:0.6rem;font-weight:500;color:rgba(36,20,41,0.5);}
+.sf input,.sf textarea,.sf select{font-family:"Inter",sans-serif;font-size:0.76rem;padding:5px 7px;border:1px solid rgba(102,20,102,0.16);border-radius:5px;background:#FBF8FD;color:#241429;outline:none;width:100%;transition:border-color 0.15s;}
+.sf input:focus,.sf textarea:focus,.sf select:focus{border-color:#883288;}
+.sf input::placeholder,.sf textarea::placeholder{color:rgba(36,20,41,0.3);}
+.sf input[readonly]{opacity:0.55;cursor:default;}
+.sf textarea{resize:none;min-height:50px;overflow:hidden;font-family:"Inter",sans-serif;font-size:0.74rem;line-height:1.5;}
+.sf select{appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='rgba(36,20,41,0.5)' d='M5 7L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center;padding-right:22px;background-color:#FBF8FD;}
+.sf select option{background:#fff;color:#241429;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;}
+.g4ol{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:7px;}
+.crow{display:flex;align-items:center;gap:9px;margin-bottom:6px;}
+.clbl{font-size:0.6rem;font-weight:500;color:rgba(36,20,41,0.55);min-width:104px;flex-shrink:0;}
+.cfields{display:grid;grid-template-columns:1fr 1fr;gap:5px;flex:1;}
+.sb-ftr{padding:11px 14px;border-top:1px solid rgba(102,20,102,0.1);display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;}
+.btn{font-family:"Inter",sans-serif;font-weight:600;font-size:0.8rem;padding:9px 17px;border-radius:7px;cursor:pointer;border:none;}
+.btn-p{background:linear-gradient(135deg,#B544B5,#661466);color:#fff;}.btn-p:hover{background:linear-gradient(135deg,#C955C9,#7A1B7A);}
+.btn-g{background:rgba(102,20,102,0.08);color:#661466;}.btn-g:hover{background:rgba(102,20,102,0.15);}
+.plan-presets{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px;}
+.pbtn{font-family:"Inter",sans-serif;font-size:0.7rem;font-weight:600;padding:8px 14px;border-radius:7px;cursor:pointer;border:1px solid rgba(102,20,102,0.18);background:#FBF8FD;color:rgba(36,20,41,0.6);}
+.pbtn:hover{background:#883288;color:#fff;border-color:#883288;}
+.slide-nav{display:flex;align-items:center;gap:5px;padding:8px 14px;border-bottom:1px solid rgba(102,20,102,0.1);background:#F8F5FA;flex-shrink:0;}
+.snb{width:22px;height:22px;border-radius:4px;border:1px solid rgba(102,20,102,0.16);background:transparent;color:rgba(36,20,41,0.45);cursor:pointer;font-size:0.8rem;display:flex;align-items:center;justify-content:center;}
+.snb:hover{background:rgba(102,20,102,0.1);color:#661466;}
+.sdots{display:flex;gap:4px;}.sdot{width:16px;height:3px;border-radius:2px;background:rgba(102,20,102,0.18);cursor:pointer;transition:all 0.15s;}.sdot.active{background:#883288;}
+.slbl{font-family:"Inter",sans-serif;font-size:0.58rem;color:rgba(36,20,41,0.4);margin-left:6px;}
+.preview-area{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#EFE9F4;}
+.preview-wrap{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:14px;}
+.slide{width:880px;height:495px;position:relative;border-radius:10px;overflow:hidden;box-shadow:0 20px 70px rgba(0,0,0,0.6);flex-shrink:0;}
+.sd{background:linear-gradient(135deg,#1A0D2B 0%,#2D1052 100%);}
+.sp{background:linear-gradient(135deg,#2D1052 0%,#3D1570 100%);}
+.sa{background:linear-gradient(135deg,#3D1152 0%,#5A1A78 100%);}
+.slide::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:40px 40px;}
+.sc-dec{position:absolute;top:0;right:0;width:250px;height:250px;background:radial-gradient(circle at 100% 0%,rgba(177,100,255,0.14) 0%,transparent 70%);}
+.scb-dec{position:absolute;bottom:0;left:0;width:160px;height:160px;background:radial-gradient(circle at 0% 100%,rgba(107,47,160,0.1) 0%,transparent 70%);}
+.si{position:relative;z-index:2;padding:30px 38px;height:100%;display:flex;flex-direction:column;overflow:hidden;}
+.stag{font-family:"Inter",sans-serif;font-size:0.66rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.32);margin-bottom:2px;}
+.stitle{font-family:"Montserrat",sans-serif;font-size:1.55rem;font-weight:700;color:#fff;letter-spacing:-0.02em;margin-bottom:8px;line-height:1.15;}
+.slogo{position:absolute;top:20px;right:30px;display:flex;align-items:center;gap:6px;opacity:0.45;}
+.slogo img{width:18px;height:18px;border-radius:3px;object-fit:cover;}
+.slogo span{font-family:"Inter",sans-serif;font-size:0.54rem;color:rgba(255,255,255,0.5);}
+.kg{display:grid;gap:6px;}.kg2{grid-template-columns:repeat(2,1fr);}.kg3{grid-template-columns:repeat(3,1fr);}.kg4{grid-template-columns:repeat(4,1fr);}.kg5{grid-template-columns:repeat(5,1fr);}.kg6{grid-template-columns:repeat(6,1fr);}.kg7{grid-template-columns:repeat(7,1fr);}
+.kpi{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:9px 14px;display:flex;flex-direction:column;}
+.kpi.big{background:rgba(107,47,160,0.18);border:1px solid rgba(177,100,255,0.18);}
+.kl{font-size:0.62rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:4px;}
+.kv{font-family:"Inter",sans-serif;font-size:1.4rem;font-weight:600;color:#fff;line-height:1;}
+.kpi.big .kv{font-size:1.8rem;}
+.ks{font-size:0.66rem;color:rgba(255,255,255,0.4);margin-top:3px;font-family:"Inter",sans-serif;}
+.pm-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:4px;}
+.pm-nums{display:flex;gap:16px;}
+.pm-item{display:flex;flex-direction:column;gap:3px;}
+.pm-tag{font-family:"Inter",sans-serif;font-size:0.56rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:rgba(255,255,255,0.42);}
+.pm-tag.plan{color:#C9A6FF;}
+.conv-section{background:rgba(177,100,255,0.09);border:1px solid rgba(177,100,255,0.28);border-radius:12px;padding:12px 14px;margin-top:6px;}
+.pm-item .kv{font-size:1.3rem;}
+.pm-item.plan .kv{color:#C9A6FF;}
+.kb{display:inline-block;font-size:0.62rem;font-family:"Inter",sans-serif;padding:2px 6px;border-radius:4px;margin-top:4px;}
+.conv-section .kpi.pm{padding:6px 9px;}
+.conv-section .kl{font-size:0.56rem;margin-bottom:3px;}
+.conv-section .pm-row{margin-top:3px;gap:6px;}
+.conv-section .pm-nums{gap:10px;}
+.conv-section .pm-item .kv{font-size:1.05rem;}
+.conv-section .kpi:not(.pm){padding:8px 10px;}
+.conv-section .kpi:not(.pm) .kv{font-size:1.15rem;}
+.conv-section .kg6 .kpi.pm{padding:6px 7px;}
+.conv-section .kg6 .kl{font-size:0.5rem;margin-bottom:3px;}
+.conv-section .kg6 .pm-item .kv{font-size:0.88rem;}
+.conv-section .kg6 .pm-nums{gap:6px;}
+.conv-section .kg6 .pm-row{gap:4px;}
+.conv-section .kg6 .kpi:not(.pm){padding:6px 7px;}
+.conv-section .kg6 .kpi:not(.pm) .kv{font-size:1rem;}
+.conv-section .kg-lg.kg .kpi.pm{padding:13px 15px;}
+.conv-section .kg-lg.kg .kl{font-size:0.66rem;margin-bottom:7px;}
+.conv-section .kg-lg.kg .pm-row{margin-top:7px;gap:12px;}
+.conv-section .kg-lg.kg .pm-nums{gap:18px;}
+.conv-section .kg-lg.kg .pm-item .kv{font-size:1.45rem;}
+.conv-section .kg-lg.kg .kpi:not(.pm){padding:13px 15px;}
+.conv-section .kg-lg.kg .kpi:not(.pm) .kv{font-size:1.5rem;}
+.kg-compact.kg .kpi.pm{padding:7px 8px;}
+.kg-compact.kg .kl{font-size:0.5rem;margin-bottom:3px;}
+.kg-compact.kg .pm-row{margin-top:4px;gap:6px;}
+.kg-compact.kg .pm-nums{gap:8px;}
+.kg-compact.kg .pm-item .kv{font-size:0.95rem;}
+.kg-compact.kg .kpi:not(.pm){padding:7px 8px;}
+.kg-compact.kg .kpi:not(.pm) .kv{font-size:1.05rem;}
+.kg-bal.kg .kpi.pm{padding:6px 9px;}
+.kg-bal.kg .kl{font-size:0.58rem;margin-bottom:3px;}
+.kg-bal.kg .pm-row{margin-top:3px;gap:7px;}
+.kg-bal.kg .pm-nums{gap:11px;}
+.kg-bal.kg .pm-item .kv{font-size:1.08rem;}
+.kg-bal.kg .kpi:not(.pm){padding:8px 10px;}
+.kg-bal.kg .kpi:not(.pm) .kv{font-size:1.18rem;}
+.ok{background:rgba(26,122,74,0.22);color:#4AE08A;}.warn{background:rgba(180,83,9,0.22);color:#FCD34D;}.bad{background:rgba(192,57,43,0.22);color:#FC8181;}
+.c2{display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1;min-height:0;}
+.sch{flex:1;position:relative;min-height:0;}
+.frow{display:flex;gap:7px;margin-bottom:7px;}
+.fc{flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:7px;padding:11px 13px;}
+.fc.hl{background:rgba(107,47,160,0.25);border-color:rgba(177,100,255,0.25);}.fc.pr{background:rgba(26,122,74,0.22);border-color:rgba(74,224,138,0.2);}.fc.pr .fv{color:#4AE08A;}.fc.loss{background:rgba(192,57,43,0.22);border-color:rgba(252,129,129,0.2);}.fc.loss .fv{color:#FC8181;}
+.fl{font-size:0.6rem;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:5px;}
+.fv{font-family:"Inter",sans-serif;font-size:1.5rem;font-weight:600;color:#fff;}
+.tb{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:9px 12px;margin-bottom:6px;}
+.tl{font-size:0.6rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:5px;}
+.tt{font-size:0.82rem;color:rgba(255,255,255,0.68);line-height:1.55;word-break:break-word;}
+.shd{display:flex;align-items:center;gap:6px;margin-bottom:9px;}
+.shd-dot{width:6px;height:6px;border-radius:50%;background:#B07EFF;flex-shrink:0;}
+.shd-name{font-family:"Montserrat",sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:#B07EFF;}
+.shd-line{flex:1;height:1px;background:rgba(255,255,255,0.07);}
+.cov-ti{font-family:"Montserrat",sans-serif;font-size:2.7rem;font-weight:700;color:#fff;letter-spacing:-0.03em;line-height:1;margin-bottom:6px;}
+.cov-ti span{color:#B07EFF;}
+.cov-mo{font-family:"Inter",sans-serif;font-size:0.72rem;color:rgba(255,255,255,0.4);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:8px;}
+.cov-d{font-size:0.7rem;color:rgba(255,255,255,0.38);margin-bottom:22px;}
+.csv{font-family:"Inter",sans-serif;font-size:1.35rem;font-weight:500;color:#fff;}
+.csl{font-size:0.5rem;color:rgba(255,255,255,0.28);text-transform:uppercase;letter-spacing:0.07em;margin-top:2px;}
+.cov-stats{display:flex;gap:24px;}
+@media print{
+  @page{size:880px 495px;margin:0;}
+  html,body{margin:0;padding:0;background:#1A0D2B!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sidebar,.slide-nav,.sb-ftr{display:none!important;}
+  .preview-area{display:block!important;width:880px!important;overflow:visible!important;}
+  .preview-wrap{display:block!important;padding:0!important;margin:0!important;overflow:visible!important;}
+  #sc{display:block!important;}
+  .slide{width:880px!important;height:495px!important;border-radius:0!important;box-shadow:none!important;page-break-after:always!important;break-after:page!important;display:block!important;margin:0!important;overflow:hidden!important;}
+  .slide:last-child{page-break-after:avoid!important;break-after:avoid!important;}
+  .slide,.slide *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sb-hdr">
+    <img src="data:image/jpeg;base64,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" alt="logo">
+    <h1>Weekly Report Studio</h1>
+    <span id="sd"></span>
+  </div>
+  <div class="sb-body">
+    <div class="s-sec">
+      <div class="s-ttl">Період</div>
+      <div class="g3">
+        <div class="sf"><label>Місяць</label>
+          <select id="sel-month" onchange="render()">
+            <option value="">—</option>
+            <option>Січень</option><option>Лютий</option><option>Березень</option>
+            <option>Квітень</option><option>Травень</option><option>Червень</option>
+            <option>Липень</option><option>Серпень</option><option>Вересень</option>
+            <option>Жовтень</option><option>Листопад</option><option>Грудень</option>
+          </select>
+        </div>
+        <div class="sf"><label>Тиждень</label>
+          <select id="sel-week" onchange="render()">
+            <option value="">—</option>
+            <option>Тиждень 1</option><option>Тиждень 2</option><option>Тиждень 3</option>
+            <option>Тиждень 4</option><option>Тиждень 5</option>
+          </select>
+        </div>
+        <div class="sf"><label>Менеджер</label><input type="text" id="manager" placeholder="Ім'я" oninput="render()"></div>
+      </div>
+    </div>
+    <div class="s-sec">
+      <div class="s-ttl">План</div>
+      <div class="plan-presets">
+        <button type="button" class="pbtn" onclick="applyPlanPreset('none')">No Plan</button>
+        <button type="button" class="pbtn" onclick="applyPlanPreset('min')">Minimum</button>
+        <button type="button" class="pbtn" onclick="applyPlanPreset('avg')">Average</button>
+        <button type="button" class="pbtn" onclick="applyPlanPreset('real')">Realistic</button>
+        <button type="button" class="pbtn" onclick="applyPlanPreset('max')">Maximum</button>
+      </div>
+      <div class="s-sub mb" style="margin-top:2px">Manual Bidding</div>
+      <div class="g3">
+        <div class="sf"><label>Cover Letters</label><input type="number" id="pp_mb_cl" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Answers</label><input type="number" id="pp_mb_a" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Conversion %</label><input type="number" id="pp_mb_conv" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Calls</label><input type="number" id="pp_mb_c" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Qual.Leads</label><input type="number" id="pp_mb_ql" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Contracts</label><input type="number" id="pp_mb_co" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Viewed</label><input type="number" id="pp_mb_v" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Cover Letters to Answers %</label><input type="number" id="pp_mb_c2a" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Cover Letters to Viewed %</label><input type="number" id="pp_mb_c2v" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Answers to Calls %</label><input type="number" id="pp_mb_a2c" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Calls to Qual.Leads %</label><input type="number" id="pp_mb_c2ql" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Qual.Leads to Contracts %</label><input type="number" id="pp_mb_ql2co" placeholder="0" oninput="render()"></div>
+      </div>
+      <div class="s-sub ol" style="margin-top:4px">Organic Leads</div>
+      <div class="g4ol"><div><div style="font-size:0.54rem;font-weight:600;color:rgba(102,20,102,0.85);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">Invites</div><div class="sf"><label>Кіл-ть</label><input type="number" id="pp_ol_inv" placeholder="0" oninput="render()"></div><div class="sf"><label>Calls</label><input type="number" id="pp_ol_inv_c" placeholder="0" oninput="render()"></div><div class="sf"><label>QL</label><input type="number" id="pp_ol_inv_ql" placeholder="0" oninput="render()"></div><div class="sf"><label>Contr</label><input type="number" id="pp_ol_inv_co" placeholder="0" oninput="render()"></div><div class="sf"><label>Кіл-ть to Calls %</label><input type="number" id="pp_ol_inv_q2c" placeholder="0" oninput="render()"></div><div class="sf"><label>Calls to QL %</label><input type="number" id="pp_ol_inv_c2ql" placeholder="0" oninput="render()"></div><div class="sf"><label>QL to Contr %</label><input type="number" id="pp_ol_inv_ql2co" placeholder="0" oninput="render()"></div></div><div><div style="font-size:0.54rem;font-weight:600;color:rgba(102,20,102,0.85);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">DM</div><div class="sf"><label>Кіл-ть</label><input type="number" id="pp_ol_dm" placeholder="0" oninput="render()"></div><div class="sf"><label>Calls</label><input type="number" id="pp_ol_dm_c" placeholder="0" oninput="render()"></div><div class="sf"><label>QL</label><input type="number" id="pp_ol_dm_ql" placeholder="0" oninput="render()"></div><div class="sf"><label>Contr</label><input type="number" id="pp_ol_dm_co" placeholder="0" oninput="render()"></div><div class="sf"><label>Кіл-ть to Calls %</label><input type="number" id="pp_ol_dm_q2c" placeholder="0" oninput="render()"></div><div class="sf"><label>Calls to QL %</label><input type="number" id="pp_ol_dm_c2ql" placeholder="0" oninput="render()"></div><div class="sf"><label>QL to Contr %</label><input type="number" id="pp_ol_dm_ql2co" placeholder="0" oninput="render()"></div></div><div><div style="font-size:0.54rem;font-weight:600;color:rgba(102,20,102,0.85);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">PC</div><div class="sf"><label>Кіл-ть</label><input type="number" id="pp_ol_pc" placeholder="0" oninput="render()"></div><div class="sf"><label>Calls</label><input type="number" id="pp_ol_pc_c" placeholder="0" oninput="render()"></div><div class="sf"><label>QL</label><input type="number" id="pp_ol_pc_ql" placeholder="0" oninput="render()"></div><div class="sf"><label>Contr</label><input type="number" id="pp_ol_pc_co" placeholder="0" oninput="render()"></div><div class="sf"><label>Кіл-ть to Calls %</label><input type="number" id="pp_ol_pc_q2c" placeholder="0" oninput="render()"></div><div class="sf"><label>Calls to QL %</label><input type="number" id="pp_ol_pc_c2ql" placeholder="0" oninput="render()"></div><div class="sf"><label>QL to Contr %</label><input type="number" id="pp_ol_pc_ql2co" placeholder="0" oninput="render()"></div></div><div><div style="font-size:0.54rem;font-weight:600;color:rgba(102,20,102,0.85);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">Consult</div><div class="sf"><label>Кіл-ть</label><input type="number" id="pp_ol_con" placeholder="0" oninput="render()"></div><div class="sf"><label>Calls</label><input type="number" id="pp_ol_con_c" placeholder="0" oninput="render()"></div><div class="sf"><label>QL</label><input type="number" id="pp_ol_con_ql" placeholder="0" oninput="render()"></div><div class="sf"><label>Contr</label><input type="number" id="pp_ol_con_co" placeholder="0" oninput="render()"></div><div class="sf"><label>Кіл-ть to Calls %</label><input type="number" id="pp_ol_con_q2c" placeholder="0" oninput="render()"></div><div class="sf"><label>Calls to QL %</label><input type="number" id="pp_ol_con_c2ql" placeholder="0" oninput="render()"></div><div class="sf"><label>QL to Contr %</label><input type="number" id="pp_ol_con_ql2co" placeholder="0" oninput="render()"></div></div>
+      </div>
+      <div class="s-sub gm" style="margin-top:4px">GetMany</div>
+      <div class="g3">
+        <div class="sf"><label>Cover Letters</label><input type="number" id="pp_gm_cl" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Answers</label><input type="number" id="pp_gm_a" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Conversion %</label><input type="number" id="pp_gm_conv" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Viewed</label><input type="number" id="pp_gm_v" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Calls</label><input type="number" id="pp_gm_c" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Qual.Leads</label><input type="number" id="pp_gm_ql" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Contracts</label><input type="number" id="pp_gm_co" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Cover Letters to Answers %</label><input type="number" id="pp_gm_c2a" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Cover Letters to Viewed %</label><input type="number" id="pp_gm_c2v" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Answers to Calls %</label><input type="number" id="pp_gm_a2c" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Calls to Qual.Leads %</label><input type="number" id="pp_gm_c2ql" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Qual.Leads to Contracts %</label><input type="number" id="pp_gm_ql2co" placeholder="0" oninput="render()"></div>
+      </div>
+      <div class="s-sub li" style="margin-top:4px">LinkedIn</div>
+      <div class="g3">
+        <div class="sf"><label>Connections</label><input type="number" id="pp_li_conn" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Leads</label><input type="number" id="pp_li_leads" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Answers</label><input type="number" id="pp_li_a" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Calls</label><input type="number" id="pp_li_c" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Qualified Leads</label><input type="number" id="pp_li_ql" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Contracts</label><input type="number" id="pp_li_co" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Income $</label><input type="number" id="pp_li_income" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Connections to Leads %</label><input type="number" id="pp_li_c2l" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Leads to Answers %</label><input type="number" id="pp_li_l2a" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Answers to Calls %</label><input type="number" id="pp_li_a2c" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Calls to Qual.Leads %</label><input type="number" id="pp_li_c2ql" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Qual.Leads to Contracts %</label><input type="number" id="pp_li_ql2co" placeholder="0" oninput="render()"></div>
+      </div>
+    </div>
+    <div class="s-sec">
+      <div class="s-ttl">Виконано</div>
+      <div class="s-sub mb" style="margin-top:2px">Manual Bidding</div>
+      <div class="g3">
+        <div class="sf"><label>Cover Letters</label><input type="number" id="mb_cl" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Answers</label><input type="number" id="mb_a" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Conversion %</label><input type="number" id="mb_conv" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Viewed</label><input type="number" id="mb_v" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Calls</label><input type="number" id="mb_c" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Qual.Leads</label><input type="number" id="mb_ql" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Contracts</label><input type="number" id="mb_co" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Income $</label><input type="number" id="mb_income" placeholder="0" oninput="render()"></div>
+      </div>
+      <div class="s-sub ol" style="margin-top:4px">Organic Leads</div>
+      <div class="g4ol">
+        <div><div style="font-size:0.54rem;font-weight:600;color:rgba(102,20,102,0.85);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">Invites</div><div class="sf"><label>Кіл-ть</label><input type="number" id="ol_inv" placeholder="0" oninput="render()"></div><div class="sf"><label>Calls</label><input type="number" id="ol_inv_c" placeholder="0" oninput="render()"></div><div class="sf"><label>QL</label><input type="number" id="ol_inv_ql" placeholder="0" oninput="render()"></div><div class="sf"><label>Contr</label><input type="number" id="ol_inv_co" placeholder="0" oninput="render()"></div></div><div><div style="font-size:0.54rem;font-weight:600;color:rgba(102,20,102,0.85);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">DM</div><div class="sf"><label>Кіл-ть</label><input type="number" id="ol_dm" placeholder="0" oninput="render()"></div><div class="sf"><label>Calls</label><input type="number" id="ol_dm_c" placeholder="0" oninput="render()"></div><div class="sf"><label>QL</label><input type="number" id="ol_dm_ql" placeholder="0" oninput="render()"></div><div class="sf"><label>Contr</label><input type="number" id="ol_dm_co" placeholder="0" oninput="render()"></div></div><div><div style="font-size:0.54rem;font-weight:600;color:rgba(102,20,102,0.85);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">PC</div><div class="sf"><label>Кіл-ть</label><input type="number" id="ol_pc" placeholder="0" oninput="render()"></div><div class="sf"><label>Calls</label><input type="number" id="ol_pc_c" placeholder="0" oninput="render()"></div><div class="sf"><label>QL</label><input type="number" id="ol_pc_ql" placeholder="0" oninput="render()"></div><div class="sf"><label>Contr</label><input type="number" id="ol_pc_co" placeholder="0" oninput="render()"></div></div><div><div style="font-size:0.54rem;font-weight:600;color:rgba(102,20,102,0.85);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">Consult</div><div class="sf"><label>Кіл-ть</label><input type="number" id="ol_con" placeholder="0" oninput="render()"></div><div class="sf"><label>Calls</label><input type="number" id="ol_con_c" placeholder="0" oninput="render()"></div><div class="sf"><label>QL</label><input type="number" id="ol_con_ql" placeholder="0" oninput="render()"></div><div class="sf"><label>Contr</label><input type="number" id="ol_con_co" placeholder="0" oninput="render()"></div></div>
+      </div>
+      <div class="g2" style="margin-top:4px">
+        <div class="sf"><label>OL Income $</label><input type="number" id="ol_income" placeholder="0" oninput="render()"></div>
+      </div>
+      <div class="s-sub gm" style="margin-top:4px">GetMany</div>
+      <div class="g3">
+        <div class="sf"><label>Cover Letters</label><input type="number" id="gm_cl" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Answers</label><input type="number" id="gm_a" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Viewed</label><input type="number" id="gm_v" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>View Rate %</label><input type="number" id="gm_view_rate" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Reply Rate %</label><input type="number" id="gm_reply_rate" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>View to Reply %</label><input type="number" id="gm_view_to_reply" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Calls</label><input type="number" id="gm_c" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Qual.Leads</label><input type="number" id="gm_ql" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Contracts</label><input type="number" id="gm_co" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Income $</label><input type="number" id="gm_income" placeholder="0" oninput="render()"></div>
+      </div>
+      <div class="s-sub li" style="margin-top:4px">LinkedIn</div>
+      <div class="g3">
+        <div class="sf"><label>Connections</label><input type="number" id="li_conn" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Leads</label><input type="number" id="li_leads" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Answers</label><input type="number" id="li_answers" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Calls</label><input type="number" id="li_calls" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Qualified Leads</label><input type="number" id="li_ql" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Contracts</label><input type="number" id="li_contracts" placeholder="0" oninput="render()"></div>
+        <div class="sf"><label>Income $</label><input type="number" id="li_income" placeholder="0" oninput="render()"></div>
+      </div>
+    </div>
+    <div class="s-sec">
+      <div class="s-ttl">Витрати</div>
+      <div class="s-sub mb" style="margin-top:2px">Manual Bidding</div>
+      <div class="crow"><div class="clbl">CL Connects</div><div class="cfields"><div class="sf"><label>Conn</label><input type="number" id="mb_c_cl_n" placeholder="0" oninput="calcCosts()"></div><div class="sf"><label>$</label><input type="text" id="mb_c_cl_d" readonly></div></div></div><div class="crow"><div class="clbl">Boosted</div><div class="cfields"><div class="sf"><label>Conn</label><input type="number" id="mb_c_boost_n" placeholder="0" oninput="calcCosts()"></div><div class="sf"><label>$</label><input type="text" id="mb_c_boost_d" readonly></div></div></div><div class="crow"><div class="clbl">Availability</div><div class="cfields"><div class="sf"><label>Conn</label><input type="number" id="mb_c_badge_n" placeholder="0" oninput="calcCosts()"></div><div class="sf"><label>$</label><input type="text" id="mb_c_badge_d" readonly></div></div></div><div class="crow"><div class="clbl">Boost Prof</div><div class="cfields"><div class="sf"><label>Conn</label><input type="number" id="mb_c_profile_n" placeholder="0" oninput="calcCosts()"></div><div class="sf"><label>$</label><input type="text" id="mb_c_profile_d" readonly></div></div></div><div class="crow"><div class="clbl">Return</div><div class="cfields"><div class="sf"><label>Conn</label><input type="number" id="mb_c_ret_n" placeholder="0" oninput="calcCosts()"></div><div class="sf"><label>$</label><input type="text" id="mb_c_ret_d" readonly></div></div></div><div class="crow"><div class="clbl">Additional</div><div class="cfields"><div class="sf"><label>Conn</label><input type="number" id="mb_c_extra_n" placeholder="0" oninput="calcCosts()"></div><div class="sf"><label>$</label><input type="text" id="mb_c_extra_d" readonly></div></div></div>
+      <div class="crow" style="margin-top:2px">
+        <div class="clbl" style="font-weight:600;color:rgba(36,20,41,0.75)">Total MB</div>
+        <div class="cfields">
+          <div class="sf"><label>Conn</label><input type="text" id="mb_total_n" readonly></div>
+          <div class="sf"><label>$</label><input type="text" id="mb_total_d" readonly></div>
+        </div>
+      </div>
+      <div class="s-sub gm" style="margin-top:5px">GetMany</div>
+      <div class="crow"><div class="clbl">Subscription</div><div class="cfields"><div class="sf"><label>$</label><input type="number" id="gm_c_sub_usd" placeholder="0" oninput="calcCosts()"></div><div class="sf"></div></div></div><div class="crow"><div class="clbl">Комісія</div><div class="cfields"><div class="sf"><label>$</label><input type="number" id="commission_usd" placeholder="0" oninput="calcCosts()"></div><div class="sf"></div></div></div><div class="crow"><div class="clbl">CL Connects</div><div class="cfields"><div class="sf"><label>Conn</label><input type="number" id="gm_c_cl_n" placeholder="0" oninput="calcCosts()"></div><div class="sf"><label>$</label><input type="text" id="gm_c_cl_d" readonly></div></div></div><div class="crow"><div class="clbl">Boosted</div><div class="cfields"><div class="sf"><label>Conn</label><input type="number" id="gm_c_boost_n" placeholder="0" oninput="calcCosts()"></div><div class="sf"><label>$</label><input type="text" id="gm_c_boost_d" readonly></div></div></div><div class="crow"><div class="clbl">Return</div><div class="cfields"><div class="sf"><label>Conn</label><input type="number" id="gm_c_ret_n" placeholder="0" oninput="calcCosts()"></div><div class="sf"><label>$</label><input type="text" id="gm_c_ret_d" readonly></div></div></div><div class="crow"><div class="clbl">Additional</div><div class="cfields"><div class="sf"><label>Conn</label><input type="number" id="gm_c_extra_n" placeholder="0" oninput="calcCosts()"></div><div class="sf"><label>$</label><input type="text" id="gm_c_extra_d" readonly></div></div></div>
+      <div class="crow" style="margin-top:2px">
+        <div class="clbl" style="font-weight:600;color:rgba(36,20,41,0.75)">Total GM</div>
+        <div class="cfields">
+          <div class="sf"><label>Conn</label><input type="text" id="gm_total_n" readonly></div>
+          <div class="sf"><label>$</label><input type="text" id="gm_total_d" readonly></div>
+        </div>
+      </div>
+      <div class="s-sub li" style="margin-top:5px">LinkedIn</div>
+      <div class="crow"><div class="clbl">Subscription</div><div class="cfields"><div class="sf"><label>$</label><input type="number" id="li_c_sub_usd" placeholder="0" oninput="calcCosts()"></div><div class="sf"></div></div></div><div class="crow"><div class="clbl">Tools</div><div class="cfields"><div class="sf"><label>$</label><input type="number" id="li_c_tools_usd" placeholder="0" oninput="calcCosts()"></div><div class="sf"></div></div></div><div class="crow"><div class="clbl">Commission</div><div class="cfields"><div class="sf"><label>$</label><input type="number" id="li_c_comm_usd" placeholder="0" oninput="calcCosts()"></div><div class="sf"></div></div></div>
+      <div class="crow" style="margin-top:2px">
+        <div class="clbl" style="font-weight:600;color:rgba(36,20,41,0.75)">Total LI</div>
+        <div class="cfields">
+          <div class="sf"><label>$</label><input type="text" id="li_total_d" readonly></div>
+          <div class="sf"></div>
+        </div>
+      </div>
+    </div>
+    <div class="s-sec">
+      <div class="s-ttl">Завдання</div>
+      <div class="sf"><label>Заплановані</label><textarea id="t_plan" oninput="autoH(this);render()" placeholder="Введіть..."></textarea></div>
+      <div class="sf"><label>Виконані</label><textarea id="t_done" oninput="autoH(this);render()" placeholder="Введіть..."></textarea></div>
+      <div class="sf"><label>Плани на наступний тиждень</label><textarea id="t_next" oninput="autoH(this);render()" placeholder="Введіть..."></textarea></div>
+      <div class="sf"><label>Висновки</label><textarea id="t_conc" oninput="autoH(this);render()" placeholder="Введіть..."></textarea></div>
+    </div>
+  </div>
+  <div class="sb-ftr">
+    <button class="btn btn-g" onclick="location.href='index.html'">&#8592; Меню</button>
+    <button class="btn btn-p" onclick="exportPDF()">&#8595; PDF</button>
+    <button class="btn btn-g" onclick="saveJSON()">&#8595; JSON</button>
+    <button class="btn btn-g" onclick="document.getElementById('jin').click()">&#8593; JSON</button>
+    <input type="file" id="jin" accept=".json" style="display:none" onchange="importJSON(this)">
+  </div>
+</div>
+
+<div class="preview-area">
+  <div class="slide-nav">
+    <button class="snb" onclick="prevSlide()">&#8249;</button>
+    <div class="sdots" id="sdots"></div>
+    <button class="snb" onclick="nextSlide()">&#8250;</button>
+    <span class="slbl" id="slbl"></span>
+  </div>
+  <div class="preview-wrap"><div id="sc"></div></div>
+</div>
+<script>
+document.getElementById('sd').textContent = new Date().toLocaleDateString('uk-UA',{day:'2-digit',month:'2-digit',year:'numeric'});
+
+var currentSlide = 0;
+var charts = {};
+var SLIDE_NAMES = ['Титул','Manual Bidding','Invites','Direct Messages','Project Catalog','Consultations','GetMany','LinkedIn','Фінанси','Завдання'];
+var RATE = 0.15;
+
+var PLAN_PRESETS = {
+  none: {mb:{cl:0,a:0,conv:0,v:0,c:0,ql:0,co:0,r:{c2a:0,c2v:0,a2c:0,c2ql:0,ql2co:0}}, ol:{inv:{n:0,c:0,ql:0,co:0},dm:{n:0,c:0,ql:0,co:0},pc:{n:0,c:0,ql:0,co:0},con:{n:0,c:0,ql:0,co:0},r:{q2c:0,c2ql:0,ql2co:0}}, gm:{cl:0,a:0,conv:0,v:0,c:0,ql:0,co:0,r:{c2a:0,c2v:0,a2c:0,c2ql:0,ql2co:0}}, li:{conn:0,leads:0,a:0,c:0,ql:0,co:0,r:{c2l:0,l2a:0,a2c:0,c2ql:0,ql2co:0}}},
+  min:  {mb:{cl:25,a:5,conv:20,v:10,c:2,ql:2,co:1,r:{c2a:10,c2v:10,a2c:50,c2ql:50,ql2co:10}}, ol:{inv:{n:2,c:2,ql:1,co:1},dm:{n:1,c:1,ql:1,co:1},pc:{n:1,c:1,ql:1,co:1},con:{n:1,c:1,ql:1,co:1},r:{q2c:80,c2ql:80,ql2co:10}}, gm:{cl:25,a:5,conv:20,v:20,c:2,ql:2,co:1,r:{c2a:10,c2v:10,a2c:50,c2ql:50,ql2co:10}}, li:{conn:50,leads:5,a:5,c:3,ql:3,co:1,r:{c2l:10,l2a:30,a2c:50,c2ql:80,ql2co:10}}},
+  avg:  {mb:{cl:50,a:10,conv:20,v:20,c:5,ql:5,co:1,r:{c2a:15,c2v:20,a2c:50,c2ql:50,ql2co:10}}, ol:{inv:{n:4,c:3,ql:2,co:1},dm:{n:2,c:1,ql:1,co:1},pc:{n:2,c:1,ql:1,co:1},con:{n:2,c:1,ql:1,co:1},r:{q2c:80,c2ql:80,ql2co:10}}, gm:{cl:50,a:10,conv:20,v:30,c:5,ql:5,co:1,r:{c2a:15,c2v:20,a2c:50,c2ql:50,ql2co:10}}, li:{conn:100,leads:10,a:10,c:5,ql:5,co:1,r:{c2l:10,l2a:30,a2c:50,c2ql:80,ql2co:10}}},
+  real: {mb:{cl:75,a:15,conv:20,v:30,c:10,ql:10,co:2,r:{c2a:20,c2v:30,a2c:80,c2ql:80,ql2co:10}}, ol:{inv:{n:8,c:5,ql:5,co:1},dm:{n:2,c:1,ql:1,co:1},pc:{n:2,c:1,ql:1,co:1},con:{n:2,c:1,ql:1,co:1},r:{q2c:80,c2ql:80,ql2co:10}}, gm:{cl:100,a:20,conv:20,v:40,c:15,ql:15,co:2,r:{c2a:20,c2v:30,a2c:80,c2ql:80,ql2co:10}}, li:{conn:150,leads:15,a:15,c:8,ql:5,co:1,r:{c2l:10,l2a:30,a2c:50,c2ql:80,ql2co:10}}},
+  max:  {mb:{cl:100,a:20,conv:20,v:50,c:15,ql:15,co:2,r:{c2a:25,c2v:40,a2c:80,c2ql:80,ql2co:20}}, ol:{inv:{n:10,c:8,ql:6,co:1},dm:{n:2,c:1,ql:1,co:1},pc:{n:2,c:1,ql:1,co:1},con:{n:2,c:1,ql:1,co:1},r:{q2c:80,c2ql:80,ql2co:10}}, gm:{cl:150,a:30,conv:20,v:50,c:20,ql:20,co:4,r:{c2a:25,c2v:40,a2c:80,c2ql:80,ql2co:20}}, li:{conn:200,leads:20,a:20,c:10,ql:10,co:2,r:{c2l:10,l2a:30,a2c:50,c2ql:80,ql2co:10}}}
+};
+
+function setVal(id,v){ var el=document.getElementById(id); if(el) el.value=v; }
+
+function applyPlanPreset(kind){
+  var p = PLAN_PRESETS[kind]; if(!p) return;
+  setVal('pp_mb_cl',p.mb.cl); setVal('pp_mb_a',p.mb.a); setVal('pp_mb_conv',p.mb.conv); setVal('pp_mb_v',p.mb.v);
+  setVal('pp_mb_c',p.mb.c); setVal('pp_mb_ql',p.mb.ql); setVal('pp_mb_co',p.mb.co);
+  setVal('pp_mb_c2a',p.mb.r.c2a); setVal('pp_mb_c2v',p.mb.r.c2v); setVal('pp_mb_a2c',p.mb.r.a2c);
+  setVal('pp_mb_c2ql',p.mb.r.c2ql); setVal('pp_mb_ql2co',p.mb.r.ql2co);
+  ['inv','dm','pc','con'].forEach(function(ch){
+    var v=p.ol[ch];
+    setVal('pp_ol_'+ch,v.n); setVal('pp_ol_'+ch+'_c',v.c); setVal('pp_ol_'+ch+'_ql',v.ql); setVal('pp_ol_'+ch+'_co',v.co);
+    setVal('pp_ol_'+ch+'_q2c',p.ol.r.q2c); setVal('pp_ol_'+ch+'_c2ql',p.ol.r.c2ql); setVal('pp_ol_'+ch+'_ql2co',p.ol.r.ql2co);
+  });
+  setVal('pp_gm_cl',p.gm.cl); setVal('pp_gm_a',p.gm.a); setVal('pp_gm_conv',p.gm.conv); setVal('pp_gm_v',p.gm.v);
+  setVal('pp_gm_c',p.gm.c); setVal('pp_gm_ql',p.gm.ql); setVal('pp_gm_co',p.gm.co);
+  setVal('pp_gm_c2a',p.gm.r.c2a); setVal('pp_gm_c2v',p.gm.r.c2v); setVal('pp_gm_a2c',p.gm.r.a2c);
+  setVal('pp_gm_c2ql',p.gm.r.c2ql); setVal('pp_gm_ql2co',p.gm.r.ql2co);
+  setVal('pp_li_conn',p.li.conn); setVal('pp_li_leads',p.li.leads); setVal('pp_li_a',p.li.a);
+  setVal('pp_li_c',p.li.c); setVal('pp_li_ql',p.li.ql); setVal('pp_li_co',p.li.co);
+  setVal('pp_li_c2l',p.li.r.c2l); setVal('pp_li_l2a',p.li.r.l2a); setVal('pp_li_a2c',p.li.r.a2c);
+  setVal('pp_li_c2ql',p.li.r.c2ql); setVal('pp_li_ql2co',p.li.r.ql2co);
+  render();
+}
+
+function autoH(el){ el.style.height='auto'; el.style.height=el.scrollHeight+'px'; }
+function autoHAll(){ document.querySelectorAll('.sf textarea').forEach(function(el){ autoH(el); }); }
+function nv(id){ var el=document.getElementById(id); return el?parseFloat(el.value)||0:0; }
+function sv(id){ var el=document.getElementById(id); return el?el.value.trim():''; }
+function pct(a,b){ return b?(a/b*100):null; }
+function fp(v){ return(v===null||isNaN(v)||!isFinite(v))?'&mdash;':v.toFixed(1)+'%'; }
+function bcls(f,p){ if(!p)return''; var r=f/p; if(r>=0.9)return'ok'; if(r>=0.6)return'warn'; return'bad'; }
+function bh(f,p){ if(!p)return''; return'<span class="kb '+bcls(f,p)+'">'+Math.round(f/p*100)+'%</span>'; }
+
+function calcCosts(){
+  var items=[
+    {n:'mb_c_cl_n',d:'mb_c_cl_d',exp:true},{n:'mb_c_boost_n',d:'mb_c_boost_d',exp:true},
+    {n:'mb_c_badge_n',d:'mb_c_badge_d',exp:true},{n:'mb_c_profile_n',d:'mb_c_profile_d',exp:true},
+    {n:'mb_c_ret_n',d:'mb_c_ret_d',exp:false},{n:'mb_c_extra_n',d:'mb_c_extra_d',exp:true}
+  ];
+  var tn=0,td=0;
+  items.forEach(function(it){
+    var c=nv(it.n),d=c*RATE;
+    var el=document.getElementById(it.d);
+    if(el)el.value=c?(it.exp?'-':'+')+'\$'+d.toFixed(2):'';
+    if(it.exp){tn-=c;td-=d;}else{tn+=c;td+=d;}
+  });
+  document.getElementById('mb_total_n').value=(tn>=0?'+':'')+tn;
+  document.getElementById('mb_total_d').value=(td>=0?'+':'')+td.toFixed(2)+'\$';
+  var gitems=[
+    {n:'gm_c_cl_n',d:'gm_c_cl_d',exp:true},{n:'gm_c_boost_n',d:'gm_c_boost_d',exp:true},
+    {n:'gm_c_ret_n',d:'gm_c_ret_d',exp:false},{n:'gm_c_extra_n',d:'gm_c_extra_d',exp:true}
+  ];
+  var gtn=0,gtd=0;
+  gitems.forEach(function(it){
+    var c=nv(it.n),d=c*RATE;
+    var el=document.getElementById(it.d);
+    if(el)el.value=c?(it.exp?'-':'+')+'\$'+d.toFixed(2):'';
+    if(it.exp){gtn-=c;gtd-=d;}else{gtn+=c;gtd+=d;}
+  });
+  var sub=nv('gm_c_sub_usd');
+  var commission=nv('commission_usd');
+  var gm_td_final=gtd-sub-commission;
+  document.getElementById('gm_total_n').value=(gtn>=0?'+':'')+gtn;
+  document.getElementById('gm_total_d').value=(gm_td_final>=0?'+':'')+gm_td_final.toFixed(2)+'\$';
+
+  var li_sub=nv('li_c_sub_usd'), li_tools=nv('li_c_tools_usd'), li_comm=nv('li_c_comm_usd');
+  var li_td_final=-(li_sub+li_tools+li_comm);
+  document.getElementById('li_total_d').value=(li_td_final>=0?'+':'')+li_td_final.toFixed(2)+'\$';
+
+  render();
+}
+
+function getCosts(){
+  var mb_cl_d=nv('mb_c_cl_n')*RATE, mb_boost_d=nv('mb_c_boost_n')*RATE;
+  var mb_badge_d=nv('mb_c_badge_n')*RATE, mb_profile_d=nv('mb_c_profile_n')*RATE;
+  var mb_ret_d=nv('mb_c_ret_n')*RATE, mb_extra_d=nv('mb_c_extra_n')*RATE;
+  var mb_total=mb_ret_d-mb_cl_d-mb_boost_d-mb_badge_d-mb_profile_d-mb_extra_d;
+  var gm_cl_d=nv('gm_c_cl_n')*RATE, gm_boost_d=nv('gm_c_boost_n')*RATE;
+  var gm_ret_d=nv('gm_c_ret_n')*RATE, gm_extra_d=nv('gm_c_extra_n')*RATE;
+  var sub=nv('gm_c_sub_usd');
+  var commission=nv('commission_usd');
+  var gm_total=gm_ret_d-gm_cl_d-gm_boost_d-gm_extra_d-sub-commission;
+  var li_sub=nv('li_c_sub_usd'), li_tools=nv('li_c_tools_usd'), li_comm=nv('li_c_comm_usd');
+  var li_total=-(li_sub+li_tools+li_comm);
+  var all_total=mb_total+gm_total+li_total;
+  return{mb:{cl:mb_cl_d,boost:mb_boost_d,badge:mb_badge_d,profile:mb_profile_d,ret:mb_ret_d,extra:mb_extra_d,total:mb_total},
+    gm:{cl:gm_cl_d,boost:gm_boost_d,ret:gm_ret_d,extra:gm_extra_d,sub:sub,commission:commission,total:gm_total},
+    li:{sub:li_sub,tools:li_tools,commission:li_comm,total:li_total},
+    commission:commission, all_total:all_total};
+}
+
+function makeChart(id,cfg){
+  setTimeout(function(){
+    var ctx=document.getElementById(id); if(!ctx)return;
+    if(charts[id])charts[id].destroy();
+    charts[id]=new Chart(ctx,cfg);
+  },60);
+}
+
+function copts(){
+  return{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'rgba(255,255,255,0.45)',font:{size:10}}}},
+    scales:{x:{ticks:{color:'rgba(255,255,255,0.4)',font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}},
+            y:{ticks:{color:'rgba(255,255,255,0.4)',font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}}}};
+}
+
+function sLogo(){ return '<div class="slogo"><img src="'+document.querySelector('.sb-hdr img').src+'" alt=""><span>Mon&#39;Archi</span></div>'; }
+function sw(cls,inner){ return '<div class="slide '+cls+'"><div class="sc-dec"></div><div class="scb-dec"></div>'+sLogo()+'<div class="si">'+inner+'</div></div>'; }
+function kpi(lbl,val,sub,badge,big){ return'<div class="kpi'+(big?' big':'')+'"><div class="kl">'+lbl+'</div><div class="kv">'+val+'</div>'+(badge||'')+(sub?'<div class="ks">'+sub+'</div>':'')+'</div>'; }
+function fc(lbl,val,cls){ return'<div class="fc'+(cls?' '+cls:'')+'"><div class="fl">'+lbl+'</div><div class="fv">'+val+'</div></div>'; }
+
+function ring(actualNum,planNum,size){
+  size = size||46;
+  var r=size/2-4.5, cx=size/2, cy=size/2;
+  var circ=2*Math.PI*r;
+  var ratio = planNum ? (actualNum/planNum) : 0;
+  var clamped = Math.max(0,Math.min(ratio,1));
+  var offset = circ*(1-clamped);
+  var cls = planNum ? bcls(actualNum,planNum) : '';
+  var color = cls==='ok'?'#4AE08A':cls==='warn'?'#FCD34D':cls==='bad'?'#FC8181':'rgba(255,255,255,0.15)';
+  var label = planNum ? Math.round(ratio*100)+'%' : '&mdash;';
+  return '<div style="position:relative;width:'+size+'px;height:'+size+'px;flex-shrink:0;">'
+    +'<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'">'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="5"/>'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+color+'" stroke-width="5" stroke-linecap="round" stroke-dasharray="'+circ.toFixed(1)+'" stroke-dashoffset="'+offset.toFixed(1)+'" transform="rotate(-90 '+cx+' '+cy+')"/>'
+    +'</svg>'
+    +'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:&quot;Inter&quot;,sans-serif;font-size:0.62rem;font-weight:700;color:#fff;">'+label+'</div>'
+    +'</div>';
+}
+
+function pmCard(lbl,actualDisp,planDisp,actualNum,planNum,big,extra,ringSize){
+  return '<div class="kpi pm'+(big?' big':'')+'">'
+    +'<div class="kl">'+lbl+'</div>'
+    +'<div class="pm-row">'
+    +'<div class="pm-nums">'
+    +'<div class="pm-item"><div class="pm-tag">Факт</div><div class="kv">'+actualDisp+'</div></div>'
+    +'<div class="pm-item plan"><div class="pm-tag plan">План</div><div class="kv">'+planDisp+'</div></div>'
+    +'</div>'
+    +ring(actualNum,planNum,ringSize||46)
+    +'</div>'
+    +(extra||'')
+    +'</div>';
+}
+function pmN(lbl,actual,plan,big,extra,ringSize){ return pmCard(lbl,actual,plan,actual,plan,big,extra,ringSize); }
+function pmPct(lbl,actual,plan,big,extra,ringSize){ return pmCard(lbl,actual+'%',plan+'%',actual,plan,big,extra,ringSize); }
+function pmRatio(lbl,actualNum,planNum,ringSize){ return pmCard(lbl,fp(actualNum),(planNum||0)+'%',actualNum,planNum,false,'',ringSize); }
+
+function buildCover(){
+  var month=sv('sel-month')||'Місяць', week=sv('sel-week'), mgr=sv('manager');
+  var C=getCosts();
+  var mb={cl:nv('mb_cl'),a:nv('mb_a'),co:nv('mb_co'),inc:nv('mb_income')};
+  var gm={cl:nv('gm_cl'),a:nv('gm_a'),co:nv('gm_co'),inc:nv('gm_income')};
+  var li={conn:nv('li_conn'),leads:nv('li_leads'),ans:nv('li_answers'),calls:nv('li_calls'),ql:nv('li_ql'),co:nv('li_contracts'),inc:nv('li_income')};
+  var ol_src=nv('ol_inv')+nv('ol_dm')+nv('ol_pc')+nv('ol_con');
+  var ol_co=nv('ol_inv_co')+nv('ol_dm_co')+nv('ol_pc_co')+nv('ol_con_co');
+  var ol_inc=nv('ol_income');
+
+  var total_bids=mb.cl+gm.cl;
+  var total_ans=mb.a+gm.a;
+  var total_conv=total_bids?(total_ans/total_bids*100):null;
+  var li_total_conv=pct(li.leads,li.conn);
+
+  var total_contracts=mb.co+ol_co+gm.co+li.co;
+  var total_vytraty=C.mb.total+C.gm.total+C.li.total;
+  var total_profit=mb.inc+ol_inc+gm.inc+li.inc;
+
+  var inner='<div class="cov-mo">// weekly report &middot; '+month+(week?' &middot; '+week:'')+(mgr?' &middot; '+mgr:'')+'</div>'
+    +'<div class="cov-ti">Weekly<br><span>Report</span></div>'
+    +'<div class="shd" style="margin-top:6px;"><div class="shd-dot" style="background:#B07EFF"></div><div class="shd-name" style="color:#B07EFF">Upwork</div><div class="shd-line"></div></div>'
+    +'<div class="kg kg4" style="margin-bottom:12px;">'
+    +kpi('Total Bids',total_bids,'','')
+    +kpi('Total Answers',total_ans,'','')
+    +kpi('Total Organic Leads',ol_src,'','')
+    +kpi('Total Conversion',fp(total_conv),'','')
+    +'</div>'
+    +'<div class="shd"><div class="shd-dot" style="background:#3B9EEB"></div><div class="shd-name" style="color:#3B9EEB">LinkedIn</div><div class="shd-line"></div></div>'
+    +'<div class="kg kg4" style="margin-bottom:12px;">'
+    +kpi('Total Connections',li.conn,'','')
+    +kpi('Total Leads',li.leads,'','')
+    +kpi('Total Answers',li.ans,'','')
+    +kpi('Total Conversion',fp(li_total_conv),'','')
+    +'</div>'
+    +'<div class="c2">'
+    +'<div>'
+      +'<div class="shd"><div class="shd-dot" style="background:#C39BD3"></div><div class="shd-name" style="color:#C39BD3">Contracts</div><div class="shd-line"></div></div>'
+      +kpi('Total Contracts',total_contracts,'','',true)
+    +'</div>'
+    +'<div>'
+      +'<div class="shd"><div class="shd-dot" style="background:#4AE08A"></div><div class="shd-name" style="color:#4AE08A">Finance</div><div class="shd-line"></div></div>'
+      +'<div class="kg kg2">'
+      +kpi('Total Витрати','-$'+Math.abs(total_vytraty).toFixed(0),'','')
+      +kpi('Total Прибуток','$'+total_profit.toFixed(0),'','',true)
+      +'</div>'
+    +'</div>'
+    +'</div>';
+  return sw('sd',inner);
+}
+
+function buildMB(){
+  var mb={cl:nv('mb_cl'),a:nv('mb_a'),v:nv('mb_v'),c:nv('mb_c'),ql:nv('mb_ql'),co:nv('mb_co')};
+  var pp={cl:nv('pp_mb_cl'),a:nv('pp_mb_a'),v:nv('pp_mb_v'),c:nv('pp_mb_c'),ql:nv('pp_mb_ql'),co:nv('pp_mb_co'),
+    c2a:nv('pp_mb_c2a'),c2v:nv('pp_mb_c2v'),a2c:nv('pp_mb_a2c'),c2ql:nv('pp_mb_c2ql'),ql2co:nv('pp_mb_ql2co')};
+  var clToAns=pct(mb.a,mb.cl), clToView=pct(mb.v,mb.cl), ansToCalls=pct(mb.c,mb.a),
+      callsToQl=pct(mb.ql,mb.c), qlToContr=pct(mb.co,mb.ql);
+  var inner='<div class="stag">// 01 &mdash; manual bidding</div>'
+    +'<div class="stitle">Manual Bidding</div>'
+    +'<div class="shd" style="margin-top:2px;"><div class="shd-dot" style="background:#B07EFF"></div><div class="shd-name" style="color:#B07EFF">Показники</div><div class="shd-line"></div></div>'
+    +'<div class="kg kg3" style="margin-bottom:5px;">'
+    +pmN('Cover Letters',mb.cl,pp.cl,false,'',69)
+    +pmN('Answers',mb.a,pp.a,false,'',69)
+    +pmN('Viewed',mb.v,pp.v,false,'',69)
+    +'</div>'
+    +'<div class="kg kg3" style="margin-bottom:8px;">'
+    +pmN('Calls',mb.c,pp.c,false,'',69)
+    +pmN('Qualified Leads',mb.ql,pp.ql,false,'',69)
+    +pmN('Contracts',mb.co,pp.co,false,'',69)
+    +'</div>'
+    +'<div class="conv-section">'
+    +'<div class="shd" style="margin-bottom:5px;"><div class="shd-dot" style="background:#B07EFF"></div><div class="shd-name" style="color:#B07EFF">Конверсія</div><div class="shd-line"></div></div>'
+    +'<div class="kg kg5">'
+    +pmRatio('Cover Letters to Answers',clToAns,pp.c2a,50)
+    +pmRatio('Cover Letters to Viewed',clToView,pp.c2v,50)
+    +pmRatio('Answers to Calls',ansToCalls,pp.a2c,50)
+    +pmRatio('Calls to Qualified Leads',callsToQl,pp.c2ql,50)
+    +pmRatio('Qualified Leads to Contracts',qlToContr,pp.ql2co,50)
+    +'</div>'
+    +'</div>';
+  return sw('sp',inner);
+}
+
+function buildOLChannel(tagNum,chId,chLabel,engTag,bg){
+  var n=nv('ol_'+chId), c=nv('ol_'+chId+'_c'), ql=nv('ol_'+chId+'_ql'), co=nv('ol_'+chId+'_co');
+  var pn=nv('pp_ol_'+chId), pc=nv('pp_ol_'+chId+'_c'), pql=nv('pp_ol_'+chId+'_ql'), pco=nv('pp_ol_'+chId+'_co');
+  var pq2c=nv('pp_ol_'+chId+'_q2c'), pc2ql=nv('pp_ol_'+chId+'_c2ql'), pql2co=nv('pp_ol_'+chId+'_ql2co');
+  var nToCalls=pct(c,n), callsToQl=pct(ql,c), qlToContr=pct(co,ql);
+  var inner='<div class="stag">// '+tagNum+' &mdash; '+engTag+'</div>'
+    +'<div class="stitle">'+chLabel+'</div>'
+    +'<div class="shd" style="margin-top:2px;"><div class="shd-dot" style="background:#B07EFF"></div><div class="shd-name" style="color:#B07EFF">Показники</div><div class="shd-line"></div></div>'
+    +'<div class="kg kg4" style="margin-bottom:12px;">'
+    +pmN('Кількість',n,pn,false,'',69)
+    +pmN('Calls',c,pc,false,'',69)
+    +pmN('Qualified Leads',ql,pql,false,'',69)
+    +pmN('Contracts',co,pco,false,'',69)
+    +'</div>'
+    +'<div class="conv-section">'
+    +'<div class="shd" style="margin-bottom:8px;"><div class="shd-dot" style="background:#B07EFF"></div><div class="shd-name" style="color:#B07EFF">Конверсія</div><div class="shd-line"></div></div>'
+    +'<div class="kg kg3">'
+    +pmRatio('Кількість to Calls',nToCalls,pq2c,60)
+    +pmRatio('Calls to Qualified Leads',callsToQl,pc2ql,60)
+    +pmRatio('Qualified Leads to Contracts',qlToContr,pql2co,60)
+    +'</div>'
+    +'</div>';
+  return sw(bg,inner);
+}
+function buildInvites(){ return buildOLChannel('02','inv','Invites','invites','sa'); }
+function buildDM(){ return buildOLChannel('03','dm','Direct Messages','direct messages','sd'); }
+function buildPC(){ return buildOLChannel('04','pc','Project Catalog','project catalog','sp'); }
+function buildConsult(){ return buildOLChannel('05','con','Consultations','consultations','sa'); }
+
+function buildGM(){
+  var gm={cl:nv('gm_cl'),a:nv('gm_a'),v:nv('gm_v'),c:nv('gm_c'),ql:nv('gm_ql'),co:nv('gm_co')};
+  var pp={cl:nv('pp_gm_cl'),a:nv('pp_gm_a'),v:nv('pp_gm_v'),c:nv('pp_gm_c'),ql:nv('pp_gm_ql'),co:nv('pp_gm_co'),
+    c2a:nv('pp_gm_c2a'),c2v:nv('pp_gm_c2v'),a2c:nv('pp_gm_a2c'),c2ql:nv('pp_gm_c2ql'),ql2co:nv('pp_gm_ql2co')};
+  var C=getCosts();
+  var cpl=gm.a?(C.gm.cl+C.gm.boost)/gm.a:null;
+  var clToAns=pct(gm.a,gm.cl), clToView=pct(gm.v,gm.cl), ansToCalls=pct(gm.c,gm.a),
+      callsToQl=pct(gm.ql,gm.c), qlToContr=pct(gm.co,gm.ql);
+  var inner='<div class="stag">// 06 &mdash; getmany</div>'
+    +'<div class="stitle">GetMany</div>'
+    +'<div class="shd" style="margin-top:2px;"><div class="shd-dot" style="background:#B07EFF"></div><div class="shd-name" style="color:#B07EFF">Показники</div><div class="shd-line"></div></div>'
+    +'<div class="kg kg3 kg-bal" style="margin-bottom:4px;">'
+    +pmN('Cover Letters',gm.cl,pp.cl,false,'',46)
+    +pmN('Answers',gm.a,pp.a,false,'',46)
+    +pmN('Viewed',gm.v,pp.v,false,'',46)
+    +'</div>'
+    +'<div class="kg kg3 kg-bal" style="margin-bottom:6px;">'
+    +pmN('Calls',gm.c,pp.c,false,'',46)
+    +pmN('Qualified Leads',gm.ql,pp.ql,false,'',46)
+    +pmN('Contracts',gm.co,pp.co,false,'',46)
+    +'</div>'
+    +'<div class="conv-section">'
+    +'<div class="shd" style="margin-bottom:4px;"><div class="shd-dot" style="background:#B07EFF"></div><div class="shd-name" style="color:#B07EFF">Конверсія</div><div class="shd-line"></div></div>'
+    +'<div class="kg kg3 kg-bal" style="margin-bottom:4px;">'
+    +kpi('CPL',cpl?'$'+cpl.toFixed(2):'&mdash;','','')
+    +pmRatio('CL to Answers',clToAns,pp.c2a,46)
+    +pmRatio('CL to Viewed',clToView,pp.c2v,46)
+    +'</div>'
+    +'<div class="kg kg3 kg-bal">'
+    +pmRatio('Answers to Calls',ansToCalls,pp.a2c,46)
+    +pmRatio('Calls to QL',callsToQl,pp.c2ql,46)
+    +pmRatio('QL to Contracts',qlToContr,pp.ql2co,34)
+    +'</div>'
+    +'</div>';
+  return sw('sd',inner);
+}
+
+function buildLinkedIn(){
+  var li={conn:nv('li_conn'),leads:nv('li_leads'),ans:nv('li_answers'),calls:nv('li_calls'),ql:nv('li_ql'),co:nv('li_contracts')};
+  var pp={conn:nv('pp_li_conn'),leads:nv('pp_li_leads'),a:nv('pp_li_a'),c:nv('pp_li_c'),ql:nv('pp_li_ql'),co:nv('pp_li_co'),
+    c2l:nv('pp_li_c2l'),l2a:nv('pp_li_l2a'),a2c:nv('pp_li_a2c'),c2ql:nv('pp_li_c2ql'),ql2co:nv('pp_li_ql2co')};
+  var c2l=pct(li.leads,li.conn), l2a=pct(li.ans,li.leads), a2c=pct(li.calls,li.ans),
+      c2ql=pct(li.ql,li.calls), ql2co=pct(li.co,li.ql);
+  var inner='<div class="stag">// 07 &mdash; linkedin</div>'
+    +'<div class="stitle" style="display:flex;align-items:center;gap:10px;">LinkedIn'
+    +'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="opacity:0.7"><rect width="24" height="24" rx="4" fill="#0A66C2"/><path d="M6.5 9.5h2V17h-2V9.5zm1-3.5a1 1 0 110 2 1 1 0 010-2zm3.5 3.5h1.9v1.05c.35-.63 1.1-1.2 2.1-1.2 2.15 0 2.5 1.4 2.5 3.2V17h-2v-3.6c0-.85-.02-1.95-1.2-1.95-1.2 0-1.3.93-1.3 1.9V17H11V9.5z" fill="white"/></svg>'
+    +'</div>'
+    +'<div class="shd" style="margin-top:2px;"><div class="shd-dot" style="background:#B07EFF"></div><div class="shd-name" style="color:#B07EFF">Показники</div><div class="shd-line"></div></div>'
+    +'<div class="kg kg3" style="margin-bottom:8px;">'
+    +pmN('Connections',li.conn,pp.conn)
+    +pmN('Leads',li.leads,pp.leads)
+    +pmN('Answers',li.ans,pp.a)
+    +'</div>'
+    +'<div class="kg kg3" style="margin-bottom:12px;">'
+    +pmN('Calls',li.calls,pp.c)
+    +pmN('Qualified Leads',li.ql,pp.ql)
+    +pmN('Contracts',li.co,pp.co)
+    +'</div>'
+    +'<div class="conv-section">'
+    +'<div class="shd" style="margin-bottom:8px;"><div class="shd-dot" style="background:#B07EFF"></div><div class="shd-name" style="color:#B07EFF">Конверсія</div><div class="shd-line"></div></div>'
+    +'<div class="kg kg5">'
+    +pmCard('Connections to Leads',fp(c2l),pp.c2l+'%',c2l,pp.c2l)
+    +pmCard('Leads to Answers',fp(l2a),pp.l2a+'%',l2a,pp.l2a)
+    +pmCard('Answers to Calls',fp(a2c),pp.a2c+'%',a2c,pp.a2c)
+    +pmCard('Calls to Qual.Leads',fp(c2ql),pp.c2ql+'%',c2ql,pp.c2ql)
+    +pmCard('Qual.Leads to Contracts',fp(ql2co),pp.ql2co+'%',ql2co,pp.ql2co)
+    +'</div>'
+    +'</div>';
+  return sw('sa',inner);
+}
+
+function buildFinance(){
+  var C=getCosts();
+  var mb_inc=nv('mb_income'),ol_inc=nv('ol_income'),gm_inc=nv('gm_income'),li_inc=nv('li_income');
+  var total_inc=mb_inc+ol_inc+gm_inc+li_inc;
+  var profit=total_inc+C.all_total;
+  var inner='<div class="stag">// 08 &mdash; фінанси</div>'
+    +'<div class="stitle">Фінанси</div>'
+    +'<div class="shd" style="margin-top:8px;"><div class="shd-dot" style="background:#4AE08A"></div><div class="shd-name" style="color:#4AE08A">Income</div><div class="shd-line"></div></div>'
+    +'<div class="frow" style="margin-bottom:22px;">'
+    +fc('Total Income','$'+total_inc.toFixed(0),'hl')
+    +fc('MB Income','$'+mb_inc.toFixed(0),'')
+    +fc('OL Income','$'+ol_inc.toFixed(0),'')
+    +fc('GM Income','$'+gm_inc.toFixed(0),'')
+    +fc('LI Income','$'+li_inc.toFixed(0),'')
+    +'</div>'
+    +'<div class="shd"><div class="shd-dot" style="background:#FC8181"></div><div class="shd-name" style="color:#FC8181">Витрати</div><div class="shd-line"></div></div>'
+    +'<div class="frow" style="margin-bottom:22px;">'
+    +fc('Total Витрати MB','-$'+Math.abs(C.mb.total).toFixed(0),'')
+    +fc('Total Витрати GM','-$'+Math.abs(C.gm.total).toFixed(0),'')
+    +fc('Total Витрати LI','-$'+Math.abs(C.li.total).toFixed(0),'')
+    +fc('Total Витрати','-$'+Math.abs(C.all_total).toFixed(0),'hl')
+    +'</div>'
+    +'<div style="margin-top:auto;display:flex;justify-content:center;padding-bottom:6px;">'
+    +'<div class="fc '+(profit>=0?'pr':'loss')+'" style="min-width:280px;text-align:center;padding:18px 30px;">'
+    +'<div class="fl" style="font-size:0.6rem;">Прибуток</div>'
+    +'<div class="fv" style="font-size:2rem;">'+(profit>=0?'+':'-')+'$'+Math.abs(profit).toFixed(0)+'</div>'
+    +'</div>'
+    +'</div>';
+  return sw('sp',inner);
+}
+
+function buildTasksSlides(){
+  var fields=[
+    {label:'Заплановані завдання',val:sv('t_plan')},
+    {label:'Виконані завдання',val:sv('t_done')},
+    {label:'Плани на наступний тиждень',val:sv('t_next')},
+    {label:'Висновки',val:sv('t_conc')},
+  ].filter(function(f){return f.val&&f.val.trim();});
+  if(!fields.length) return [sw('sd','<div class="stag">// завдання</div><div class="stitle" style="font-size:1.2rem;">Завдання</div><div class="tb" style="flex:1;display:flex;flex-direction:column;padding:16px 18px;"><div class="tl" style="margin-bottom:8px;">Завдання</div><div class="tt" style="font-size:0.88rem;line-height:1.62;">&mdash;</div></div>')];
+  var LINES=15, CW=85;
+  function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  // Merge soft-wrapped continuation lines (typed in a narrow textarea) back into one
+  // logical item, so on the wide slide it can wrap naturally across the full width.
+  // A new item starts at "1.", "2)", "-", "•" markers, or the very first line.
+  function joinItems(text){
+    var raw=text.split('\n'), items=[];
+    raw.forEach(function(l){
+      var t=l.trim();
+      if(t==='')return;
+      var isNew = items.length===0 || /^(\d+[\.\)]|[-&#8226;*])\s/.test(t);
+      if(isNew) items.push(t);
+      else items[items.length-1]=items[items.length-1]+' '+t;
+    });
+    return items;
+  }
+  function split(text){
+    var items=joinItems(text),chunks=[],cur=[],used=0;
+    items.forEach(function(it){
+      var need=Math.max(1,Math.ceil(it.length/CW));
+      if(used+need>LINES&&cur.length>0){chunks.push(cur);cur=[];used=0;}
+      cur.push(it);used+=need;
+    });
+    if(cur.length)chunks.push(cur);
+    return chunks;
+  }
+  var slides=[];
+  fields.forEach(function(f,idx){
+    var chunks=split(f.val.trim());
+    chunks.forEach(function(chunk,ci){
+      var lbl=f.label+(chunks.length>1?' ('+(ci+1)+'/'+chunks.length+')':'');
+      var html=chunk.map(function(it){ return esc(it); }).join('<br>');
+      var inner='<div class="stag" style="margin-bottom:2px;">// завдання &middot; поле '+(idx+1)+' з '+fields.length+'</div>'
+        +'<div class="stitle" style="font-size:1.2rem;margin-bottom:10px;">Завдання</div>'
+        +'<div class="tb" style="flex:1;display:flex;flex-direction:column;padding:16px 18px;overflow:hidden;">'
+        +'<div class="tl" style="margin-bottom:8px;">'+lbl+'</div>'
+        +'<div class="tt" style="font-size:0.88rem;line-height:1.62;">'+html+'</div>'
+        +'</div>';
+      slides.push(sw('sd',inner));
+    });
+  });
+  return slides;
+}
+
+var allSlides=[];
+
+function render(){
+  autoHAll();
+  allSlides=[buildCover(),buildMB(),buildInvites(),buildDM(),buildPC(),buildConsult(),buildGM(),buildLinkedIn(),buildFinance()];
+  buildTasksSlides().forEach(function(s){allSlides.push(s);});
+  document.getElementById('sdots').innerHTML=allSlides.map(function(_,i){
+    return'<div class="sdot'+(i===currentSlide?' active':'')+'" onclick="goSlide('+i+')"></div>';
+  }).join('');
+  document.getElementById('slbl').textContent=(SLIDE_NAMES[Math.min(currentSlide,SLIDE_NAMES.length-1)]||'Завдання')+' ('+(currentSlide+1)+'/'+allSlides.length+')';
+  document.getElementById('sc').innerHTML=allSlides[currentSlide];
+}
+
+function goSlide(n){currentSlide=n;render();}
+function nextSlide(){if(currentSlide<allSlides.length-1){currentSlide++;render();}}
+function prevSlide(){if(currentSlide>0){currentSlide--;render();}}
+
+function exportPDF(){
+  var slides=[buildCover(),buildMB(),buildInvites(),buildDM(),buildPC(),buildConsult(),buildGM(),buildLinkedIn(),buildFinance()];
+  buildTasksSlides().forEach(function(s){slides.push(s);});
+  document.getElementById('sc').innerHTML=slides.join('');
+  setTimeout(function(){window.print();setTimeout(function(){render();},800);},500);
+}
+
+function saveJSON(){
+  var ids=['sel-month','sel-week','manager',
+    'pp_mb_cl','pp_mb_a','pp_mb_conv','pp_mb_v','pp_mb_c','pp_mb_ql','pp_mb_co',
+    'pp_mb_c2a','pp_mb_c2v','pp_mb_a2c','pp_mb_c2ql','pp_mb_ql2co',
+    'pp_ol_inv','pp_ol_inv_c','pp_ol_inv_ql','pp_ol_inv_co','pp_ol_inv_q2c','pp_ol_inv_c2ql','pp_ol_inv_ql2co',
+    'pp_ol_dm','pp_ol_dm_c','pp_ol_dm_ql','pp_ol_dm_co','pp_ol_dm_q2c','pp_ol_dm_c2ql','pp_ol_dm_ql2co',
+    'pp_ol_pc','pp_ol_pc_c','pp_ol_pc_ql','pp_ol_pc_co','pp_ol_pc_q2c','pp_ol_pc_c2ql','pp_ol_pc_ql2co',
+    'pp_ol_con','pp_ol_con_c','pp_ol_con_ql','pp_ol_con_co','pp_ol_con_q2c','pp_ol_con_c2ql','pp_ol_con_ql2co',
+    'pp_gm_cl','pp_gm_a','pp_gm_conv','pp_gm_v','pp_gm_c','pp_gm_ql','pp_gm_co',
+    'pp_gm_c2a','pp_gm_c2v','pp_gm_a2c','pp_gm_c2ql','pp_gm_ql2co',
+    'pp_li_conn','pp_li_leads','pp_li_a','pp_li_c','pp_li_ql','pp_li_co','pp_li_income',
+    'pp_li_c2l','pp_li_l2a','pp_li_a2c','pp_li_c2ql','pp_li_ql2co',
+    'mb_cl','mb_a','mb_conv','mb_v','mb_c','mb_ql','mb_co','mb_income',
+    'ol_inv','ol_inv_c','ol_inv_ql','ol_inv_co','ol_dm','ol_dm_c','ol_dm_ql','ol_dm_co',
+    'ol_pc','ol_pc_c','ol_pc_ql','ol_pc_co','ol_con','ol_con_c','ol_con_ql','ol_con_co','ol_income',
+    'gm_cl','gm_a','gm_v','gm_view_rate','gm_reply_rate','gm_view_to_reply','gm_c','gm_ql','gm_co','gm_income',
+    'li_conn','li_leads','li_answers','li_calls','li_ql','li_contracts','li_income',
+    'mb_c_cl_n','mb_c_boost_n','mb_c_badge_n','mb_c_profile_n','mb_c_ret_n','mb_c_extra_n',
+    'gm_c_sub_usd','gm_c_cl_n','gm_c_boost_n','gm_c_ret_n','gm_c_extra_n','commission_usd',
+    'li_c_sub_usd','li_c_tools_usd','li_c_comm_usd',
+    't_plan','t_done','t_next','t_conc'];
+  var d={_version:1,_type:'upwork_weekly_report'};
+  ids.forEach(function(id){var el=document.getElementById(id);if(el)d[id]=el.value||'';});
+  var m=(sv('sel-month')||'month').toLowerCase();
+  var w=(sv('sel-week')||'').replace(/\s+/g,'_');
+  var blob=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='weekly_'+m+(w?'_'+w:'')+'.json';a.click();URL.revokeObjectURL(a.href);
+}
+
+function importJSON(input){
+  var file=input.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var d=JSON.parse(e.target.result);
+      if(d._type!=='upwork_weekly_report'){alert('Неправильний формат');return;}
+      Object.keys(d).forEach(function(k){
+        if(k.startsWith('_'))return;
+        var el=document.getElementById(k);if(el)el.value=d[k]||'';
+      });
+      calcCosts();render();
+    }catch(err){alert('Помилка: '+err.message);}
+    input.value='';
+  };
+  reader.readAsText(file);
+}
+
+document.addEventListener('keydown',function(e){
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT')return;
+  if(e.key==='ArrowRight')nextSlide();if(e.key==='ArrowLeft')prevSlide();
+});
+
+render();
+</script>
+</body>
+</html>
