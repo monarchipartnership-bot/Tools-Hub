@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Report Studio &mdash; Mon'Archi</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZD0iTTIwLjAyMjUgMzkuOTM3NUMzMS4wMjggMzkuOTM3NSAzOS45NDk3IDMxLjAxMTIgMzkuOTQ5NyAyMEMzOS45NDk3IDguOTg4ODIgMzEuMDI4IDAuMDYyNSAyMC4wMjI1IDAuMDYyNUM5LjAxNjk2IDAuMDYyNSAwLjA5NTIxNDggOC45ODg4MiAwLjA5NTIxNDggMjBDMC4wOTUyMTQ4IDMxLjAxMTIgOS4wMTY5NiAzOS45Mzc1IDIwLjAyMjUgMzkuOTM3NVoiIGZpbGw9IiM0MjEzNDIiLz48ZyBmaWxsPSIjZmZmZmZmIj48cGF0aCBkPSJNMTguOTk4IDE3LjE1MDJDMTguOTk4IDE3LjE1MDIgMTQuNTAzNCAxNS41MDMzIDEyLjU2MzggMTUuMDAzM0MxMi41NjM4IDE1LjAwMzMgMTIuNTYyMiAxNS4wMDMzIDEyLjU2MDcgMTUuMDAzM0MxMi40NzAxIDE0Ljk4NjEgMTIuMzc2NCAxNC45NzgzIDEyLjI4MTEgMTQuOTc4M0MxMi4xNzk2IDE0Ljk3ODMgMTIuMDc5NyAxNC45ODc3IDExLjk4MjkgMTUuMDA2NEMxMS43NDM5IDE1LjA1MzMgMTEuNTIzNyAxNS4xNTMzIDExLjMzNDggMTUuMjk3MUMxMS4xOTQyIDE1LjQwNDkgMTEuMDcyNCAxNS41MzYxIDEwLjk3MjQgMTUuNjgzQzEwLjk3MjQgMTUuNjgzIDEwLjgxOTQgMTUuOTc1MiAxMC44MTk0IDE1Ljk3NjhDOC44OTUzOCAxOS42OTU1IDYuMzUyOTMgMjguMTM3NyA2LjMwNjA4IDI4LjI0ODZDNi4yNTE0MiAyOC4zNzM2IDYuMTI2NDkgMjguNDU5NiA1Ljk4MjgxIDI4LjQ1OTZDNS43ODYwNCAyOC40NTk2IDUuNjI2NzUgMjguMzAwMiA1LjYyODMxIDI4LjEwMzNDNS42MjgzMSAyOC4wOTcxIDYuNTc0NyAxNi41ODYxIDcuODY3NzggMTEuNzUxOEM4LjE4NjM3IDEwLjU5MjQgOS4yNDgzMiA5LjczOTI2IDEwLjUwODYgOS43MzkyNkMxMS4wNDEyIDkuNzM5MjYgMTEuNTM3OCA5Ljg5MDgyIDExLjk1NzkgMTAuMTU0OUMxMi4wMTEgMTAuMTg3NyAxMi4wMjUgMTAuMTkzOSAxMi4xMTU2IDEwLjI1NDlDMTQuNzI2OCAxMi4xNDI0IDE5LjAwMjcgMTcuMTQ4NiAxOS4wMDI3IDE3LjE0ODZMMTguOTk4IDE3LjE1MDJaIi8+PHBhdGggZD0iTTM0LjQyMjkgMjcuMTkyM0MzNC4zOTMzIDI3LjkwOTUgMzMuODAxNCAyOC40ODEzIDMzLjA3NjggMjguNDgxM0MzMi44ODQ3IDI4LjQ4MTMgMzIuNzAyIDI4LjQ0MDcgMzIuNTM2NCAyOC4zNjg4QzMxLjQ2NjYgMjcuODMxMyAyMi42NDc3IDE5LjcxMSAyMi42NDc3IDE5LjcxMUMyMi42NDc3IDE5LjcxMSAyOS4zNDI3IDIzLjY2MjYgMzAuNTEyNSAyNC4yMTczQzMwLjY3OCAyNC4yOTU0IDMwLjg1MjkgMjQuMzU5NSAzMC45MzU3IDI0LjM3MkMzMS4yMTA1IDI0LjQxNDIgMzEuNDU3MyAyNC4xNzA0IDMxLjQyNiAyMy44ODQ1QzMxLjMwMTEgMjIuNzQ1NCAyOS43OTQxIDE3LjE3MzUgMjkuMjY3OCAxNS45NDIzQzI5LjA3NDEgMTUuMzgxMyAyOC41NDE2IDE0Ljk3OTggMjcuOTE2OSAxNC45Nzk4QzI3LjcxMDggMTQuOTc5OCAyNy41MTQgMTUuMDIzNSAyNy4zMzYgMTUuMTAzMkMyNS45MDIzIDE1LjcwMTcgMTQuOTYxMSAyMi4zODYgMTQuOTYxMSAyMi4xNjg4QzE0Ljk2MTEgMjIuMDY1NyAyNC44NDM1IDEyLjM3ODIgMjguMTA5IDEwLjI0MzhDMjguNTU4OCA5Ljk3MTk3IDI5LjEwMDcgOS43MTcyOSAyOS42OTcyIDkuNzE3MjlDMzAuODc5NCA5LjcxNzI5IDMxLjg4MDUgMTAuNDg5MiAzMi4yMjI1IDExLjU1NjNDMzIuMjIyNSAxMS41NTYzIDMyLjIyMjUgMTEuNTU2OSAzMi4yMjI1IDExLjU1NzlDMzIuNDY0NiAxMi4yNTMyIDM0LjE2OTkgMjIuMTAwMSAzNC40MTIgMjYuOTM5MkMzNC40MTUxIDI3LjAyMzUgMzQuNDE5OCAyNy4xMDc5IDM0LjQyMjkgMjcuMTkyM1oiLz48cGF0aCBkPSJNMjQuMDAwMiAxOC41MjQ5TDI3LjI0NjkgMTYuNTczM0MyNy41NDUyIDE2LjM5MzcgMjcuOTM0MSAxNi41MzkgMjguMDQzNCAxNi44NzAyTDI5LjU2NzYgMjEuNTQwNUMyOS42MDM1IDIxLjY0OTkgMjkuNDg2NCAyMS43NDY4IDI5LjM4NjUgMjEuNjkwNUwyNC4wMDMzIDE4LjY3OEMyMy45NDM5IDE4LjY0NTIgMjMuOTQzOSAxOC41NjA4IDI0LjAwMDIgMTguNTI2NVYxOC41MjQ5WiIvPjwvZz48L3N2Zz4=">
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap");
+:root{
+  --ink:#241429; --mut:rgba(36,20,41,0.55); --mut2:rgba(36,20,41,0.35);
+  --purple:#661466; --purple2:#883288; --purple3:#B544B5;
+  --gold:#A6742A; --line:rgba(102,20,102,0.14); --card:#FBF8FD;
+  --done:#1A9C6B; --clients:#883288; --plans:#B8860B;
+  --li:#0A66C2; --uw:#108A00; --other:#6B6470;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Inter",sans-serif;background:#EFE9F4;color:var(--ink);min-height:100vh;}
+.toolbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:10px 22px;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 2px 12px rgba(102,20,102,0.06);}
+.tb-logo{width:26px;height:26px;flex-shrink:0;}
+.tb-ttl{font-family:"Montserrat",sans-serif;font-weight:700;font-size:0.86rem;color:var(--purple);letter-spacing:-0.01em;}
+.tb-sp{flex:1;}
+.btn{font-family:"Inter",sans-serif;font-weight:600;font-size:0.78rem;padding:8px 15px;border-radius:7px;cursor:pointer;border:none;white-space:nowrap;}
+.btn-p{background:linear-gradient(135deg,#B544B5,#661466);color:#fff;}
+.btn-p:hover{background:linear-gradient(135deg,#C955C9,#7A1B7A);}
+.btn-g{background:rgba(102,20,102,0.07);color:#661466;}
+.btn-g:hover{background:rgba(102,20,102,0.14);}
+.page-wrap{display:flex;justify-content:center;padding:30px 20px 60px;}
+.page{width:210mm;min-height:297mm;background:#fff;box-shadow:0 12px 44px rgba(60,20,70,0.16);padding:16mm 15mm;position:relative;}
+.rpt-top{display:flex;align-items:center;gap:10px;margin-bottom:2px;}
+.rpt-top svg{width:32px;height:32px;flex-shrink:0;}
+.rpt-ttl{font-family:"Montserrat",sans-serif;font-weight:800;font-size:1.55rem;color:var(--purple);letter-spacing:-0.02em;}
+.rpt-sub{font-family:"Inter",sans-serif;font-size:0.68rem;color:var(--mut2);letter-spacing:0.14em;text-transform:uppercase;margin:2px 0 14px 42px;}
+.rpt-meta{display:flex;gap:30px;padding-bottom:14px;margin-bottom:22px;border-bottom:2px solid var(--purple);}
+.rpt-field{display:flex;flex-direction:column;gap:3px;}
+.rpt-field label{font-family:"Inter",sans-serif;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--mut);}
+.rpt-field input{font-family:"Inter",sans-serif;font-size:0.92rem;font-weight:600;color:var(--ink);border:none;background:transparent;outline:none;padding:2px 0;border-bottom:1px dashed transparent;min-width:140px;}
+.rpt-field input:focus{border-bottom-color:var(--purple2);}
+.section{margin-bottom:24px;}
+.sec-head{display:flex;align-items:center;gap:8px;margin-bottom:11px;}
+.sec-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.sec-name{font-family:"Montserrat",sans-serif;font-weight:700;font-size:0.86rem;letter-spacing:0.03em;text-transform:uppercase;color:var(--ink);}
+.sec-line{flex:1;height:1px;background:var(--line);}
+.sec-count{font-family:"Inter",sans-serif;font-size:0.66rem;font-weight:600;color:var(--mut);letter-spacing:0.03em;}
+.items{display:flex;flex-direction:column;gap:9px;margin-bottom:11px;}
+.item-box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px 12px 40px;position:relative;}
+.item-idx{position:absolute;left:11px;top:12px;width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Inter",sans-serif;font-weight:700;font-size:0.64rem;color:#fff;}
+.item-box textarea{width:100%;display:block;border:none;background:transparent;outline:none;resize:none;overflow:hidden;font-family:"Inter",sans-serif;font-size:0.85rem;line-height:1.58;color:var(--ink);min-height:20px;}
+.item-box textarea::placeholder{color:var(--mut2);}
+.del-btn{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:6px;border:none;background:rgba(192,57,43,0.09);color:#C0392B;font-size:0.72rem;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;justify-content:center;line-height:1;}
+.item-box:hover .del-btn{opacity:1;}
+.client-hdr{display:flex;align-items:center;gap:6px;margin-bottom:9px;}
+.pill{font-family:"Inter",sans-serif;font-size:0.64rem;font-weight:700;padding:4px 11px;border-radius:20px;border:1px solid var(--line);background:#fff;color:var(--mut);cursor:pointer;letter-spacing:0.02em;opacity:0.5;transition:all .15s;}
+.pill:hover{opacity:0.85;}
+.pill.active{opacity:1;}
+.pill.active.src-linkedin{background:rgba(10,102,194,0.11);border-color:rgba(10,102,194,0.4);color:var(--li);}
+.pill.active.src-upwork{background:rgba(16,138,0,0.11);border-color:rgba(16,138,0,0.4);color:var(--uw);}
+.pill.active.src-other{background:rgba(107,100,112,0.11);border-color:rgba(107,100,112,0.4);color:var(--other);}
+.add-btn{align-self:flex-start;font-family:"Inter",sans-serif;font-weight:600;font-size:0.78rem;color:var(--purple2);background:rgba(102,20,102,0.05);border:1.5px dashed rgba(102,20,102,0.28);border-radius:10px;padding:9px 17px;cursor:pointer;}
+.add-btn:hover{background:rgba(102,20,102,0.11);}
+.empty-hint{font-family:"Inter",sans-serif;font-size:0.78rem;color:var(--mut2);font-style:italic;padding:2px 2px 9px;}
+.rpt-ftr{margin-top:6px;padding-top:12px;border-top:1px solid var(--line);font-family:"Inter",sans-serif;font-size:0.64rem;color:var(--mut2);text-align:center;letter-spacing:0.05em;text-transform:uppercase;}
+body.capturing .add-btn,body.capturing .del-btn{display:none!important;}
+body.capturing .pill:not(.active){display:none!important;}
+body.capturing .page{box-shadow:none!important;}
+@media print{
+  @page{size:210mm 297mm;margin:0;}
+  html,body{background:#fff!important;}
+  .toolbar,.page-wrap{padding:0!important;}
+  .toolbar{display:none!important;}
+  .page-wrap{display:block!important;background:#fff!important;}
+  .page{box-shadow:none!important;margin:0 auto!important;width:210mm!important;min-height:297mm!important;}
+  .add-btn,.del-btn{display:none!important;}
+  .pill:not(.active){display:none!important;}
+  .item-box{page-break-inside:avoid;}
+  .section{page-break-inside:avoid;}
+}
+
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div class="tb-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path d="M20.0225 39.9375C31.028 39.9375 39.9497 31.0112 39.9497 20C39.9497 8.98882 31.028 0.0625 20.0225 0.0625C9.01696 0.0625 0.0952148 8.98882 0.0952148 20C0.0952148 31.0112 9.01696 39.9375 20.0225 39.9375Z" fill="#421342"/><g fill="#ffffff"><path d="M18.998 17.1502C18.998 17.1502 14.5034 15.5033 12.5638 15.0033C12.5638 15.0033 12.5622 15.0033 12.5607 15.0033C12.4701 14.9861 12.3764 14.9783 12.2811 14.9783C12.1796 14.9783 12.0797 14.9877 11.9829 15.0064C11.7439 15.0533 11.5237 15.1533 11.3348 15.2971C11.1942 15.4049 11.0724 15.5361 10.9724 15.683C10.9724 15.683 10.8194 15.9752 10.8194 15.9768C8.89538 19.6955 6.35293 28.1377 6.30608 28.2486C6.25142 28.3736 6.12649 28.4596 5.98281 28.4596C5.78604 28.4596 5.62675 28.3002 5.62831 28.1033C5.62831 28.0971 6.5747 16.5861 7.86778 11.7518C8.18637 10.5924 9.24832 9.73926 10.5086 9.73926C11.0412 9.73926 11.5378 9.89082 11.9579 10.1549C12.011 10.1877 12.025 10.1939 12.1156 10.2549C14.7268 12.1424 19.0027 17.1486 19.0027 17.1486L18.998 17.1502Z"/><path d="M34.4229 27.1923C34.3933 27.9095 33.8014 28.4813 33.0768 28.4813C32.8847 28.4813 32.702 28.4407 32.5364 28.3688C31.4666 27.8313 22.6477 19.711 22.6477 19.711C22.6477 19.711 29.3427 23.6626 30.5125 24.2173C30.678 24.2954 30.8529 24.3595 30.9357 24.372C31.2105 24.4142 31.4573 24.1704 31.426 23.8845C31.3011 22.7454 29.7941 17.1735 29.2678 15.9423C29.0741 15.3813 28.5416 14.9798 27.9169 14.9798C27.7108 14.9798 27.514 15.0235 27.336 15.1032C25.9023 15.7017 14.9611 22.386 14.9611 22.1688C14.9611 22.0657 24.8435 12.3782 28.109 10.2438C28.5588 9.97197 29.1007 9.71729 29.6972 9.71729C30.8794 9.71729 31.8805 10.4892 32.2225 11.5563C32.2225 11.5563 32.2225 11.5569 32.2225 11.5579C32.4646 12.2532 34.1699 22.1001 34.412 26.9392C34.4151 27.0235 34.4198 27.1079 34.4229 27.1923Z"/><path d="M24.0002 18.5249L27.2469 16.5733C27.5452 16.3937 27.9341 16.539 28.0434 16.8702L29.5676 21.5405C29.6035 21.6499 29.4864 21.7468 29.3865 21.6905L24.0033 18.678C23.9439 18.6452 23.9439 18.5608 24.0002 18.5265V18.5249Z"/></g></svg></div>
+  <div class="tb-ttl">Daily Report Studio</div>
+  <div class="tb-sp"></div>
+  <button class="btn btn-g" onclick="location.href='index.html'">&#8592; Меню</button>
+  <button class="btn btn-p" onclick="exportPDF()">&#8595; PDF</button>
+  <button class="btn btn-g" onclick="exportJPEG(this)">&#8595; JPEG</button>
+  <button class="btn btn-g" onclick="saveJSON()">&#8595; JSON</button>
+  <button class="btn btn-g" onclick="document.getElementById('jin').click()">&#8593; JSON</button>
+  <input type="file" id="jin" accept=".json" style="display:none" onchange="importJSON(this)">
+</div>
+
+<div class="page-wrap">
+  <div class="page" id="page">
+    <div class="rpt-top">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path d="M20.0225 39.9375C31.028 39.9375 39.9497 31.0112 39.9497 20C39.9497 8.98882 31.028 0.0625 20.0225 0.0625C9.01696 0.0625 0.0952148 8.98882 0.0952148 20C0.0952148 31.0112 9.01696 39.9375 20.0225 39.9375Z" fill="#421342"/><g fill="#ffffff"><path d="M18.998 17.1502C18.998 17.1502 14.5034 15.5033 12.5638 15.0033C12.5638 15.0033 12.5622 15.0033 12.5607 15.0033C12.4701 14.9861 12.3764 14.9783 12.2811 14.9783C12.1796 14.9783 12.0797 14.9877 11.9829 15.0064C11.7439 15.0533 11.5237 15.1533 11.3348 15.2971C11.1942 15.4049 11.0724 15.5361 10.9724 15.683C10.9724 15.683 10.8194 15.9752 10.8194 15.9768C8.89538 19.6955 6.35293 28.1377 6.30608 28.2486C6.25142 28.3736 6.12649 28.4596 5.98281 28.4596C5.78604 28.4596 5.62675 28.3002 5.62831 28.1033C5.62831 28.0971 6.5747 16.5861 7.86778 11.7518C8.18637 10.5924 9.24832 9.73926 10.5086 9.73926C11.0412 9.73926 11.5378 9.89082 11.9579 10.1549C12.011 10.1877 12.025 10.1939 12.1156 10.2549C14.7268 12.1424 19.0027 17.1486 19.0027 17.1486L18.998 17.1502Z"/><path d="M34.4229 27.1923C34.3933 27.9095 33.8014 28.4813 33.0768 28.4813C32.8847 28.4813 32.702 28.4407 32.5364 28.3688C31.4666 27.8313 22.6477 19.711 22.6477 19.711C22.6477 19.711 29.3427 23.6626 30.5125 24.2173C30.678 24.2954 30.8529 24.3595 30.9357 24.372C31.2105 24.4142 31.4573 24.1704 31.426 23.8845C31.3011 22.7454 29.7941 17.1735 29.2678 15.9423C29.0741 15.3813 28.5416 14.9798 27.9169 14.9798C27.7108 14.9798 27.514 15.0235 27.336 15.1032C25.9023 15.7017 14.9611 22.386 14.9611 22.1688C14.9611 22.0657 24.8435 12.3782 28.109 10.2438C28.5588 9.97197 29.1007 9.71729 29.6972 9.71729C30.8794 9.71729 31.8805 10.4892 32.2225 11.5563C32.2225 11.5563 32.2225 11.5569 32.2225 11.5579C32.4646 12.2532 34.1699 22.1001 34.412 26.9392C34.4151 27.0235 34.4198 27.1079 34.4229 27.1923Z"/><path d="M24.0002 18.5249L27.2469 16.5733C27.5452 16.3937 27.9341 16.539 28.0434 16.8702L29.5676 21.5405C29.6035 21.6499 29.4864 21.7468 29.3865 21.6905L24.0033 18.678C23.9439 18.6452 23.9439 18.5608 24.0002 18.5265V18.5249Z"/></g></svg>
+      <div class="rpt-ttl">Daily Report</div>
+    </div>
+    <div class="rpt-sub">Mon&#39;Archi &middot; Internal</div>
+    <div class="rpt-meta">
+      <div class="rpt-field"><label>Дата</label><input type="text" id="rpt-date" oninput="markDirty()"></div>
+      <div class="rpt-field"><label>Ім&#39;я</label><input type="text" id="rpt-name" placeholder="Ваше ім&#39;я" oninput="markDirty()"></div>
+    </div>
+
+    <div class="section" id="sec-done">
+      <div class="sec-head">
+        <div class="sec-dot" style="background:var(--done)"></div>
+        <div class="sec-name" style="color:var(--done)">Виконано за день</div>
+        <div class="sec-line"></div>
+        <div class="sec-count" id="cnt-done">0 пунктів</div>
+      </div>
+      <div class="items" id="items-done"></div>
+      <div class="empty-hint" id="empty-done">Немає пунктів &mdash; додайте перший нижче</div>
+      <button type="button" class="add-btn" onclick="addItem('done')">+ Додати пункт</button>
+    </div>
+
+    <div class="section" id="sec-clients">
+      <div class="sec-head">
+        <div class="sec-dot" style="background:var(--clients)"></div>
+        <div class="sec-name" style="color:var(--clients)">Клієнти</div>
+        <div class="sec-line"></div>
+        <div class="sec-count" id="cnt-clients">0 пунктів</div>
+      </div>
+      <div class="items" id="items-clients"></div>
+      <div class="empty-hint" id="empty-clients">Немає пунктів &mdash; додайте перший нижче</div>
+      <button type="button" class="add-btn" onclick="addItem('clients')">+ Додати клієнта</button>
+    </div>
+
+    <div class="section" id="sec-plans">
+      <div class="sec-head">
+        <div class="sec-dot" style="background:var(--plans)"></div>
+        <div class="sec-name" style="color:var(--plans)">Плани на завтра</div>
+        <div class="sec-line"></div>
+        <div class="sec-count" id="cnt-plans">0 пунктів</div>
+      </div>
+      <div class="items" id="items-plans"></div>
+      <div class="empty-hint" id="empty-plans">Немає пунктів &mdash; додайте перший нижче</div>
+      <button type="button" class="add-btn" onclick="addItem('plans')">+ Додати пункт</button>
+    </div>
+
+    <div class="rpt-ftr">Mon&#39;Archi &middot; Daily Report</div>
+  </div>
+</div>
+
+<script>
+var STATE = { date:'', name:'', done:[], clients:[], plans:[] };
+var nextId = 1;
+var SEC_COLOR = { done:'#1A9C6B', clients:'#883288', plans:'#B8860B' };
+var SEC_LABEL = { done:'пункт', clients:'клієнт', plans:'пункт' };
+var SOURCES = ['LinkedIn','Upwork','Other'];
+
+function esc(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function autoH(el){ el.style.height='auto'; el.style.height=el.scrollHeight+'px'; }
+
+function pad2(n){ return n<10?'0'+n:''+n; }
+function todayStr(){
+  var d=new Date();
+  return pad2(d.getDate())+'.'+pad2(d.getMonth()+1)+'.'+d.getFullYear();
+}
+
+function markDirty(){ STATE.date = document.getElementById('rpt-date').value; STATE.name = document.getElementById('rpt-name').value; }
+
+function updateCount(section){
+  var n = STATE[section].length;
+  var word = n===1 ? SEC_LABEL[section] : (SEC_LABEL[section]==='клієнт' ? 'клієнти' : 'пунктів');
+  document.getElementById('cnt-'+section).textContent = n + ' ' + word;
+  document.getElementById('empty-'+section).style.display = n ? 'none' : 'block';
+}
+
+function pillsHTML(section, id, active){
+  if(section !== 'clients') return '';
+  return '<div class="client-hdr">' + SOURCES.map(function(s){
+    var cls = 'src-' + s.toLowerCase();
+    return '<button type="button" class="pill '+cls+(s===active?' active':'')+'" onclick="setSource(\''+section+'\','+id+',\''+s+'\',this)">'+s+'</button>';
+  }).join('') + '</div>';
+}
+
+function addItem(section, presetText, presetSource){
+  var id = nextId++;
+  var item = { id:id, text: presetText||'' };
+  if(section === 'clients') item.source = presetSource || 'LinkedIn';
+  STATE[section].push(item);
+  renderNewItem(section, item);
+  updateCount(section);
+  return item;
+}
+
+function renderNewItem(section, item){
+  var container = document.getElementById('items-'+section);
+  var html = '<div class="item-box" data-id="'+item.id+'">'
+    + '<div class="item-idx" style="background:'+SEC_COLOR[section]+'">'+STATE[section].length+'</div>'
+    + '<button type="button" class="del-btn" title="Видалити">&times;</button>'
+    + pillsHTML(section, item.id, item.source)
+    + '<textarea placeholder="Введіть текст..." rows="1">'+esc(item.text)+'</textarea>'
+    + '</div>';
+  container.insertAdjacentHTML('beforeend', html);
+  var box = container.lastElementChild;
+  var ta = box.querySelector('textarea');
+  ta.value = item.text;
+  autoH(ta);
+  ta.addEventListener('input', function(){ item.text = ta.value; autoH(ta); });
+  box.querySelector('.del-btn').addEventListener('click', function(){ removeItem(section, item.id, box); });
+}
+
+function removeItem(section, id, box){
+  STATE[section] = STATE[section].filter(function(it){ return it.id !== id; });
+  box.remove();
+  renumber(section);
+  updateCount(section);
+}
+
+function renumber(section){
+  var container = document.getElementById('items-'+section);
+  var boxes = container.querySelectorAll('.item-box');
+  for(var i=0;i<boxes.length;i++){
+    var idx = boxes[i].querySelector('.item-idx');
+    if(idx) idx.textContent = (i+1);
+  }
+}
+
+function setSource(section, id, source, btn){
+  var item = STATE[section].filter(function(it){ return it.id === id; })[0];
+  if(!item) return;
+  item.source = source;
+  var hdr = btn.parentElement;
+  var pills = hdr.querySelectorAll('.pill');
+  pills.forEach(function(p){ p.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+function exportPDF(){
+  window.print();
+}
+
+function exportJPEG(btn){
+  var label = btn ? btn.textContent : '';
+  if(btn) btn.textContent = '...';
+  document.body.classList.add('capturing');
+  var ready = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+  ready.then(function(){
+    return html2canvas(document.getElementById('page'), {
+      scale: 2,
+      backgroundColor: '#ffffff',
+      useCORS: true
+    });
+  }).then(function(canvas){
+    var link = document.createElement('a');
+    var datePart = (STATE.date||'').replace(/[^0-9]/g,'_') || 'report';
+    link.download = 'daily_report_' + datePart + '.jpg';
+    link.href = canvas.toDataURL('image/jpeg', 0.92);
+    link.click();
+  }).catch(function(err){
+    alert('Не вдалося створити зображення: ' + err.message);
+  }).finally(function(){
+    document.body.classList.remove('capturing');
+    if(btn) btn.textContent = label;
+  });
+}
+
+function saveJSON(){
+  markDirty();
+  var payload = { _type:'monarchi_daily_report', _version:1, date:STATE.date, name:STATE.name,
+    done:STATE.done, clients:STATE.clients, plans:STATE.plans };
+  var blob = new Blob([JSON.stringify(payload,null,2)], {type:'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  var datePart = (STATE.date||'').replace(/[^0-9]/g,'_') || 'report';
+  a.download = 'daily_report_' + datePart + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function clearAll(){
+  ['done','clients','plans'].forEach(function(section){
+    STATE[section] = [];
+    document.getElementById('items-'+section).innerHTML = '';
+    updateCount(section);
+  });
+}
+
+function importJSON(input){
+  var file = input.files[0]; if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      var d = JSON.parse(e.target.result);
+      if(d._type !== 'monarchi_daily_report'){ alert('Неправильний формат файлу'); return; }
+      clearAll();
+      document.getElementById('rpt-date').value = d.date || '';
+      document.getElementById('rpt-name').value = d.name || '';
+      markDirty();
+      (d.done||[]).forEach(function(it){ addItem('done', it.text); });
+      (d.clients||[]).forEach(function(it){ addItem('clients', it.text, it.source); });
+      (d.plans||[]).forEach(function(it){ addItem('plans', it.text); });
+    }catch(err){
+      alert('Помилка: ' + err.message);
+    }
+    input.value = '';
+  };
+  reader.readAsText(file);
+}
+
+document.getElementById('rpt-date').value = todayStr();
+markDirty();
+updateCount('done'); updateCount('clients'); updateCount('plans');
+addItem('done'); addItem('clients'); addItem('plans');
+
+</script>
+</body>
+</html>
