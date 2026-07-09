@@ -48,6 +48,7 @@ body{font-family:"Inter",sans-serif;background:#EFE9F4;color:var(--ink);min-heig
 .item-idx{position:absolute;left:11px;top:12px;width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Inter",sans-serif;font-weight:700;font-size:0.64rem;color:#fff;}
 .item-box textarea{width:100%;display:block;border:none;background:transparent;outline:none;resize:none;overflow:hidden;font-family:"Inter",sans-serif;font-size:0.85rem;line-height:1.58;color:var(--ink);min-height:20px;}
 .item-box textarea::placeholder{color:var(--mut2);}
+.capture-text{width:100%;display:block;font-family:"Inter",sans-serif;font-size:0.85rem;line-height:1.58;color:var(--ink);white-space:pre-wrap;word-wrap:break-word;overflow-wrap:break-word;min-height:20px;}
 .del-btn{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:6px;border:none;background:rgba(192,57,43,0.09);color:#C0392B;font-size:0.72rem;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;justify-content:center;line-height:1;}
 .item-box:hover .del-btn{opacity:1;}
 .client-hdr{display:flex;align-items:center;gap:6px;margin-bottom:9px;}
@@ -234,10 +235,33 @@ function exportPDF(){
   window.print();
 }
 
+function swapTextareasForCapture(){
+  var page = document.getElementById('page');
+  var textareas = page.querySelectorAll('textarea');
+  var swapped = [];
+  textareas.forEach(function(ta){
+    var div = document.createElement('div');
+    div.className = 'capture-text';
+    div.textContent = ta.value;
+    ta.style.display = 'none';
+    ta.insertAdjacentElement('afterend', div);
+    swapped.push({ ta: ta, div: div });
+  });
+  return swapped;
+}
+
+function restoreTextareasAfterCapture(swapped){
+  swapped.forEach(function(pair){
+    pair.div.remove();
+    pair.ta.style.display = '';
+  });
+}
+
 function exportJPEG(btn){
   var label = btn ? btn.textContent : '';
   if(btn) btn.textContent = '...';
   document.body.classList.add('capturing');
+  var swapped = swapTextareasForCapture();
   var ready = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
   ready.then(function(){
     return html2canvas(document.getElementById('page'), {
@@ -254,6 +278,7 @@ function exportJPEG(btn){
   }).catch(function(err){
     alert('Не вдалося створити зображення: ' + err.message);
   }).finally(function(){
+    restoreTextareasAfterCapture(swapped);
     document.body.classList.remove('capturing');
     if(btn) btn.textContent = label;
   });
