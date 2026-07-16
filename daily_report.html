@@ -148,9 +148,9 @@ body.capturing .btn,body.capturing .topbar,body.capturing .sidebar,body.capturin
     <button class="tb-burger" id="burgerBtn" onclick="toggleSidebar()" title="Меню розділів">
       <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
     </button>
-    <div class="tb-logo" id="logo"></div>
+    <a class="tb-logo" href="index.html" id="logo" title="На головну"></a>
     <div class="tb-sp"></div>
-    <a class="btn" href="index.html">&#8592; Menu</a>
+    <button class="btn" onclick="goBack()">&#8592; Back</button>
     <button class="btn" onclick="exportPDF()">&#8595; PDF</button>
     <button class="btn" onclick="exportJPEG(this)">&#8595; JPEG</button>
     <button class="btn btn-p" onclick="saveReport(this)">&#10003; Save</button>
@@ -233,6 +233,7 @@ document.getElementById("logo").innerHTML =
 
 /* ===== sidebar toggle ===== */
 function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('collapsed'); }
+function goBack(){ if(history.length>1){ history.back(); } else { location.href='index.html'; } }
 
 /* ===== helpers ===== */
 function esc(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
