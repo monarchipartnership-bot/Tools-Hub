@@ -137,7 +137,7 @@ html{scroll-behavior:smooth}
 
 /* Tasks (manual, month-only) */
 .task-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
-.task-col .items{display:flex;flex-direction:column;gap:9px;margin-bottom:12px}
+.items{display:flex;flex-direction:column;gap:9px;margin-bottom:12px}
 .item-box{background:var(--card2);border:1px solid var(--line);border-radius:11px;padding:11px 36px 11px 13px;position:relative}
 .item-box textarea{width:100%;display:block;border:none;background:transparent;color:var(--text);font-family:"Inter",sans-serif;
   font-size:.86rem;line-height:1.5;resize:none;overflow:hidden;outline:none;min-height:20px}
@@ -148,6 +148,17 @@ html{scroll-behavior:smooth}
 .add-btn{font-family:"Inter",sans-serif;font-weight:600;font-size:.8rem;color:var(--gold);background:rgba(232,192,121,.06);
   border:1.5px dashed rgba(232,192,121,.32);border-radius:10px;padding:9px 15px;cursor:pointer}
 .add-btn:hover{background:rgba(232,192,121,.12)}
+
+/* Клієнти (manual, month-only) */
+.client-fields{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;padding-right:20px}
+.cf{display:flex;flex-direction:column;gap:5px;min-width:150px}
+.cf label{font-family:"Inter",sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
+.cf select,.cf input{font-family:"Inter",sans-serif;font-size:.86rem;color:var(--text);background:rgba(255,255,255,.06);
+  border:1px solid var(--line);border-radius:8px;padding:7px 9px;outline:none}
+.cf select option{background:#2a0a2a;color:var(--text)}
+.cf select:focus,.cf input:focus{border-color:var(--gold)}
+.cf-wide{flex:1;min-width:220px}
+.empty-hint{font-family:"Inter",sans-serif;font-size:.8rem;color:var(--mut);font-style:italic;padding:8px 2px}
 
 @media(max-width:1180px){ .chgrid{grid-template-columns:repeat(2,1fr)} }
 @media(max-width:880px){
@@ -191,6 +202,7 @@ body.capturing .btn,body.capturing .topbar,body.capturing .sidebar{display:none!
         <a href="#sec-upwork"><svg class="s-ic" viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>Upwork (6 каналів)</a>
         <a href="#sec-linkedin"><svg class="s-ic" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M6.8 7.6l4.6 8.8M17.2 7.6l-4.6 8.8"/></svg>LinkedIn</a>
         <a href="#sec-finance"><svg class="s-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.3 9.6c0-1.4 1.2-2.3 2.7-2.3s2.7.8 2.7 1.9c0 1.5-1.6 1.9-2.7 2.3-1.1.4-2.7.8-2.7 2.3s1.2 1.9 2.7 1.9 2.7-.9 2.7-2.3"/></svg>Фінанси</a>
+        <a href="#sec-clients"><svg class="s-ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>Клієнти</a>
         <a href="#sec-tasks"><svg class="s-ic" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Задачі</a>
       </div>
     </nav>
@@ -290,6 +302,16 @@ body.capturing .btn,body.capturing .topbar,body.capturing .sidebar{display:none!
             <div class="fl">Прибуток</div><div class="fv" id="sum_profit" style="font-size:2rem">+$0</div>
           </div>
         </div>
+      </section>
+
+      <section class="report-section" id="sec-clients">
+        <div class="stitle">Клієнти</div>
+        <div class="placeholder" style="max-width:none;margin-bottom:18px">
+          <p>Цей розділ заповнюється вручну для місяця &mdash; він не підсумовується з тижневих звітів.</p>
+        </div>
+        <div class="items" id="items-clients"></div>
+        <div class="empty-hint" id="empty-clients" style="display:none">Немає клієнтів &mdash; додайте першого нижче</div>
+        <button type="button" class="add-btn" onclick="addClientItem()">+ Додати клієнта</button>
       </section>
 
       <section class="report-section" id="sec-tasks">
@@ -595,6 +617,54 @@ function clearTasks(){
   taskNextId=1;
 }
 
+/* ===== Клієнти (manual, month-only; item logic ported from daily_report.html) ===== */
+var CLIENT_PLATFORMS = ['Upwork','LinkedIn','Email','Other'];
+var LEAD_TYPES = ['Новий лід','Поточний лід','Старий лід'];
+var CLIENTS = [];
+var clientNextId = 1;
+function updateEmptyHintClients(){
+  var el=document.getElementById('empty-clients'); if(el) el.style.display = CLIENTS.length ? 'none' : 'block';
+}
+function addClientItem(preset){
+  var id = clientNextId++;
+  var item = { id:id, platform:(preset&&preset.platform)||CLIENT_PLATFORMS[0], leadType:(preset&&preset.leadType)||LEAD_TYPES[0], text:(preset&&preset.text)||'' };
+  CLIENTS.push(item);
+  renderClientItem(item);
+  updateEmptyHintClients();
+  return item;
+}
+function renderClientItem(item){
+  var container = document.getElementById('items-clients');
+  var html = '<div class="item-box" data-id="'+item.id+'">'
+    + '<button type="button" class="del-btn" title="Видалити">&times;</button>'
+    + '<div class="client-fields">'
+      + '<div class="cf"><label>Платформа</label><select data-field="platform">'
+        + CLIENT_PLATFORMS.map(function(p){ return '<option value="'+p+'"'+(p===item.platform?' selected':'')+'>'+p+'</option>'; }).join('')
+        + '</select></div>'
+      + '<div class="cf"><label>Тип ліда</label><select data-field="leadType">'
+        + LEAD_TYPES.map(function(t){ return '<option value="'+t+'"'+(t===item.leadType?' selected':'')+'>'+t+'</option>'; }).join('')
+        + '</select></div>'
+      + '<div class="cf cf-wide"><label>Дії</label><input type="text" data-field="text" value="'+escHtml(item.text)+'" placeholder="Опишіть дію..."></div>'
+    + '</div></div>';
+  container.insertAdjacentHTML('beforeend', html);
+  var box = container.lastElementChild;
+  box.querySelector('[data-field="platform"]').addEventListener('change', function(e){ item.platform = e.target.value; });
+  box.querySelector('[data-field="leadType"]').addEventListener('change', function(e){ item.leadType = e.target.value; });
+  box.querySelector('[data-field="text"]').addEventListener('input', function(e){ item.text = e.target.value; });
+  box.querySelector('.del-btn').addEventListener('click', function(){ removeClientItem(item.id, box); });
+}
+function removeClientItem(id, box){
+  CLIENTS = CLIENTS.filter(function(it){ return it.id !== id; });
+  box.remove();
+  updateEmptyHintClients();
+}
+function clearClients(){
+  CLIENTS = [];
+  var el=document.getElementById('items-clients'); if(el) el.innerHTML='';
+  clientNextId = 1;
+  updateEmptyHintClients();
+}
+
 /* ===== month/date logic (ported from weekly.html) ===== */
 function computeWeeksForMonth(year, month){ // month: 1-12
   var first = new Date(year, month-1, 1);
@@ -652,6 +722,7 @@ function renderWeeksBadge(rows, expectedWeeks){
 
 async function loadMonthlySnapshot(ym){
   clearTasks();
+  clearClients();
   document.getElementById('manager').value='';
   if(!supa){ document.getElementById('saveState').textContent='Ще не збережено'; return; }
   try{
@@ -664,6 +735,7 @@ async function loadMonthlySnapshot(ym){
           (data.tasks[section]||[]).forEach(function(it){ addTaskItem(section, it.text); });
         });
       }
+      (data.clients||[]).forEach(function(it){ addClientItem({platform:it.platform, leadType:it.leadType, text:it.text}); });
       document.getElementById('manager').value = res.data.author||'';
       document.getElementById('saveState').textContent = 'Збережено ' + new Date(res.data.updated_at).toLocaleString('uk-UA');
     } else {
@@ -707,7 +779,8 @@ async function saveReport(btn){
     tasks: { t_plan:TASKS.t_plan.map(function(it){return {text:it.text};}),
       t_done:TASKS.t_done.map(function(it){return {text:it.text};}),
       t_next:TASKS.t_next.map(function(it){return {text:it.text};}),
-      t_conc:TASKS.t_conc.map(function(it){return {text:it.text};}) }
+      t_conc:TASKS.t_conc.map(function(it){return {text:it.text};}) },
+    clients: CLIENTS.map(function(it){ return {platform:it.platform, leadType:it.leadType, text:it.text}; })
   };
   var payload = {
     year:ym.y, month:ym.m, month_start:monthStart,

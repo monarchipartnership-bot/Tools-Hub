@@ -143,6 +143,8 @@ table.cmp-table tr.hl td.best{background:rgba(74,224,138,.16)}
 .cmp-tasks-list{list-style:none;text-align:left;display:flex;flex-direction:column;gap:5px;max-width:220px;white-space:normal}
 .cmp-tasks-list li{font-size:.8rem;color:var(--text);padding-left:12px;position:relative}
 .cmp-tasks-list li::before{content:"\2022";position:absolute;left:0;color:var(--gold)}
+.cmp-client-tag{font-size:.68rem;font-weight:700;color:var(--gold)}
+.cmp-client-tag.lead{color:var(--mag)}
 .cmp-tasks-empty{color:var(--mut);font-style:italic}
 
 @media(max-width:880px){
@@ -182,6 +184,7 @@ body.capturing .btn,body.capturing .topbar,body.capturing .sidebar,body.capturin
         <a href="#sec-upwork"><svg class="s-ic" viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>Upwork (6 каналів)</a>
         <a href="#sec-linkedin"><svg class="s-ic" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M6.8 7.6l4.6 8.8M17.2 7.6l-4.6 8.8"/></svg>LinkedIn</a>
         <a href="#sec-finance"><svg class="s-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.3 9.6c0-1.4 1.2-2.3 2.7-2.3s2.7.8 2.7 1.9c0 1.5-1.6 1.9-2.7 2.3-1.1.4-2.7.8-2.7 2.3s1.2 1.9 2.7 1.9 2.7-.9 2.7-2.3"/></svg>Фінанси</a>
+        <a href="#sec-clients"><svg class="s-ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>Клієнти</a>
         <a href="#sec-tasks"><svg class="s-ic" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Задачі</a>
       </div>
     </nav>
@@ -226,6 +229,11 @@ body.capturing .btn,body.capturing .topbar,body.capturing .sidebar,body.capturin
         <section class="report-section" id="sec-finance">
           <h2 class="stitle">Фінанси</h2>
           <div id="finTables"></div>
+        </section>
+
+        <section class="report-section" id="sec-clients">
+          <h2 class="stitle">Клієнти</h2>
+          <div id="clientTables"></div>
         </section>
 
         <section class="report-section" id="sec-tasks">
@@ -546,6 +554,21 @@ function renderTasks(){
   });
   document.getElementById('taskTables').innerHTML = html;
 }
+function renderClients(){
+  var cells = slots.map(function(s){
+    var items = (s.data.clients) || [];
+    if(!items.length) return '<td class="cmp-tasks-empty">&mdash;</td>';
+    return '<td><ul class="cmp-tasks-list">'+items.map(function(it){
+      return '<li><span class="cmp-client-tag">'+escHtml(it.platform)+'</span> &middot; <span class="cmp-client-tag lead">'+escHtml(it.leadType)+'</span><br>'+escHtml(it.text)+'</li>';
+    }).join('')+'</ul></td>';
+  }).join('');
+  var tableHtml = '<div class="cmp-table-wrap"><table class="cmp-table">'+tableHeadHTML()+'<tr><td class="rowlabel">Клієнти</td>'+cells+'</tr></table></div>';
+  var bodyId = 'blk_'+(blockIdCounter++);
+  var html = '<div class="ssub">Клієнти'
+    + '<button class="collapse-btn" id="'+bodyId+'_btn" onclick="toggleCollapse(\''+bodyId+'\')" title="Згорнути/розгорнути">&#9660;</button></div>'
+    + '<div class="cmp-collapsible" id="'+bodyId+'">'+tableHtml+'</div>';
+  document.getElementById('clientTables').innerHTML = html;
+}
 function renderAll(){
   document.getElementById('slotCount').textContent = slots.length;
   document.getElementById('addMonthBtn').disabled = slots.length>=6;
@@ -563,6 +586,7 @@ function renderAll(){
   renderUpwork();
   renderLI();
   renderFinance();
+  renderClients();
   renderTasks();
   flushCharts();
 }

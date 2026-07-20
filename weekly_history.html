@@ -153,10 +153,17 @@ html{scroll-behavior:smooth}
 
 /* Tasks (read-only) */
 .task-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
-.task-col .items{display:flex;flex-direction:column;gap:9px}
+.items{display:flex;flex-direction:column;gap:9px}
 .ro-item{background:var(--card2);border:1px solid var(--line);border-radius:11px;padding:11px 13px;
   font-family:"Inter",sans-serif;font-size:.86rem;line-height:1.5;color:var(--text)}
 .ro-empty{color:var(--mut);font-style:italic;font-size:.82rem;padding:4px 2px}
+
+/* Клієнти (read-only) */
+.ro-client-tags{display:flex;gap:8px;margin-bottom:6px}
+.ro-client-tag{font-family:"Inter",sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.03em;color:var(--gold);
+  background:rgba(232,192,121,.1);border:1px solid rgba(232,192,121,.3);border-radius:20px;padding:3px 10px}
+.ro-client-tag.lead{color:var(--mag);background:rgba(194,75,194,.1);border-color:rgba(194,75,194,.3)}
+.ro-client-text{color:var(--text)}
 
 @media(max-width:1180px){ .chgrid{grid-template-columns:repeat(2,1fr)} }
 @media(max-width:880px){
@@ -201,6 +208,7 @@ body.capturing .btn,body.capturing .topbar,body.capturing .sidebar{display:none!
         <a href="#sec-upwork"><svg class="s-ic" viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>Upwork (6 каналів)</a>
         <a href="#sec-linkedin"><svg class="s-ic" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M6.8 7.6l4.6 8.8M17.2 7.6l-4.6 8.8"/></svg>LinkedIn</a>
         <a href="#sec-finance"><svg class="s-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.3 9.6c0-1.4 1.2-2.3 2.7-2.3s2.7.8 2.7 1.9c0 1.5-1.6 1.9-2.7 2.3-1.1.4-2.7.8-2.7 2.3s1.2 1.9 2.7 1.9 2.7-.9 2.7-2.3"/></svg>Фінанси</a>
+        <a href="#sec-clients"><svg class="s-ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>Клієнти</a>
         <a href="#sec-tasks"><svg class="s-ic" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Задачі</a>
       </div>
     </nav>
@@ -290,6 +298,11 @@ body.capturing .btn,body.capturing .topbar,body.capturing .sidebar{display:none!
               <div class="fl">Прибуток</div><div class="fv" id="sum_profit" style="font-size:2rem">+$0</div>
             </div>
           </div>
+        </section>
+
+        <section class="report-section" id="sec-clients">
+          <div class="stitle">Клієнти</div>
+          <div class="items" id="items-clients"></div>
         </section>
 
         <section class="report-section" id="sec-tasks">
@@ -544,6 +557,19 @@ function renderAllTasks(tasksObj){
   TASK_SECTIONS.forEach(function(section){ renderTaskList(section, tasksObj && tasksObj[section]); });
 }
 
+/* ===== Клієнти (read-only) ===== */
+function renderClientList(items){
+  var el = document.getElementById('items-clients');
+  if(!el) return;
+  if(!items || !items.length){ el.innerHTML = '<div class="ro-empty">Немає клієнтів</div>'; return; }
+  el.innerHTML = items.map(function(it){
+    return '<div class="ro-item">'
+      + '<div class="ro-client-tags"><span class="ro-client-tag">'+escHtml(it.platform)+'</span><span class="ro-client-tag lead">'+escHtml(it.leadType)+'</span></div>'
+      + '<div class="ro-client-text">'+escHtml(it.text)+'</div>'
+      + '</div>';
+  }).join('');
+}
+
 /* ===== date helpers (ported from weekly.html) ===== */
 function computeWeeksForMonth(year, month){
   var first = new Date(year, month-1, 1);
@@ -610,6 +636,7 @@ function allFieldIds(){
 function clearFields(){
   allFieldIds().forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
   renderAllTasks(null);
+  renderClientList(null);
   recalcAll();
 }
 
@@ -654,6 +681,7 @@ async function loadReport(){
       Object.keys(data).forEach(function(k){ var el=document.getElementById(k); if(el) el.value = data[k]; });
       recalcAll();
       renderAllTasks(data.tasks);
+      renderClientList(data.clients);
       showBody();
     } else {
       clearFields();
