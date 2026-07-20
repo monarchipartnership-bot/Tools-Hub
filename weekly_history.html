@@ -197,6 +197,7 @@ body.capturing .btn,body.capturing .topbar,body.capturing .sidebar{display:none!
     <button class="btn" onclick="goBack()">&#8592; Back</button>
     <a class="btn" href="weekly.html">+ Новий звіт</a>
     <a class="btn" href="weekly_compare.html">Порівняння</a>
+    <button class="btn" id="shareBtn" onclick="shareReport(this)">&#8599; Поділитися</button>
     <button class="btn" onclick="exportPDF()">&#8595; PDF</button>
     <button class="btn" onclick="exportJPEG(this)">&#8595; JPEG</button>
   </div>
@@ -710,13 +711,72 @@ function exportJPEG(btn){
   .finally(function(){ document.body.classList.remove('capturing'); if(btn) btn.innerHTML=label; });
 }
 
+/* ===== share (deep-link to this exact report) ===== */
+function ensureYearOption(selId, year){
+  var sel = document.getElementById(selId); if(!sel) return;
+  var exists = Array.prototype.some.call(sel.options, function(o){ return +o.value===year; });
+  if(!exists){
+    var opt = document.createElement('option');
+    opt.value = year; opt.textContent = year;
+    sel.appendChild(opt);
+  }
+}
+function copyToClipboard(text){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    return navigator.clipboard.writeText(text);
+  }
+  return new Promise(function(resolve,reject){
+    try{
+      var ta=document.createElement('textarea');
+      ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      var ok=document.execCommand('copy');
+      document.body.removeChild(ta);
+      ok?resolve():reject(new Error('execCommand failed'));
+    }catch(e){ reject(e); }
+  });
+}
+function buildShareURL(periodStr){
+  var url = new URL(location.href);
+  url.search = '?period=' + encodeURIComponent(periodStr);
+  return url.toString();
+}
+function getSharedPeriod(){
+  return new URLSearchParams(location.search).get('period');
+}
+function shareReport(btn){
+  var w = currentWeekObj(); if(!w) return;
+  var url = buildShareURL(isoDate(w.start));
+  var label = btn.innerHTML;
+  copyToClipboard(url).then(function(){
+    btn.innerHTML = '&#10003; Скопійовано';
+    setTimeout(function(){ btn.innerHTML = label; }, 2000);
+  }).catch(function(){
+    window.prompt('Скопіюйте посилання вручну:', url);
+  });
+}
+
 /* ===== init ===== */
 renderChannelGrids();
 renderLI();
 renderCostGrids();
 populateYearMonthSelects();
-refreshWeekOptions();
-loadReport();
+(function(){
+  var p = getSharedPeriod();
+  var m = p && /^(\d{4})-(\d{2})-(\d{2})$/.exec(p);
+  if(m){
+    var target = new Date(+m[1], +m[2]-1, +m[3]);
+    ensureYearOption('f-year', target.getFullYear());
+    document.getElementById('f-year').value = target.getFullYear();
+    document.getElementById('f-month').value = target.getMonth()+1;
+    refreshWeekOptions();
+    var match = currentWeeks.filter(function(w){ return isoDate(w.start)===p; })[0];
+    if(match){ document.getElementById('f-week').value = match.index; selectedWeekIndex = match.index; }
+  } else {
+    refreshWeekOptions();
+  }
+  loadReport();
+})();
 </script>
 </body>
 </html>
