@@ -17,7 +17,7 @@
   --ok:#4AE08A; --warn:#FCD34D; --bad:#FC8181;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:var(--bgA)}
+html,body{background:var(--bgA);overflow-x:hidden}
 body{font-family:"Inter",sans-serif;color:var(--text)}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
@@ -34,7 +34,7 @@ html{scroll-behavior:smooth}
 #page>*:not(.glow-wrap){position:relative;z-index:1}
 
 /* topbar */
-.topbar{display:flex;align-items:center;gap:14px;padding:14px 22px;border-bottom:1px solid var(--line);
+.topbar{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:14px 22px;border-bottom:1px solid var(--line);
   background:rgba(0,0,0,.15);position:sticky;top:0;z-index:20;backdrop-filter:blur(6px)}
 .tb-logo svg{height:26px;width:auto;display:block}
 .tb-burger{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--card);
@@ -150,6 +150,36 @@ html{scroll-behavior:smooth}
   .sidebar.collapsed{margin-left:-250px}
   .li-grid,.task-grid{grid-template-columns:1fr}
   .fin-income{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:480px){
+  .topbar{padding:10px 12px;gap:8px}
+  .btn{font-size:.68rem;padding:7px 10px;gap:4px}
+  .tb-logo svg{height:20px}
+  .tb-burger{width:30px;height:30px}
+  .tb-burger svg{width:14px;height:14px}
+  .side-kicker{font-size:.58rem}
+  .side-nav a{font-size:.82rem;padding:8px 9px}
+  .s-ic{width:14px;height:14px}
+  .rpt-hero h1{font-size:24px}
+  .rpt-hero p.sub{font-size:.8rem}
+  .rpt-sub-row{gap:14px}
+  .rpt-sub{font-size:.78rem}
+  .stitle{font-size:1.3rem}
+  .ssub{font-size:.68rem}
+  .chbox{padding:14px}
+  .chbox-title{font-size:.92rem}
+  .kl{font-size:.58rem}
+  .kv{font-size:1rem}
+  .pk-field select{font-size:.8rem;padding:7px 9px;min-width:110px}
+  .cost-label{font-size:.75rem}
+  .cost-input{width:50px;font-size:.85rem}
+  .cost-dollar{width:56px;font-size:.7rem}
+  .fl{font-size:.58rem}
+  .fv{font-size:1.1rem}
+  .cf select,.cf input{font-size:.8rem;padding:6px 8px}
+  .add-btn{font-size:.75rem;padding:8px 12px}
+  .item-box textarea{font-size:.82rem}
+  .ro-item{font-size:.82rem;padding:9px 11px}
 }
 body.capturing .btn,body.capturing .topbar,body.capturing .sidebar{display:none!important}
 @media print{
