@@ -112,12 +112,12 @@ html{scroll-behavior:smooth}
 .month-detail-btn{width:100%;justify-content:center;margin-top:auto}
 
 /* channel boxes */
-.chgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.chgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
 .chbox{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
 .chbox-title{font-family:"Montserrat",sans-serif;font-weight:600;font-size:1rem;margin-bottom:14px;color:var(--text)}
 
 .kg{display:grid;gap:10px}
-.kg2{grid-template-columns:repeat(2,1fr)}
+.kg2{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
 .kg2>*:last-child:nth-child(odd){grid-column:span 2}
 .kpi{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:11px 12px;min-width:0}
 .kl{font-family:"Inter",sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);margin-bottom:7px;
@@ -186,7 +186,6 @@ html{scroll-behavior:smooth}
 .modal-task-grid{grid-template-columns:repeat(2,1fr)}
 .ov-empty{color:var(--mut);font-style:italic;padding:30px 4px;text-align:center}
 
-@media(max-width:1180px){ .chgrid{grid-template-columns:repeat(2,1fr)} }
 @media(max-width:960px){ .month-grid{grid-template-columns:repeat(3,1fr)} }
 @media(max-width:880px){
   .sidebar{position:fixed;left:0;top:60px;bottom:0;background:var(--bgA);z-index:30}
@@ -195,7 +194,7 @@ html{scroll-behavior:smooth}
   .fin-income{grid-template-columns:repeat(2,1fr)}
   .month-grid{grid-template-columns:repeat(2,1fr)}
 }
-@media(max-width:640px){ .chgrid{grid-template-columns:1fr} .month-grid{grid-template-columns:1fr} }
+@media(max-width:640px){ .month-grid{grid-template-columns:1fr} }
 body.capturing .btn,body.capturing .topbar,body.capturing .sidebar{display:none!important}
 @media print{
   .topbar,.sidebar{display:none!important}
@@ -325,6 +324,11 @@ document.getElementById("logo").innerHTML =
 
 /* ===== sidebar toggle / nav ===== */
 function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('collapsed'); }
+function collapseSidebarOnMobile(){ if(window.innerWidth<=880){ document.getElementById('sidebar').classList.add('collapsed'); } }
+collapseSidebarOnMobile();
+document.querySelectorAll('.side-nav a').forEach(function(a){
+  a.addEventListener('click', function(){ if(window.innerWidth<=880){ document.getElementById('sidebar').classList.add('collapsed'); } });
+});
 function goBack(){ if(history.length>1){ history.back(); } else { location.href='index.html'; } }
 
 /* ===== helpers ===== */

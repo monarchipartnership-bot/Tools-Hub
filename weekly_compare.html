@@ -253,6 +253,11 @@ document.getElementById("logo").innerHTML =
 
 /* ===== sidebar toggle ===== */
 function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('collapsed'); }
+function collapseSidebarOnMobile(){ if(window.innerWidth<=880){ document.getElementById('sidebar').classList.add('collapsed'); } }
+collapseSidebarOnMobile();
+document.querySelectorAll('.side-nav a').forEach(function(a){
+  a.addEventListener('click', function(){ if(window.innerWidth<=880){ document.getElementById('sidebar').classList.add('collapsed'); } });
+});
 function goBack(){ if(history.length>1){ history.back(); } else { location.href='index.html'; } }
 
 /* ===== date helpers (ported from weekly.html) ===== */
