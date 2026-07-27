@@ -178,14 +178,16 @@
     compare:'<svg viewBox="0 0 24 24"><path d="M6 20V10M12 20V4M18 20v-7"/></svg>',
     history:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>',
     deptSales:'<svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>',
-    deptPM:'<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8 11h8M8 15h5"/></svg>'
+    deptPM:'<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8 11h8M8 15h5"/></svg>',
+    followup:'<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg>'
   };
 
   /* ===== data ===== */
   const DEPTS={
     sales:{ label:"Sales Department", icon:IC.deptSales, accent:"mag", items:[
       { key:"reports",   name:"Reports",          desc:"Daily, weekly, monthly & annual performance reporting.", icon:IC.reports,   type:"category" },
-      { key:"portfolio", name:"Portfolio Studio",  desc:"Upwork catalog & portfolio image maker.",                 icon:IC.portfolio, type:"link", href:"portfolio_studio.html" }
+      { key:"portfolio", name:"Portfolio Studio",  desc:"Upwork catalog & portfolio image maker.",                 icon:IC.portfolio, type:"link", href:"portfolio_studio.html" },
+      { key:"followup",  name:"Follow-up Generator", desc:"AI-generated personalized follow-up messages for clients.", icon:IC.followup, type:"link", href:"followup_generator.html" }
     ]},
     pm:{ label:"Project Managers Department", icon:IC.deptPM, accent:"gold", items:[
       { key:"clients", name:"Clients Report", desc:"Client-facing reporting for PMs.", icon:IC.clients, type:"link", href:"clients_report.html" }
