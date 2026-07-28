@@ -114,6 +114,15 @@
   .c-go .arr{transition:transform .22s ease}
   .card:hover .c-go .arr{transform:translateX(5px)}
 
+  .card.multi{cursor:default}
+  .c-actions{display:flex;flex-direction:column;gap:8px}
+  .c-link{display:flex;align-items:center;justify-content:space-between;gap:8px;text-decoration:none;color:var(--gold);
+    font-family:"Montserrat",sans-serif;font-weight:600;font-size:11px;letter-spacing:1px;text-transform:uppercase;
+    border:1px solid var(--line);border-radius:10px;padding:10px 13px;transition:border-color .2s ease,background .2s ease}
+  .c-link:hover{border-color:var(--gold);background:rgba(232,192,121,.08)}
+  .c-link .arr{transition:transform .22s ease}
+  .c-link:hover .arr{transform:translateX(5px)}
+
   .foot{margin-top:20px;font-family:"Inter",sans-serif;font-size:10.5px;letter-spacing:1px;color:var(--mut);opacity:.7}
 
   .card.is-soon{opacity:.72}
@@ -179,7 +188,8 @@
     history:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>',
     deptSales:'<svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>',
     deptPM:'<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8 11h8M8 15h5"/></svg>',
-    followup:'<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg>'
+    followup:'<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg>',
+    funnel:'<svg viewBox="0 0 24 24"><path d="M4 4h16l-6.5 8v6l-3 1.5v-7.5z"/></svg>'
   };
 
   /* ===== data ===== */
@@ -187,7 +197,11 @@
     sales:{ label:"Sales Department", icon:IC.deptSales, accent:"mag", items:[
       { key:"reports",   name:"Reports",          desc:"Daily, weekly, monthly & annual performance reporting.", icon:IC.reports,   type:"category" },
       { key:"portfolio", name:"Portfolio Studio",  desc:"Upwork catalog & portfolio image maker.",                 icon:IC.portfolio, type:"link", href:"portfolio_studio.html" },
-      { key:"followup",  name:"Follow-up Generator", desc:"AI-generated personalized follow-up messages for clients.", icon:IC.followup, type:"link", href:"followup_generator.html" }
+      { key:"followup",  name:"Follow-up Generator", desc:"AI-generated personalized follow-up messages for clients.", icon:IC.followup, type:"link", href:"followup_generator.html" },
+      { key:"funnelLeads", name:"Funnel Health Check Leads", desc:"Client-facing funnel calculator, plus the leads it collects.", icon:IC.funnel, type:"multilink", links:[
+        { label:"Open calculator page", href:"funnel_health_check.html" },
+        { label:"Open leads spreadsheet", href:"https://docs.google.com/spreadsheets/d/1TYu0M75PxqEDkLxmTjtldGD8AtWGuLp72d5ta351hZ0/edit?usp=sharing", external:true }
+      ]}
     ]},
     pm:{ label:"Project Managers Department", icon:IC.deptPM, accent:"gold", items:[
       { key:"clients", name:"Clients Report", desc:"Client-facing reporting for PMs.", icon:IC.clients, type:"link", href:"clients_report.html" }
@@ -227,6 +241,19 @@
     '</a>';
   }
 
+  function multiLinkCardHTML(name,desc,icon,links){
+    const btns = links.map(l=>
+      '<a class="c-link" href="'+l.href+'"'+(l.external?' target="_blank" rel="noopener"':'')+'>'+
+        l.label+'<span class="arr">&#8594;</span>'+
+      '</a>'
+    ).join('');
+    return '<div class="card multi">'+
+      '<div class="ic">'+icon+'</div>'+
+      '<div class="c-body"><div class="c-name">'+name+'</div><div class="c-desc">'+desc+'</div></div>'+
+      '<div class="c-actions">'+btns+'</div>'+
+    '</div>';
+  }
+
   function renderCrumbs(trail){
     // trail: array of {label, hash} ; last one is current (not a link)
     let html='<a href="#/">Tools Hub</a>';
@@ -261,7 +288,9 @@
       d.items.forEach(it=>{
         html += it.type==='link'
           ? linkCardHTML(it.href,it.name,it.desc,it.icon)
-          : cardHTML('/'+dk+'/'+it.key,it.name,it.desc,it.icon,false);
+          : it.type==='multilink'
+            ? multiLinkCardHTML(it.name,it.desc,it.icon,it.links)
+            : cardHTML('/'+dk+'/'+it.key,it.name,it.desc,it.icon,false);
       });
       html+='</div></section>';
     }
@@ -277,7 +306,9 @@
     d.items.forEach(it=>{
       html += it.type==='link'
         ? linkCardHTML(it.href,it.name,it.desc,it.icon)
-        : cardHTML('/'+dk+'/'+it.key,it.name,it.desc,it.icon,false);
+        : it.type==='multilink'
+          ? multiLinkCardHTML(it.name,it.desc,it.icon,it.links)
+          : cardHTML('/'+dk+'/'+it.key,it.name,it.desc,it.icon,false);
     });
     html+='</div>';
     root.innerHTML=html;

@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-commerce Funnel Health Check &mdash; Mon'Archi</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZD0iTTIwLjAyMjUgMzkuOTM3NUMzMS4wMjggMzkuOTM3NSAzOS45NDk3IDMxLjAxMTIgMzkuOTQ5NyAyMEMzOS45NDk3IDguOTg4ODIgMzEuMDI4IDAuMDYyNSAyMC4wMjI1IDAuMDYyNUM5LjAxNjk2IDAuMDYyNSAwLjA5NTIxNDggOC45ODg4MiAwLjA5NTIxNDggMjBDMC4wOTUyMTQ4IDMxLjAxMTIgOS4wMTY5NiAzOS45Mzc1IDIwLjAyMjUgMzkuOTM3NVoiIGZpbGw9IiM0MjEzNDIiLz48ZyBmaWxsPSIjZmZmZmZmIj48cGF0aCBkPSJNMTguOTk4IDE3LjE1MDJDMTguOTk4IDE3LjE1MDIgMTQuNTAzNCAxNS41MDMzIDEyLjU2MzggMTUuMDAzM0MxMi41NjM4IDE1LjAwMzMgMTIuNTYyMiAxNS4wMDMzIDEyLjU2MDcgMTUuMDAzM0MxMi40NzAxIDE0Ljk4NjEgMTIuMzc2NCAxNC45NzgzIDEyLjI4MTEgMTQuOTc4M0MxMi4xNzk2IDE0Ljk3ODMgMTIuMDc5NyAxNC45ODc3IDExLjk4MjkgMTUuMDA2NEMxMS43NDM5IDE1LjA1MzMgMTEuNTIzNyAxNS4xNTMzIDExLjMzNDggMTUuMjk3MUMxMS4xOTQyIDE1LjQwNDkgMTEuMDcyNCAxNS41MzYxIDEwLjk3MjQgMTUuNjgzQzEwLjk3MjQgMTUuNjgzIDEwLjgxOTQgMTUuOTc1MiAxMC44MTk0IDE1Ljk3NjhDOC44OTUzOCAxOS42OTU1IDYuMzUyOTMgMjguMTM3NyA2LjMwNjA4IDI4LjI0ODZDNi4yNTE0MiAyOC4zNzM2IDYuMTI2NDkgMjguNDU5NiA1Ljk4MjgxIDI4LjQ1OTZDNS43ODYwNCAyOC40NTk2IDUuNjI2NzUgMjguMzAwMiA1LjYyODMxIDI4LjEwMzNDNS42MjgzMSAyOC4wOTcxIDYuNTc0NyAxNi41ODYxIDcuODY3NzggMTEuNzUxOEM4LjE4NjM3IDEwLjU5MjQgOS4yNDgzMiA5LjczOTI2IDEwLjUwODYgOS43MzkyNkMxMS4wNDEyIDkuNzM5MjYgMTEuNTM3OCA5Ljg5MDgyIDExLjk1NzkgMTAuMTU0OUMxMi4wMTEgMTAuMTg3NyAxMi4wMjUgMTAuMTkzOSAxMi4xMTU2IDEwLjI1NDlDMTQuNzI2OCAxMi4xNDI0IDE5LjAwMjcgMTcuMTQ4NiAxOS4wMDI3IDE3LjE0ODZMMTguOTk4IDE3LjE1MDJaIi8+PHBhdGggZD0iTTM0LjQyMjkgMjcuMTkyM0MzNC4zOTMzIDI3LjkwOTUgMzMuODAxNCAyOC40ODEzIDMzLjA3NjggMjguNDgxM0MzMi44ODQ3IDI4LjQ4MTMgMzIuNzAyIDI4LjQ0MDcgMzIuNTM2NCAyOC4zNjg4QzMxLjQ2NjYgMjcuODMxMyAyMi42NDc3IDE5LjcxMSAyMi42NDc3IDE5LjcxMUMyMi42NDc3IDE5LjcxMSAyOS4zNDI3IDIzLjY2MjYgMzAuNTEyNSAyNC4yMTczQzMwLjY3OCAyNC4yOTU0IDMwLjg1MjkgMjQuMzU5NSAzMC45MzU3IDI0LjM3MkMzMS4yMTA1IDI0LjQxNDIgMzEuNDU3MyAyNC4xNzA0IDMxLjQyNiAyMy44ODQ1QzMxLjMwMTEgMjIuNzQ1NCAyOS43OTQxIDE3LjE3MzUgMjkuMjY3OCAxNS45NDIzQzI5LjA3NDEgMTUuMzgxMyAyOC41NDE2IDE0Ljk3OTggMjcuOTE2OSAxNC45Nzk4QzI3LjcxMDggMTQuOTc5OCAyNy41MTQgMTUuMDIzNSAyNy4zMzYgMTUuMTAzMkMyNS45MDIzIDE1LjcwMTcgMTQuOTYxMSAyMi4zODYgMTQuOTYxMSAyMi4xNjg4QzE0Ljk2MTEgMjIuMDY1NyAyNC44NDM1IDEyLjM3ODIgMjguMTA5IDEwLjI0MzhDMjguNTU4OCA5Ljk3MTk3IDI5LjEwMDcgOS43MTcyOSAyOS42OTcyIDkuNzE3MjlDMzAuODc5NCA5LjcxNzI5IDMxLjg4MDUgMTAuNDg5MiAzMi4yMjI1IDExLjU1NjNDMzIuMjIyNSAxMS41NTYzIDMyLjIyMjUgMTEuNTU2OSAzMi4yMjI1IDExLjU1NzlDMzIuNDY0NiAxMi4yNTMyIDM0LjE2OTkgMjIuMTAwMSAzNC40MTIgMjYuOTM5MkMzNC40MTUxIDI3LjAyMzUgMzQuNDE5OCAyNy4xMDc5IDM0LjQyMjkgMjcuMTkyM1oiLz48cGF0aCBkPSJNMjQuMDAwMiAxOC41MjQ5TDI3LjI0NjkgMTYuNTczM0MyNy41NDUyIDE2LjM5MzcgMjcuOTM0MSAxNi41MzkgMjguMDQzNCAxNi44NzAyTDI5LjU2NzYgMjEuNTQwNUMyOS42MDM1IDIxLjY0OTkgMjkuNDg2NCAyMS43NDY4IDI5LjM4NjUgMjEuNjkwNUwyNC4wMDMzIDE4LjY3OEMyMy45NDM5IDE4LjY0NTIgMjMuOTQzOSAxOC41NjA4IDI0LjAwMDIgMTguNTI2NVYxOC41MjQ5WiIvPjwvZz48L3N2Zz4=">
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap");
+:root{
+  --bgA:#160616; --bgB:#2a0a2a; --bgC:#3a0f38;
+  --gold:#E8C079; --mag:#C24BC2; --plum:#421342;
+  --text:#f5eef5; --mut:#c2a6c2; --line:rgba(255,255,255,.12);
+  --card:rgba(255,255,255,.045); --card2:rgba(255,255,255,.02);
+  --ok:#4AE08A; --warn:#FCD34D; --bad:#FC8181;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bgA);overflow-x:hidden}
+body{font-family:"Inter",sans-serif;color:var(--text)}
+
+#page{position:relative;min-height:100vh;
+  background:radial-gradient(120% 90% at 15% 0%, var(--bgC) 0%, var(--bgB) 40%, var(--bgA) 100%)}
+.glow-wrap{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.glow{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;pointer-events:none;z-index:0}
+.g1{width:520px;height:520px;background:var(--mag);top:-140px;right:-80px;opacity:.28;animation:floatG1 28s ease-in-out infinite}
+.g2{width:460px;height:460px;background:var(--gold);bottom:-160px;left:-100px;opacity:.14;animation:floatG2 34s ease-in-out infinite}
+@keyframes floatG1{0%{transform:translate(0,0)}25%{transform:translate(-70px,50px)}50%{transform:translate(30px,90px)}75%{transform:translate(70px,20px)}100%{transform:translate(0,0)}}
+@keyframes floatG2{0%{transform:translate(0,0)}30%{transform:translate(60px,-40px)}60%{transform:translate(-40px,-80px)}100%{transform:translate(0,0)}}
+@media (prefers-reduced-motion: reduce){ .glow{animation:none!important} }
+#page>*:not(.glow-wrap){position:relative;z-index:1}
+
+.topbar{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:16px 22px;border-bottom:1px solid var(--line);
+  background:rgba(0,0,0,.15);position:sticky;top:0;z-index:20;backdrop-filter:blur(6px)}
+.tb-logo{display:block;text-decoration:none;flex:none}
+.tb-logo svg{height:26px;width:auto;display:block}
+.tb-sp{flex:1;min-width:0}
+.tb-tag{font-family:"Montserrat",sans-serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+
+.main{max-width:980px;margin:0 auto;padding:36px clamp(16px,4vw,44px) 90px}
+
+.hero{margin-bottom:34px}
+.hero h1{font-family:"Montserrat",sans-serif;font-weight:800;font-size:clamp(28px,4.4vw,42px);letter-spacing:-.02em;margin-bottom:14px;line-height:1.12}
+.hero h1 span{color:var(--gold)}
+.hero p{font-family:"Inter",sans-serif;font-size:1rem;color:var(--mut);max-width:680px;line-height:1.6}
+
+.card{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:26px clamp(18px,3vw,32px);margin-bottom:24px}
+.card h2{font-family:"Montserrat",sans-serif;font-weight:700;font-size:1.15rem;margin-bottom:6px}
+.card .card-sub{font-family:"Inter",sans-serif;font-size:.84rem;color:var(--mut);margin-bottom:20px;line-height:1.5}
+
+/* website link rows */
+.link-row{display:flex;gap:10px;margin-bottom:10px}
+.link-row input{flex:1}
+.rm-btn{flex:none;width:38px;height:38px;border-radius:8px;border:1px solid var(--line);background:var(--card);
+  color:var(--mut);cursor:pointer;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center}
+.rm-btn:hover{border-color:var(--bad);color:var(--bad)}
+.add-link-btn{margin-top:4px;font-family:"Montserrat",sans-serif;font-weight:600;font-size:.78rem;background:none;
+  border:1px dashed var(--line);color:var(--gold);border-radius:8px;padding:9px 14px;cursor:pointer}
+.add-link-btn:hover{border-color:var(--gold)}
+
+/* form fields */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+@media(max-width:640px){ .grid2,.grid3{grid-template-columns:1fr} }
+.field{display:flex;flex-direction:column;margin-bottom:16px}
+.field label{font-family:"Inter",sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.03em;color:var(--mut);
+  margin-bottom:7px;text-transform:uppercase}
+.field label .opt{text-transform:none;font-weight:400;color:var(--gold);opacity:.8;font-size:.72rem;margin-left:6px;letter-spacing:0}
+input,select,textarea{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;color:var(--text);
+  padding:11px 13px;font-size:.9rem;font-family:"Inter",sans-serif;outline:none;transition:border-color .15s;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+select option{background:#2a0a2a;color:var(--text)}
+
+/* traffic source switch */
+.switch{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.switch button{font-family:"Montserrat",sans-serif;font-weight:600;font-size:.82rem;padding:10px 20px;border:none;
+  background:transparent;color:var(--mut);cursor:pointer;transition:background .15s,color .15s}
+.switch button.on{background:linear-gradient(135deg,var(--mag),var(--plum));color:#fff}
+
+.hint-box{font-family:"Inter",sans-serif;font-size:.76rem;color:var(--mut);background:var(--card);border:1px solid var(--line);
+  border-radius:10px;padding:10px 13px;margin-bottom:18px;line-height:1.5}
+
+button#calcBtn{font-family:"Montserrat",sans-serif;font-weight:700;font-size:.92rem;letter-spacing:.02em;
+  background:linear-gradient(135deg,var(--mag),var(--plum));color:#fff;border:none;border-radius:10px;
+  padding:14px 30px;cursor:pointer;transition:filter .15s,transform .1s;width:100%}
+button#calcBtn:hover{filter:brightness(1.1)}
+button#calcBtn:active{transform:scale(.99)}
+
+/* results */
+#resultsCard{display:none}
+#resultsCard.show{display:block}
+.res-table{width:100%;border-collapse:collapse;font-family:"Inter",sans-serif;font-size:.85rem}
+.res-table th,.res-table td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--line)}
+.res-table th:first-child,.res-table td:first-child{text-align:left;color:var(--mut)}
+.res-table thead th{font-family:"Montserrat",sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
+.res-table thead th.col-opt{color:var(--ok)}
+.res-table thead th.col-neg{color:var(--bad)}
+.res-table td.col-opt{color:var(--ok)}
+.res-table td.col-neg{color:var(--bad)}
+.res-table tr.hl td{font-weight:700;color:var(--text);font-size:.94rem;border-top:1px solid var(--line);border-bottom:none}
+.res-table-wrap{overflow-x:auto}
+
+.gap-card{margin-top:20px;background:linear-gradient(135deg,rgba(194,75,194,.16),rgba(66,19,66,.35));
+  border:1px solid rgba(232,192,121,.35);border-radius:14px;padding:20px 22px;text-align:center}
+.gap-card .gap-label{font-family:"Montserrat",sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--mut);margin-bottom:6px}
+.gap-card .gap-value{font-family:"Montserrat",sans-serif;font-size:clamp(28px,5vw,40px);font-weight:800;color:var(--gold)}
+.gap-card .gap-sub{font-family:"Inter",sans-serif;font-size:.82rem;color:var(--mut);margin-top:8px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.5}
+
+.saveStatus{font-family:"Inter",sans-serif;font-size:.76rem;color:var(--mut);display:block;text-align:center;margin-top:16px}
+
+/* recommendations mockup — full-bleed section, wider than the .main column */
+.full-bleed{width:100vw;margin-left:50%;transform:translateX(-50%);border-radius:0;border-left:none;border-right:none;
+  padding-left:0;padding-right:0}
+.full-bleed-inner{max-width:1560px;margin:0 auto;padding:0 clamp(16px,4vw,44px)}
+
+.rec-head{margin-bottom:22px}
+.rec-head h2{font-family:"Montserrat",sans-serif;font-weight:800;font-size:clamp(1.3rem,2.4vw,1.7rem);margin-bottom:8px}
+.rec-head p{font-family:"Inter",sans-serif;font-size:.88rem;color:var(--mut);max-width:720px;line-height:1.6}
+
+.rec-legend{display:flex;flex-direction:column;gap:10px}
+.rec-item{display:flex;gap:10px;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--acc);
+  border-radius:10px;padding:11px 13px}
+.rec-item .num{flex:none;width:24px;height:24px;border-radius:6px;background:var(--acc);color:#1a0a1a;
+  font-family:"Montserrat",sans-serif;font-weight:800;font-size:.72rem;display:flex;align-items:center;justify-content:center}
+.rec-item p{font-family:"Inter",sans-serif;font-size:.78rem;color:var(--text);line-height:1.5}
+.rec-item.req{--acc:var(--gold)}
+.rec-item.dist{--acc:var(--mag)}
+.rec-item.pop{--acc:var(--ok)}
+.rec-cat-label{font-family:"Montserrat",sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  margin:18px 0 10px;color:var(--mut)}
+.rec-cat-label:first-child{margin-top:0}
+
+.rec-layout{display:grid;grid-template-columns:300px 1fr 300px;gap:28px;align-items:start}
+@media(max-width:1240px){ .rec-layout{grid-template-columns:260px 1fr 260px;gap:20px} }
+@media(max-width:1000px){ .rec-layout{grid-template-columns:1fr} }
+
+/* mockup */
+.mock{background:#fff;color:#1a1a2a;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.mock-nav{display:flex;align-items:center;gap:16px;padding:14px 18px;border-bottom:1px solid #eee;flex-wrap:wrap}
+.mock-nav b{font-family:"Montserrat",sans-serif;font-size:.9rem}
+.mock-nav .sp{flex:1}
+.mock-nav a{font-size:.78rem;color:#555;text-decoration:none;margin-left:14px}
+.mock-badge{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:5px;
+  font-family:"Montserrat",sans-serif;font-weight:800;font-size:.62rem;color:#1a0a1a;margin-right:6px;flex:none}
+.mock-badge.req{background:var(--gold)}
+.mock-badge.dist{background:var(--mag);color:#fff}
+.mock-badge.pop{background:var(--ok)}
+.mock-promo{background:#241026;color:#fff;font-size:.76rem;padding:8px 18px;display:flex;align-items:center}
+.mock-crumb{font-size:.74rem;color:#777;padding:12px 18px 0}
+.mock-body{display:flex;gap:22px;padding:18px;flex-wrap:wrap}
+.mock-imgcol{flex:1;min-width:220px}
+.mock-imgbox{background:#f2f0f5;border-radius:10px;aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;
+  color:#b8aec2;font-size:.72rem;position:relative}
+.mock-thumbs{display:flex;gap:8px;margin-top:8px}
+.mock-thumbs div{flex:1;background:#f2f0f5;border-radius:8px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  color:#b8aec2;font-size:.62rem}
+.mock-infocol{flex:1;min-width:220px}
+.mock-infocol h3{font-family:"Montserrat",sans-serif;font-size:1.3rem;margin-bottom:6px}
+.mock-stars{color:#e0a300;font-size:.8rem;margin-bottom:10px}
+.mock-stars a{font-size:.72rem;color:#7a5fc0;margin-left:8px;text-decoration:none}
+.mock-price{font-size:1.3rem;font-weight:700;margin-bottom:10px}
+.mock-price .old{font-weight:400;color:#999;text-decoration:line-through;font-size:.9rem;margin-right:6px}
+.mock-desc{font-size:.78rem;color:#777;margin-bottom:14px;line-height:1.5}
+.mock-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;font-size:.78rem}
+.mock-select{border:1px solid #ddd;border-radius:6px;padding:6px 10px;font-size:.78rem;color:#333}
+.mock-tag{background:#241026;color:#fff;border-radius:6px;padding:4px 8px;font-size:.68rem}
+.mock-swatches{display:flex;gap:6px}
+.mock-swatches span{width:20px;height:20px;border-radius:50%;border:1px solid #ccc;display:inline-block}
+.mock-cart{background:#241026;color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:.82rem;font-weight:600;cursor:default}
+.mock-pay{display:flex;gap:6px;margin-top:10px;align-items:center;font-size:.68rem;color:#888;flex-wrap:wrap}
+.mock-pay span{border:1px solid #ddd;border-radius:5px;padding:3px 7px}
+.mock-tabs{display:flex;gap:20px;padding:0 18px;border-top:1px solid #eee;border-bottom:1px solid #eee;font-size:.78rem;color:#888;flex-wrap:wrap}
+.mock-tabs .active{color:#241026;font-weight:600;border-bottom:2px solid #241026;padding:10px 0}
+.mock-tabs div{padding:10px 0}
+.mock-tabcontent{padding:16px 18px;font-size:.76rem;color:#999;line-height:1.6}
+.mock-section-title{padding:0 18px;font-family:"Montserrat",sans-serif;font-size:1rem;margin-top:10px;display:flex;align-items:center}
+.mock-reviews{display:flex;gap:12px;padding:12px 18px 18px;flex-wrap:wrap}
+.mock-reviews>div{flex:1;min-width:150px;border:1px solid #eee;border-radius:10px;padding:12px;font-size:.72rem;color:#999}
+.mock-alsolike{display:flex;gap:10px;padding:12px 18px 18px;flex-wrap:wrap}
+.mock-alsolike>div{flex:1;min-width:80px;aspect-ratio:1;background:#f2f0f5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#c8bed8}
+.mock-instagrid{display:flex;gap:6px;padding:0 18px 18px;flex-wrap:wrap}
+.mock-instagrid>div{flex:1;min-width:36px;aspect-ratio:1;background:#e9e6f0;border-radius:6px}
+.mock-newsletter{background:#f7f6fa;padding:16px 18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.8rem}
+.mock-newsletter input{max-width:220px;padding:8px 10px;border:1px solid #ddd;border-radius:6px;font-size:.76rem}
+.mock-newsletter button{background:#5b4fc7;color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:.76rem;cursor:default}
+.mock-footer{background:#f2f0f5;padding:22px 18px;display:flex;gap:30px;flex-wrap:wrap;font-size:.74rem;color:#666}
+.mock-footer h4{font-size:.74rem;color:#333;margin-bottom:8px}
+.mock-footer div div{margin-bottom:5px}
+.mock-brandline{text-align:center;padding:26px 18px;color:#241026;font-family:"Montserrat",sans-serif;font-weight:800;font-size:1.3rem}
+
+.foot-note{margin-top:40px;text-align:center;font-family:"Inter",sans-serif;font-size:.74rem;color:var(--mut);line-height:1.6}
+
+@media(max-width:720px){
+  .main{padding-top:26px}
+  .card{padding:20px 18px}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .switch{width:100%}
+  .switch button{flex:1}
+  .mock-body{padding:14px}
+  .mock-imgcol,.mock-infocol{min-width:100%}
+}
+
+@media(max-width:480px){
+  .topbar{padding:10px 12px;gap:8px}
+  .tb-logo svg{height:20px}
+  .tb-tag{font-size:.6rem}
+  .hero h1{font-size:22px}
+  .hero p{font-size:.84rem}
+  .card{padding:16px 14px}
+  .card h2{font-size:1rem}
+  .card .card-sub{font-size:.78rem}
+  .link-row input,input,select{font-size:.84rem;padding:10px 11px}
+  .switch button{font-size:.74rem;padding:9px 10px}
+  .res-table{font-size:.68rem}
+  .res-table th,.res-table td{padding:7px 5px}
+  .gap-card{padding:16px 14px}
+  .gap-card .gap-sub{font-size:.74rem}
+  button#calcBtn{padding:12px 20px;font-size:.84rem}
+  .full-bleed-inner{padding:0 12px}
+  .rec-head h2{font-size:1.15rem}
+  .rec-head p{font-size:.8rem}
+  .rec-item{padding:9px 11px;gap:8px}
+  .rec-item p{font-size:.74rem}
+  .mock-nav{padding:10px 12px;gap:10px}
+  .mock-nav a{margin-left:0;font-size:.72rem}
+  .mock-crumb,.mock-promo{padding-left:12px;padding-right:12px}
+  .mock-body{padding:12px;gap:14px}
+  .mock-infocol h3{font-size:1.1rem}
+  .mock-tabs,.mock-tabcontent,.mock-section-title,.mock-reviews,.mock-alsolike,.mock-instagrid,.mock-newsletter,.mock-footer{padding-left:12px;padding-right:12px}
+}
+</style>
+</head>
+<body>
+<div id="page">
+  <div class="glow-wrap"><div class="glow g1"></div><div class="glow g2"></div></div>
+
+  <div class="topbar">
+    <a class="tb-logo" href="#" id="logo" onclick="return false" title="Mon'Archi"></a>
+    <div class="tb-sp"></div>
+    <div class="tb-tag">E-commerce Funnel Health Check</div>
+  </div>
+
+  <main class="main">
+
+    <section class="hero">
+      <h1>What's your funnel really <span>costing</span> you?</h1>
+      <p>Plug in your real numbers below and see, side by side, what your store's profit looks like if your funnel keeps improving &mdash; versus what it looks like if it's left on autopilot. Takes two minutes. No theory, just your numbers.</p>
+    </section>
+
+    <div class="card">
+      <h2>Your website</h2>
+      <div class="card-sub">Optional, but helpful &mdash; if you have more than one store or landing page, add them all.</div>
+      <div id="linkRows"></div>
+      <button type="button" class="add-link-btn" onclick="addLinkRow()">+ Add another website</button>
+    </div>
+
+    <div class="card">
+      <h2>A little about you <span style="font-weight:400;color:var(--mut);font-size:.8rem">(optional)</span></h2>
+      <div class="grid3">
+        <div class="field"><label>Name</label><input type="text" id="contactName" placeholder="Jane Doe"></div>
+        <div class="field"><label>Company</label><input type="text" id="contactCompany" placeholder="Acme Inc."></div>
+        <div class="field"><label>Email</label><input type="email" id="contactEmail" placeholder="jane@acme.com"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Your current numbers</h2>
+      <div class="card-sub">Fill in your real ad account and store numbers. Everything below calculates automatically.</div>
+
+      <div class="switch" id="trafficSwitch">
+        <button type="button" class="on" data-src="meta" onclick="setTrafficSource('meta')">Meta / Display</button>
+        <button type="button" data-src="google" onclick="setTrafficSource('google')">Google Search</button>
+      </div>
+
+      <div class="hint-box" id="trafficHint">Meta/Display is pay-per-impression &mdash; fill in your CPM and CTR below, clicks are derived automatically.</div>
+
+      <div class="grid2">
+        <div class="field" id="fieldCPM"><label>CPM ($) <span class="opt">Meta/Display only</span></label><input type="number" id="cpm" value="12" step="0.01"></div>
+        <div class="field" id="fieldCTR"><label>CTR (%) <span class="opt">Meta/Display only</span></label><input type="number" id="ctr" value="1.8" step="0.01"></div>
+        <div class="field" id="fieldCPC" style="display:none"><label>CPC ($) <span class="opt">Google Search only</span></label><input type="number" id="cpc" value="1.2" step="0.01"></div>
+        <div class="field"><label>Monthly Ad Budget ($)</label><input type="number" id="budget" value="5000" step="1"></div>
+      </div>
+
+      <div class="grid2">
+        <div class="field"><label>Website Conversion Rate (%)</label><input type="number" id="convRate" value="1.6" step="0.01"></div>
+        <div class="field"><label>Average Order Value / AOV ($)</label><input type="number" id="aov" value="950" step="1"></div>
+      </div>
+
+      <div class="grid2">
+        <div class="field"><label>Cost of Goods Sold (% of revenue)</label><input type="number" id="cogsPct" value="35" step="0.1"></div>
+        <div class="field"><label>Other Costs &mdash; fees, logistics ($/mo)</label><input type="number" id="otherCosts" value="300" step="1"></div>
+      </div>
+
+      <button id="calcBtn" onclick="calculate()">Calculate my funnel</button>
+      <div class="saveStatus" id="saveStatus" style="margin-top:10px"></div>
+    </div>
+
+    <div class="card" id="resultsCard">
+      <h2>Three scenarios, one page</h2>
+      <div class="card-sub">"If Optimized" applies the typical upside once CTR and conversion rate are actively managed. "If Neglected" applies the typical decline when creative isn't refreshed and CRO isn't maintained &mdash; which is what happens to most accounts left on their own.</div>
+      <div class="res-table-wrap">
+        <table class="res-table" id="resTable">
+          <thead>
+            <tr><th>Metric</th><th>Current</th><th class="col-opt">If Optimized</th><th class="col-neg">If Neglected</th></tr>
+          </thead>
+          <tbody id="resTableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="gap-card">
+        <div class="gap-label">Profit gap: Optimized vs Neglected</div>
+        <div class="gap-value" id="profitGapValue">$0</div>
+        <div class="gap-sub">That's the real cost of active funnel management &mdash; or the cost of leaving it alone. This model uses simplified, linear assumptions to make the mechanics visible; treat it as a directional signal, not a guaranteed forecast.</div>
+      </div>
+
+      <span class="saveStatus" id="saveStatus2"></span>
+    </div>
+
+    <div class="card full-bleed">
+     <div class="full-bleed-inner">
+      <div class="rec-head">
+        <h2>25 elements of a high-converting product page</h2>
+        <p>A quick, visual reference for what we look for when we audit a store's funnel &mdash; the baseline every product page needs, plus the extra touches that separate good stores from great ones.</p>
+      </div>
+
+      <div class="rec-layout">
+        <div class="rec-legend" id="legendReq"></div>
+
+        <div class="mock">
+          <div class="mock-nav">
+            <span class="mock-badge req">1</span><b>Company name</b>
+            <div class="sp"></div>
+            <a href="#">Homepage</a><a href="#">Category 1</a><a href="#">Category 2</a><a href="#">&hearts; Wishlist</a><a href="#">&#128722; Cart</a>
+          </div>
+          <div class="mock-promo"><span class="mock-badge dist">11</span> Only $45.60 away from free shipping!</div>
+          <div class="mock-crumb"><span class="mock-badge req">2</span>Home &gt; Category 1 &gt; Product page</div>
+
+          <div class="mock-body">
+            <div class="mock-imgcol">
+              <div class="mock-imgbox">
+                <span class="mock-badge dist" style="position:absolute;top:10px;left:10px">12</span>
+                <span class="mock-badge dist" style="position:absolute;top:10px;right:10px">15</span>
+                <span class="mock-badge req">4</span> Product photo
+              </div>
+              <div class="mock-thumbs">
+                <div>photo</div><div>video</div><div><span class="mock-badge pop">21</span>360&deg;</div>
+              </div>
+            </div>
+            <div class="mock-infocol">
+              <h3><span class="mock-badge req">3</span>Product name goes here</h3>
+              <div class="mock-stars">&#9733;&#9733;&#9733;&#9733;&#9734; <a href="#"><span class="mock-badge dist">13</span>Read reviews</a></div>
+              <div class="mock-price"><span class="old">$259</span> $155.40 <span class="mock-badge req">5</span></div>
+              <div class="mock-desc">Oportet uti solum de actibus prosequentium et fugam, haec leniter et blandus et reservato.</div>
+              <div class="mock-row"><span class="mock-select">Size: S&ndash;M</span><span class="mock-tag"><span class="mock-badge dist">14</span>Only 2 left!</span></div>
+              <div class="mock-row"><span class="mock-badge req">6</span>Color <span class="mock-swatches"><span></span><span></span><span></span><span></span></span></div>
+              <button class="mock-cart"><span class="mock-badge req">7</span>Add to cart</button>
+              <div class="mock-pay">
+                <span class="mock-badge dist">16</span>Checkout safely
+                <span>PayPal</span><span>Visa</span><span>Mastercard</span><span>Amex</span>
+                <span class="mock-badge dist">22</span>Buy now, pay later
+                <span class="mock-badge dist">17</span>&#128172; Chat
+              </div>
+            </div>
+          </div>
+
+          <div class="mock-tabs">
+            <div><span class="mock-badge req">8</span>Description</div>
+            <div>Composition &amp; Care</div>
+            <div class="active">Shipping &amp; Returns</div>
+            <div><span class="mock-badge pop">23</span>Free samples</div>
+          </div>
+          <div class="mock-tabcontent">Si osculantur puer tuus aut uxorem tuam, osculum, non dico quod omnia quae sunt hominis.</div>
+
+          <div class="mock-section-title"><span class="mock-badge dist">18</span>Customer reviews</div>
+          <div class="mock-reviews">
+            <div>&#9733;&#9733;&#9733;&#9733;&#9734;<br>Tenete ergo quod si servitus quae natura liber.</div>
+            <div>&#9733;&#9733;&#9733;&#9733;&#9734;<br>Tenete ergo quod si servitus quae natura liber.</div>
+            <div>&#9733;&#9733;&#9733;&#9733;&#9734;<br>Tenete ergo quod si servitus quae natura liber.</div>
+          </div>
+
+          <div class="mock-section-title"><span class="mock-badge dist">19</span>You may also like</div>
+          <div class="mock-alsolike">
+            <div>&#128085;</div><div>&#128095;</div><div>&#128092;</div><div>&#128100;<span class="mock-badge pop" style="position:absolute;margin-top:-30px;margin-left:30px">24</span></div>
+          </div>
+
+          <div class="mock-section-title"><span class="mock-badge pop">25</span>Get inspired by our community!</div>
+          <div class="mock-instagrid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+
+          <div class="mock-newsletter"><span class="mock-badge dist">20</span>Subscribe to our newsletter <input placeholder="you@email.com"><button>Subscribe</button></div>
+
+          <div class="mock-footer">
+            <div><h4><span class="mock-badge req">9</span>Contact</h4><div>Email us</div><div>Call us</div><div>Chat online</div></div>
+            <div><h4><span class="mock-badge req">10</span>Policy</h4><div>Shipping</div><div>Returns &amp; Refunds</div><div>Privacy Policy</div></div>
+          </div>
+          <div class="mock-brandline">Mon'Archi</div>
+        </div>
+
+        <div>
+          <div class="rec-legend" id="legendDistPop"></div>
+        </div>
+      </div>
+     </div>
+    </div>
+
+    <div class="foot-note">Mon'Archi &middot; performance marketing for e-commerce &middot; this page does not store payment or account credentials &mdash; only the funnel numbers you choose to share.</div>
+  </main>
+</div>
+
+<script>
+/* ============ hub logo + branding chrome ============ */
+(function(){
+  const RAW_SVG=`<svg width="186" height="40" viewBox="0 0 186 40" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="Group"><g id="Group_2"><path id="Vector" d="M72.0708 10.7094C71.746 9.27188 69.7782 9.07813 69.1785 10.4234L64.5434 20.8188C64.4825 20.9672 64.3888 21.1797 64.2654 21.4516C63.9031 22.2578 63.6142 22.9531 63.4034 23.5359C63.3487 23.6875 63.1363 23.6844 63.0785 23.5344C62.8521 22.9375 62.6538 22.4219 62.4867 21.9906C62.2743 21.4516 62.1181 21.0672 62.015 20.8344L57.2503 10.3828C56.6397 9.04532 54.6797 9.25157 54.3611 10.6875L50.0103 30.3609H53.3913L55.8135 18.9531C55.9463 18.3719 56.0462 17.8141 56.1165 17.2813C56.1836 16.7516 56.2196 16.2422 56.2321 15.7547C56.3648 16.2297 56.5225 16.7109 56.7006 17.1969C56.8817 17.6813 57.0941 18.1813 57.3424 18.6984L63.0973 30.9656C63.1582 31.0969 63.3456 31.0969 63.4081 30.9656L69.1598 18.9516C69.4175 18.4031 69.6314 17.8641 69.8017 17.3375C69.9719 16.8109 70.1015 16.2844 70.1952 15.7531C70.2561 16.1984 70.3279 16.7563 70.4107 17.4313C70.5044 18.2422 70.5716 18.7391 70.6137 18.9188L73.1109 30.3594H76.5216L72.0755 10.7078L72.0708 10.7094Z" fill="#421342"/><path id="Vector_2" d="M92.1699 20.8281C91.8248 19.9906 91.3172 19.2375 90.6519 18.5734C89.9851 17.8984 89.2323 17.3891 88.3937 17.0438C87.5551 16.6984 86.6587 16.5234 85.7092 16.5234C84.7596 16.5234 83.9007 16.6984 83.0558 17.0438C82.2141 17.3891 81.466 17.8859 80.8179 18.5313C80.162 19.1875 79.6576 19.9375 79.3078 20.7797C78.9548 21.6219 78.7799 22.5156 78.7799 23.4625C78.7799 24.4094 78.9517 25.3031 79.3 26.1406C79.6482 26.9797 80.1526 27.7359 80.8179 28.4109C81.477 29.075 82.2266 29.5828 83.0714 29.9328C83.9132 30.2828 84.794 30.4578 85.7092 30.4578C86.6243 30.4578 87.5285 30.2828 88.3734 29.9328C89.2183 29.5828 89.9867 29.0641 90.6785 28.3813C91.3375 27.7359 91.8357 26.9922 92.1793 26.1562C92.5197 25.3172 92.6915 24.4203 92.6915 23.4625C92.6915 22.5047 92.5197 21.6656 92.1715 20.8266L92.1699 20.8281ZM88.4999 26.5484C87.7394 27.3797 86.8195 27.7984 85.7341 27.7984C84.6488 27.7984 83.7289 27.3797 82.9684 26.5484C82.211 25.7141 81.8283 24.6969 81.8283 23.4937C81.8283 22.2906 82.2094 21.2734 82.9684 20.4391C83.7289 19.6047 84.6488 19.1891 85.7341 19.1891C86.8195 19.1891 87.7487 19.6047 88.5046 20.4391C89.2605 21.2734 89.6384 22.2906 89.6384 23.4937C89.6384 24.6969 89.2573 25.7141 88.4983 26.5484H88.4999Z" fill="#421342"/><path id="Vector_3" d="M108.755 20.1157C108.655 19.6423 108.496 19.2267 108.274 18.8704C107.902 18.2688 107.385 17.8157 106.722 17.511C106.061 17.2079 105.26 17.0532 104.317 17.0532C103.199 17.0532 102.249 17.2595 101.468 17.6673C100.684 18.0782 100.005 18.7298 99.4286 19.6235V17.6532C99.4286 17.572 99.363 17.5048 99.2803 17.5048H96.8581C96.7769 17.5048 96.7097 17.5704 96.7097 17.6532V30.4579H99.6004V24.5548C99.6004 23.4876 99.6426 22.711 99.7254 22.2251C99.8112 21.736 99.9612 21.3392 100.172 21.0298C100.475 20.5642 100.889 20.2032 101.418 19.9501C101.946 19.6938 102.547 19.5688 103.222 19.5688C104.254 19.5688 104.971 19.8485 105.376 20.4079C105.778 20.9673 105.982 22.1001 105.982 23.8032V30.4595H108.899V22.6001C108.899 21.4173 108.849 20.5892 108.752 20.1157H108.755Z" fill="#421342"/><path id="Vector_4" d="M147.657 17.2063C147.262 17.1047 146.859 17.0547 146.451 17.0547C145.695 17.0547 145.063 17.2609 144.551 17.6688C144.042 18.0797 143.631 18.7125 143.32 19.5703V17.6266C143.32 17.5453 143.255 17.4781 143.172 17.4781H140.578C140.497 17.4781 140.429 17.5438 140.429 17.6266V30.4609H143.32V24.775C143.32 22.9188 143.529 21.5953 143.945 20.8047C144.363 20.0172 145.051 19.625 146.009 19.625C146.365 19.625 146.689 19.6672 146.976 19.7531C147.263 19.8391 147.534 19.975 147.782 20.1563L148.822 17.6422C148.441 17.4516 148.051 17.3047 147.655 17.2047L147.657 17.2063Z" fill="#421342"/><path id="Vector_5" d="M157.399 19.1203C158.084 19.1203 158.722 19.2531 159.312 19.5156C159.902 19.7828 160.418 20.1641 160.863 20.6641V17.4203C160.863 17.3656 160.833 17.3141 160.785 17.2875C160.329 17.0344 159.84 16.8484 159.317 16.7219C158.765 16.5906 158.161 16.5234 157.505 16.5234C155.417 16.5234 153.727 17.1641 152.434 18.4437C151.143 19.725 150.498 21.4062 150.498 23.4937C150.498 25.5812 151.119 27.2281 152.369 28.5203C153.615 29.8156 155.231 30.4609 157.213 30.4609C157.895 30.4609 158.544 30.3844 159.149 30.2313C159.73 30.0813 160.277 29.8656 160.786 29.5766C160.833 29.55 160.861 29.5 160.861 29.4453V26.1172C160.446 26.6641 159.962 27.0719 159.41 27.3406C158.859 27.6078 158.234 27.7437 157.532 27.7437C156.271 27.7437 155.281 27.3594 154.567 26.5875C153.851 25.8188 153.496 24.7594 153.496 23.4094C153.496 22.0594 153.849 21.0797 154.56 20.2953C155.27 19.5141 156.217 19.1203 157.399 19.1203Z" fill="#421342"/><path id="Vector_6" d="M176.823 20.1159C176.723 19.6425 176.564 19.2269 176.342 18.8706C175.969 18.269 175.451 17.8159 174.79 17.5112C174.129 17.2081 173.327 17.0534 172.385 17.0534C171.267 17.0534 170.314 17.2597 169.533 17.6675C168.752 18.0784 168.072 18.73 167.494 19.6237V9.42529C167.494 9.34404 167.428 9.27686 167.345 9.27686H164.923C164.842 9.27686 164.775 9.34248 164.775 9.42529V30.4581H167.669V24.555C167.669 23.4878 167.711 22.7112 167.794 22.2253C167.878 21.7362 168.026 21.3394 168.24 21.03C168.54 20.5644 168.957 20.2034 169.485 19.9503C170.016 19.694 170.617 19.569 171.292 19.569C172.321 19.569 173.041 19.8487 173.444 20.4081C173.848 20.9675 174.05 22.1003 174.05 23.8034V30.4597H176.97V22.6003C176.97 21.4175 176.92 20.5894 176.823 20.1159Z" fill="#421342"/><path id="Vector_7" d="M181.907 17.6549V30.4596H184.797V17.6549C184.797 17.5736 184.732 17.5064 184.649 17.5064H182.055C181.974 17.5064 181.907 17.5721 181.907 17.6549ZM184.633 10.5846C184.291 10.2346 183.862 10.0596 183.348 10.0596C182.834 10.0596 182.42 10.2424 182.063 10.6064C181.702 10.9721 181.522 11.4049 181.522 11.9064C181.522 12.408 181.702 12.8564 182.063 13.2252C182.42 13.5939 182.85 13.7768 183.348 13.7768C183.846 13.7768 184.282 13.5986 184.626 13.2377C184.974 12.8768 185.146 12.4346 185.146 11.9064C185.146 11.3783 184.974 10.9393 184.633 10.5861V10.5846Z" fill="#421342"/><path id="Vector_8" d="M125.114 10.5065L116.072 30.4065H119.856C119.856 30.4065 126.599 14.6065 126.672 14.3347C126.716 14.1706 126.949 14.1706 126.996 14.3347C127.072 14.6019 131.048 23.7222 131.785 25.4112C131.837 25.5315 131.739 25.6581 131.609 25.6425L122.943 24.5581L136.736 30.4144C137.211 30.6159 137.684 30.1253 137.465 29.6581L128.482 10.5097C127.825 9.06123 125.77 9.06123 125.112 10.5097L125.114 10.5065Z" fill="#421342"/><path id="Vector_9" d="M112.366 9.30008L115.895 11.2579C116.09 11.3657 116.133 11.6298 115.98 11.7938L112.442 15.5876C112.23 15.8157 111.846 15.6657 111.847 15.3516L111.854 9.60008C111.854 9.33758 112.135 9.17195 112.364 9.30008H112.366Z" fill="#421342"/></g><path id="Vector_10" d="M20.0225 39.9375C31.028 39.9375 39.9497 31.0112 39.9497 20C39.9497 8.98882 31.028 0.0625 20.0225 0.0625C9.01696 0.0625 0.0952148 8.98882 0.0952148 20C0.0952148 31.0112 9.01696 39.9375 20.0225 39.9375Z" fill="#421342"/><g id="Group_3"><path id="Vector_11" d="M18.998 17.1502C18.998 17.1502 14.5034 15.5033 12.5638 15.0033C12.5638 15.0033 12.5622 15.0033 12.5607 15.0033C12.4701 14.9861 12.3764 14.9783 12.2811 14.9783C12.1796 14.9783 12.0797 14.9877 11.9829 15.0064C11.7439 15.0533 11.5237 15.1533 11.3348 15.2971C11.1942 15.4049 11.0724 15.5361 10.9724 15.683C10.9724 15.683 10.8194 15.9752 10.8194 15.9768C8.89538 19.6955 6.35293 28.1377 6.30608 28.2486C6.25142 28.3736 6.12649 28.4596 5.98281 28.4596C5.78604 28.4596 5.62675 28.3002 5.62831 28.1033C5.62831 28.0971 6.5747 16.5861 7.86778 11.7518C8.18637 10.5924 9.24832 9.73926 10.5086 9.73926C11.0412 9.73926 11.5378 9.89082 11.9579 10.1549C12.011 10.1877 12.025 10.1939 12.1156 10.2549C14.7268 12.1424 19.0027 17.1486 19.0027 17.1486L18.998 17.1502Z" fill="white"/><path id="Vector_12" d="M34.4229 27.1923C34.3933 27.9095 33.8014 28.4813 33.0768 28.4813C32.8847 28.4813 32.702 28.4407 32.5364 28.3688C31.4666 27.8313 22.6477 19.711 22.6477 19.711C22.6477 19.711 29.3427 23.6626 30.5125 24.2173C30.678 24.2954 30.8529 24.3595 30.9357 24.372C31.2105 24.4142 31.4573 24.1704 31.426 23.8845C31.3011 22.7454 29.7941 17.1735 29.2678 15.9423C29.0741 15.3813 28.5416 14.9798 27.9169 14.9798C27.7108 14.9798 27.514 15.0235 27.336 15.1032C25.9023 15.7017 14.9611 22.386 14.9611 22.1688C14.9611 22.0657 24.8435 12.3782 28.109 10.2438C28.5588 9.97197 29.1007 9.71729 29.6972 9.71729C30.8794 9.71729 31.8805 10.4892 32.2225 11.5563C32.2225 11.5563 32.2225 11.5569 32.2225 11.5579C32.4646 12.2532 34.1699 22.1001 34.412 26.9392C34.4151 27.0235 34.4198 27.1079 34.4229 27.1923Z" fill="white"/><path id="Vector_13" d="M24.0002 18.5249L27.2469 16.5733C27.5452 16.3937 27.9341 16.539 28.0434 16.8702L29.5676 21.5405C29.6035 21.6499 29.4864 21.7468 29.3865 21.6905L24.0033 18.678C23.9439 18.6452 23.9439 18.5608 24.0002 18.5265V18.5249Z" fill="white"/></g></g></svg>`;
+  function whiteWordmark(s){ const i=s.indexOf('<path id="Vector_10"'); if(i<0) return s; return s.slice(0,i).replace(/#421342/g,"#ffffff")+s.slice(i); }
+  document.getElementById("logo").innerHTML = whiteWordmark(RAW_SVG);
+})();
+
+/* ============ website link rows ============ */
+function addLinkRow(value){
+  const wrap = document.getElementById('linkRows');
+  const row = document.createElement('div');
+  row.className = 'link-row';
+  row.innerHTML = `<input type="url" class="siteLink" placeholder="https://yourstore.com" value="${value ? value.replace(/"/g,'&quot;') : ''}">
+    <button type="button" class="rm-btn" onclick="this.parentElement.remove()">&times;</button>`;
+  wrap.appendChild(row);
+}
+addLinkRow();
+
+function getWebsites(){
+  return Array.from(document.querySelectorAll('.siteLink')).map(i=>i.value.trim()).filter(Boolean);
+}
+
+/* ============ traffic source toggle ============ */
+let trafficSource = 'meta';
+function setTrafficSource(src){
+  trafficSource = src;
+  document.querySelectorAll('#trafficSwitch button').forEach(b=>b.classList.toggle('on', b.dataset.src===src));
+  document.getElementById('fieldCPM').style.display = src==='meta' ? '' : 'none';
+  document.getElementById('fieldCTR').style.display = src==='meta' ? '' : 'none';
+  document.getElementById('fieldCPC').style.display = src==='google' ? '' : 'none';
+  document.getElementById('trafficHint').textContent = src==='meta'
+    ? 'Meta/Display is pay-per-impression — fill in your CPM and CTR below, clicks are derived automatically.'
+    : 'Google Search is pay-per-click — fill in your real CPC below, no CPM/CTR needed.';
+}
+
+/* ============ calculator (mirrors the Mon’Archi Funnel Health Check sheet) ============ */
+function fmtMoney(n){ return '$' + Math.round(n).toLocaleString('en-US'); }
+function fmtMoney2(n){ return '$' + n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+function fmtPct(n){ return (n*100).toFixed(1) + '%'; }
+function fmtPct2(n){ return (n*100).toFixed(2) + '%'; }
+function fmtX(n){ return n.toFixed(2) + 'x'; }
+function fmtInt(n){ return Math.round(n).toLocaleString('en-US'); }
+
+function runScenario(adj, inputs){
+  const { trafficSource, budget, cpm, ctr, cpc, convRate, aov, cogsPct, otherCosts } = inputs;
+  let impressions=null, ctrEff=null, clicks, cpcEff;
+  if (trafficSource === 'meta'){
+    impressions = budget / cpm * 1000;
+    ctrEff = ctr * (1+adj);
+    clicks = impressions * ctrEff;
+    cpcEff = budget / clicks;
+  } else {
+    cpcEff = cpc;
+    clicks = budget / cpc;
+  }
+  const crEff = convRate * (1+adj);
+  const purchases = clicks * crEff;
+  const cpa = budget / purchases;
+  const revenue = purchases * aov;
+  const roas = revenue / budget;
+  const cogs = revenue * cogsPct;
+  const totalCosts = budget + cogs + otherCosts;
+  const profit = revenue - totalCosts;
+  const roi = profit / totalCosts;
+  return { impressions, ctrEff, clicks, cpcEff, crEff, purchases, cpa, revenue, roas, cogs, totalCosts, profit, roi };
+}
+
+function calculate(){
+  const inputs = {
+    trafficSource,
+    budget: parseFloat(document.getElementById('budget').value) || 0,
+    cpm: parseFloat(document.getElementById('cpm').value) || 0.0001,
+    ctr: (parseFloat(document.getElementById('ctr').value) || 0) / 100,
+    cpc: parseFloat(document.getElementById('cpc').value) || 0.0001,
+    convRate: (parseFloat(document.getElementById('convRate').value) || 0) / 100,
+    aov: parseFloat(document.getElementById('aov').value) || 0,
+    cogsPct: (parseFloat(document.getElementById('cogsPct').value) || 0) / 100,
+    otherCosts: parseFloat(document.getElementById('otherCosts').value) || 0
+  };
+
+  const current = runScenario(0, inputs);
+  const optimized = runScenario(0.30, inputs);
+  const neglected = runScenario(-0.20, inputs);
+  const profitGap = optimized.profit - neglected.profit;
+
+  const rows = [];
+  if (inputs.trafficSource==='meta'){
+    rows.push(['Impressions', fmtInt(current.impressions), fmtInt(optimized.impressions), fmtInt(neglected.impressions)]);
+    rows.push(['CTR (effective)', fmtPct2(current.ctrEff), fmtPct2(optimized.ctrEff), fmtPct2(neglected.ctrEff)]);
+  }
+  rows.push(['Clicks', fmtInt(current.clicks), fmtInt(optimized.clicks), fmtInt(neglected.clicks)]);
+  rows.push(['Cost per Click (effective)', fmtMoney2(current.cpcEff), fmtMoney2(optimized.cpcEff), fmtMoney2(neglected.cpcEff)]);
+  rows.push(['Conversion Rate (effective)', fmtPct2(current.crEff), fmtPct2(optimized.crEff), fmtPct2(neglected.crEff)]);
+  rows.push(['Purchases', fmtInt(current.purchases), fmtInt(optimized.purchases), fmtInt(neglected.purchases)]);
+  rows.push(['Cost per Acquisition (CPA)', fmtMoney2(current.cpa), fmtMoney2(optimized.cpa), fmtMoney2(neglected.cpa)]);
+  rows.push(['Revenue', fmtMoney(current.revenue), fmtMoney(optimized.revenue), fmtMoney(neglected.revenue)]);
+  rows.push(['ROAS', fmtX(current.roas), fmtX(optimized.roas), fmtX(neglected.roas)]);
+  rows.push(['Cost of Goods Sold', fmtMoney(current.cogs), fmtMoney(optimized.cogs), fmtMoney(neglected.cogs)]);
+  rows.push(['Total Costs (Ad + COGS + Other)', fmtMoney(current.totalCosts), fmtMoney(optimized.totalCosts), fmtMoney(neglected.totalCosts)]);
+
+  const tbody = document.getElementById('resTableBody');
+  tbody.innerHTML = rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td class="col-opt">${r[2]}</td><td class="col-neg">${r[3]}</td></tr>`).join('')
+    + `<tr class="hl"><td>Profit</td><td>${fmtMoney(current.profit)}</td><td class="col-opt">${fmtMoney(optimized.profit)}</td><td class="col-neg">${fmtMoney(neglected.profit)}</td></tr>`
+    + `<tr class="hl"><td>ROI</td><td>${fmtPct(current.roi)}</td><td class="col-opt">${fmtPct(optimized.roi)}</td><td class="col-neg">${fmtPct(neglected.roi)}</td></tr>`;
+
+  document.getElementById('profitGapValue').textContent = fmtMoney(profitGap);
+  const resCard = document.getElementById('resultsCard');
+  resCard.classList.add('show');
+  if (typeof resCard.scrollIntoView === 'function') resCard.scrollIntoView({behavior:'smooth', block:'start'});
+
+  submitToSheet(inputs, current, optimized, neglected, profitGap);
+}
+
+/* ============ submit to Google Sheets (Apps Script Web App) ============ */
+// Deploy the Apps Script (see google-apps-script-backend.js) as a Web App and paste its URL below.
+const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbw86lv2aY-Tvi2icTYb_zAK10LSGdigztJ_B-135UHGsaUDyMOrH8o1nSYbgSxBiirQhg/exec";
+
+function submitToSheet(inputs, current, optimized, neglected, profitGap){
+  const statusEls = [document.getElementById('saveStatus'), document.getElementById('saveStatus2')];
+  if (!SHEET_ENDPOINT || SHEET_ENDPOINT.indexOf('PASTE_') === 0){
+    return; // not configured yet — calculator still works standalone
+  }
+  const payload = {
+    timestamp: new Date().toISOString(),
+    websites: getWebsites(),
+    name: document.getElementById('contactName').value.trim(),
+    company: document.getElementById('contactCompany').value.trim(),
+    email: document.getElementById('contactEmail').value.trim(),
+    trafficSource: inputs.trafficSource,
+    budget: inputs.budget,
+    cpm: inputs.trafficSource==='meta' ? inputs.cpm : '',
+    ctr: inputs.trafficSource==='meta' ? inputs.ctr : '',
+    cpc: inputs.trafficSource==='google' ? inputs.cpc : '',
+    convRate: inputs.convRate,
+    aov: inputs.aov,
+    cogsPct: inputs.cogsPct,
+    otherCosts: inputs.otherCosts,
+    currentProfit: current.profit,
+    optimizedProfit: optimized.profit,
+    neglectedProfit: neglected.profit,
+    profitGap: profitGap,
+    currentROI: current.roi,
+    optimizedROI: optimized.roi,
+    neglectedROI: neglected.roi
+  };
+  statusEls.forEach(el=>{ if(el) el.textContent = 'Saving...'; });
+  fetch(SHEET_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids CORS preflight against Apps Script
+    body: JSON.stringify(payload)
+  }).then(r=>{
+    statusEls.forEach(el=>{ if(el) el.textContent = 'Saved.'; });
+  }).catch(()=>{
+    statusEls.forEach(el=>{ if(el) el.textContent = ''; });
+  });
+}
+
+/* ============ recommendations legend ============ */
+const REQUIRED = [
+  "The menu offers quick links to different areas of the site, including the homepage, categories, and shopping cart.",
+  "Navigation “Breadcrumbs” help site visitors orient themselves on the site and facilitate navigation.",
+  "The product name should be the largest, most prominent text on the page. Make sure you use H1 tags for good SEO.",
+  "Add high-quality images and videos that showcase your product from different angles. Don’t forget about the “Zoom” feature when you click on a product.",
+  "The price of the product should be immediately apparent to the consumer. To increase conversion, you can use techniques such as price linking.",
+  "Indicate the parameters of the product, such as color and quantity. If necessary, provide helpful information: size guide, conversion tables.",
+  "Make the “Add to Cart” button prominent, use a descriptive form, and display clear feedback when adding a product.",
+  "Provide more detailed information about your product and its care. Answer essential questions about product delivery and returns.",
+  "Give your customers more than one way to contact you. Make it clear and available in the footer or on every product page.",
+  "Publish clear delivery, return and refund policies. Add an FAQ section to answer some of the most frequently asked questions."
+];
+const DISTINCTIVE = [
+  "Increase the AOV (average order value) by showing customers their progress towards a free-shipping trigger.",
+  "Give customers the opportunity to create a wish list. Based on this data, you can later run an advertising campaign.",
+  "Adding social proof (reviews) can significantly increase your conversion rate.",
+  "Use shortage signals — low inventory levels — to increase the number of “Adds to cart.”",
+  "Use dynamic social proof to create urgency and FOMO. Showcase recent purchases, daily visitors, real-time data, and more.",
+  "Use trust badges and seals to give customers an additional level of trust when making a purchase from you.",
+  "Use live chat and chatbots to provide timely assistance and guidance to customers through the sales funnel.",
+  "Display real customer reviews with the ability to filter by star rating. Be transparent and don’t hide negative reviews.",
+  "Cross-sell and up-sell using personalized recommendations based on browsing history, cart value, and more.",
+  "Use lead capture forms to grow your email database — embedded forms, pop-ups, exit-intent windows, and more."
+];
+const POPULAR = [
+  "Improve the customer experience with virtual try-on and 360° photos that let the customer get a complete picture of your product.",
+  "Alongside traditional payment methods, offer a “Buy now, pay later” option through a third party.",
+  "Give away free product samples — fabric swatches for furniture, samples for beauty products, and so on.",
+  "Create a loyalty program. Let customers earn points for purchases, shown in local currency.",
+  "Add a carousel of social media posts to showcase how real customers are using your product."
+];
+
+function renderLegend(id, items, cls, startNum){
+  const el = document.getElementById(id);
+  el.innerHTML = items.map((text,i)=>`<div class="rec-item ${cls}"><div class="num">${startNum+i}</div><p>${text}</p></div>`).join('');
+}
+renderLegend('legendReq', REQUIRED, 'req', 1);
+
+(function(){
+  const el = document.getElementById('legendDistPop');
+  el.innerHTML =
+    '<div class="rec-cat-label">Distinctive elements</div>' +
+    DISTINCTIVE.map((text,i)=>`<div class="rec-item dist"><div class="num">${11+i}</div><p>${text}</p></div>`).join('') +
+    '<div class="rec-cat-label">Popular elements</div>' +
+    POPULAR.map((text,i)=>`<div class="rec-item pop"><div class="num">${21+i}</div><p>${text}</p></div>`).join('');
+})();
+</script>
+</body>
+</html>
