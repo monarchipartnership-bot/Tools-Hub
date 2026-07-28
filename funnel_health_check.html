@@ -47,6 +47,31 @@ body{font-family:"Inter",sans-serif;color:var(--text)}
 .card h2{font-family:"Montserrat",sans-serif;font-weight:700;font-size:1.15rem;margin-bottom:6px}
 .card .card-sub{font-family:"Inter",sans-serif;font-size:.84rem;color:var(--mut);margin-bottom:20px;line-height:1.5}
 
+.card-head-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.card-head-row h2{margin-bottom:0}
+.inst-btn{flex:none;font-family:"Montserrat",sans-serif;font-weight:600;font-size:.76rem;background:none;
+  border:1px solid var(--line);color:var(--gold);border-radius:8px;padding:8px 14px;cursor:pointer;white-space:nowrap}
+.inst-btn:hover{border-color:var(--gold)}
+
+/* instructions modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(8,3,10,.72);backdrop-filter:blur(3px);
+  z-index:100;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal-box{background:var(--bgA);border:1px solid var(--line);border-radius:16px;max-width:640px;width:100%;
+  max-height:85vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 80px -20px rgba(0,0,0,.6)}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line);flex:none}
+.modal-head h3{font-family:"Montserrat",sans-serif;font-weight:700;font-size:1.05rem}
+.modal-close{background:none;border:none;color:var(--mut);font-size:24px;line-height:1;cursor:pointer;padding:0 4px}
+.modal-close:hover{color:var(--gold)}
+.modal-body{padding:20px 22px 26px;overflow-y:auto;font-family:"Inter",sans-serif;font-size:.86rem;line-height:1.65;color:var(--text)}
+.modal-body h4{font-family:"Montserrat",sans-serif;font-weight:700;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--gold);margin:20px 0 8px}
+.modal-body h4:first-child{margin-top:0}
+.modal-body p{margin-bottom:10px;color:var(--mut)}
+.modal-body ol,.modal-body ul{margin:0 0 10px 20px;color:var(--mut)}
+.modal-body li{margin-bottom:7px}
+.modal-body b{color:var(--text)}
+
 /* website link rows */
 .link-row{display:flex;gap:10px;margin-bottom:10px}
 .link-row input{flex:1}
@@ -227,6 +252,12 @@ button#calcBtn:active{transform:scale(.99)}
   .mock-body{padding:12px;gap:14px}
   .mock-infocol h3{font-size:1.1rem}
   .mock-tabs,.mock-tabcontent,.mock-section-title,.mock-reviews,.mock-alsolike,.mock-instagrid,.mock-newsletter,.mock-footer{padding-left:12px;padding-right:12px}
+  .card-head-row{gap:8px}
+  .inst-btn{font-size:.7rem;padding:7px 11px}
+  .modal-overlay{padding:0}
+  .modal-box{max-width:100%;max-height:100%;height:100%;border-radius:0}
+  .modal-head{padding:14px 16px}
+  .modal-body{padding:16px 16px 22px;font-size:.82rem}
 }
 </style>
 </head>
@@ -264,7 +295,10 @@ button#calcBtn:active{transform:scale(.99)}
     </div>
 
     <div class="card">
-      <h2>Your current numbers</h2>
+      <div class="card-head-row">
+        <h2>Your current numbers</h2>
+        <button type="button" class="inst-btn" onclick="openInstructions()">&#128214; Instructions</button>
+      </div>
       <div class="card-sub">Fill in your real ad account and store numbers. Everything below calculates automatically.</div>
 
       <div class="switch" id="trafficSwitch">
@@ -406,6 +440,44 @@ button#calcBtn:active{transform:scale(.99)}
   </main>
 </div>
 
+<div class="modal-overlay" id="instModal" onclick="if(event.target===this) closeInstructions()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>How this calculator works</h3>
+      <button type="button" class="modal-close" onclick="closeInstructions()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <h4>What this tool does</h4>
+      <p>This calculator turns your real ad account numbers into a clear picture of your funnel's economics &mdash; and shows what happens to your profit if you improve key steps of the funnel, or if you let them slide. No theory. Just your numbers, three scenarios, one page.</p>
+
+      <h4>How to use it</h4>
+      <ol>
+        <li>Pick your <b>Traffic Source</b>: Google Search (you pay per click, no real CPM) or Meta / Display (you pay per impression, CTR drives clicks). The calculator switches its logic automatically based on this choice.</li>
+        <li>Fill in your current, real numbers from your ad account and store &mdash; for Google Search, your CPC; for Meta/Display, your CPM and CTR. Then Monthly Ad Budget, Website Conversion Rate, Average Order Value (AOV), and Cost of Goods Sold as % of revenue.</li>
+        <li>Click <b>Calculate my funnel</b>. Everything else &mdash; Clicks, effective CPC, Purchases, CPA, Revenue, Costs, Profit, ROAS and ROI &mdash; is calculated automatically.</li>
+        <li>Two extra columns appear next to your current numbers. <b>If Optimized</b> shows the realistic upside once weak funnel steps get fixed (CTR and Conversion Rate improved). <b>If Neglected</b> shows what happens when the same steps degrade from fatigue, rising CPMs, or no optimization &mdash; which is what happens to most accounts left unmanaged.</li>
+        <li>Compare the three Profit and ROI numbers side by side. That gap is the real cost (or value) of active funnel management.</li>
+      </ol>
+
+      <h4>What each metric means</h4>
+      <ul>
+        <li><b>Traffic Source</b> &mdash; Google Search (CPC-bid, no real CPM) or Meta/Display (CPM-bid, CTR drives clicks) &mdash; this switches which formulas the page uses.</li>
+        <li><b>CPM</b> &mdash; Cost per 1,000 impressions &mdash; used only for Meta/Display.</li>
+        <li><b>CTR</b> &mdash; Click-through rate &mdash; share of people who see the ad and click it. Used only for Meta/Display.</li>
+        <li><b>CPC</b> &mdash; Cost per click. For Google Search, this is your input (you bid per click). For Meta/Display, it's calculated as Ad Budget divided by Clicks.</li>
+        <li><b>Conversion Rate</b> &mdash; Share of website visitors who complete a purchase.</li>
+        <li><b>AOV</b> &mdash; Average Order Value &mdash; average revenue per purchase.</li>
+        <li><b>CPA</b> &mdash; Cost per acquisition &mdash; Ad Budget divided by Purchases.</li>
+        <li><b>ROAS</b> &mdash; Return on Ad Spend &mdash; Revenue divided by Ad Budget.</li>
+        <li><b>ROI</b> &mdash; Return on Investment &mdash; Profit divided by Total Costs (ad spend + COGS + other costs).</li>
+      </ul>
+
+      <h4>A note on the numbers</h4>
+      <p>This model uses simplified, linear assumptions to make the mechanics visible. It's a directional diagnostic, not a media plan &mdash; real campaigns involve seasonality, audience saturation and creative fatigue that a static model can't capture. Treat the gap between scenarios as a signal of where to focus, not a guaranteed forecast.</p>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ============ hub logo + branding chrome ============ */
 (function(){
@@ -415,6 +487,19 @@ button#calcBtn:active{transform:scale(.99)}
 })();
 
 /* ============ website link rows ============ */
+/* ============ instructions modal ============ */
+function openInstructions(){
+  document.getElementById('instModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeInstructions(){
+  document.getElementById('instModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape') closeInstructions();
+});
+
 function addLinkRow(value){
   const wrap = document.getElementById('linkRows');
   const row = document.createElement('div');
