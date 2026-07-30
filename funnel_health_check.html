@@ -123,6 +123,53 @@ button#calcBtn:active{transform:scale(.99)}
 .res-table td.col-neg{color:var(--bad)}
 .res-table tr.hl td{font-weight:700;color:var(--text);font-size:.94rem;border-top:1px solid var(--line);border-bottom:none}
 .res-table-wrap{overflow-x:auto}
+.res-table thead .hdr-sub{display:block;font-weight:500;letter-spacing:0;text-transform:none;font-size:.9em;opacity:.85;margin-top:3px}
+.res-table td .rel-change{display:block;font-size:.72rem;color:var(--mut);font-weight:400;margin-top:2px}
+.info-ic{cursor:help;color:var(--mut);font-size:.85em;margin-left:4px}
+
+/* advanced settings (scenario assumptions) */
+.adv-toggle{width:100%;text-align:left;font-family:"Montserrat",sans-serif;font-weight:600;font-size:.8rem;
+  background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:11px 14px;
+  cursor:pointer;margin:6px 0 0;display:flex;align-items:center;justify-content:space-between}
+.adv-toggle:hover{border-color:var(--gold)}
+.adv-toggle .car{transition:transform .2s ease;color:var(--mut)}
+.adv-toggle.open .car{transform:rotate(180deg)}
+.adv-panel{display:none;margin-top:12px;padding:16px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.adv-panel.open{display:block}
+.adv-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:14px}
+@media(max-width:640px){ .adv-cols{grid-template-columns:1fr} }
+.adv-col-title{font-family:"Montserrat",sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.03em;margin-bottom:12px;
+  padding-bottom:8px;border-bottom:1px solid var(--line)}
+.adv-col-title.opt{color:var(--ok)}
+.adv-col-title.neg{color:var(--bad)}
+
+/* summary row */
+.summary-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:22px}
+@media(max-width:720px){ .summary-row{grid-template-columns:1fr} }
+.summary-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;text-align:center}
+.summary-card .sc-label{font-family:"Montserrat",sans-serif;font-weight:700;font-size:.66rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--mut);margin-bottom:8px}
+.summary-card .sc-value{font-family:"Inter",sans-serif;font-size:.84rem;color:var(--text);line-height:1.6}
+.summary-card.opt{border-color:rgba(74,224,138,.35)}
+.summary-card.opt .sc-label{color:var(--ok)}
+.summary-card.neg{border-color:rgba(252,129,129,.35)}
+.summary-card.neg .sc-label{color:var(--bad)}
+
+/* disclaimer */
+.disclaimer-box{margin-top:16px;font-family:"Inter",sans-serif;font-size:.74rem;color:var(--mut);line-height:1.5;
+  padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+
+/* break-even analysis */
+.break-even{margin-top:24px}
+.break-even h3{font-family:"Montserrat",sans-serif;font-weight:700;font-size:.95rem;margin-bottom:14px}
+.be-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:720px){ .be-grid{grid-template-columns:1fr 1fr} }
+.be-stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 12px;text-align:center}
+.be-stat .be-label{font-family:"Montserrat",sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--mut);margin-bottom:6px}
+.be-stat .be-value{font-family:"Montserrat",sans-serif;font-weight:800;font-size:1.05rem;color:var(--gold)}
+.be-stat.gap .be-value.negative{color:var(--bad)}
+.be-stat.gap .be-value.positive{color:var(--ok)}
 
 .gap-card{margin-top:20px;background:linear-gradient(135deg,rgba(194,75,194,.16),rgba(66,19,66,.35));
   border:1px solid rgba(232,192,121,.35);border-radius:14px;padding:20px 22px;text-align:center}
@@ -258,6 +305,14 @@ button#calcBtn:active{transform:scale(.99)}
   .modal-box{max-width:100%;max-height:100%;height:100%;border-radius:0}
   .modal-head{padding:14px 16px}
   .modal-body{padding:16px 16px 22px;font-size:.82rem}
+  .adv-toggle{font-size:.74rem;padding:10px 12px}
+  .adv-panel{padding:12px}
+  .summary-card{padding:12px 13px}
+  .summary-card .sc-value{font-size:.78rem}
+  .disclaimer-box{font-size:.7rem;padding:10px 12px}
+  .be-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .be-stat{padding:11px 9px}
+  .be-stat .be-value{font-size:.92rem}
 }
 </style>
 </head>
@@ -322,24 +377,53 @@ button#calcBtn:active{transform:scale(.99)}
 
       <div class="grid2">
         <div class="field"><label>Cost of Goods Sold (% of revenue)</label><input type="number" id="cogsPct" value="35" step="0.1"></div>
-        <div class="field"><label>Other Costs &mdash; fees, logistics ($/mo)</label><input type="number" id="otherCosts" value="300" step="1"></div>
+        <div class="field"><label>Fixed Monthly Costs ($/mo)</label><input type="number" id="fixedCosts" value="300" step="1"></div>
       </div>
 
-      <button id="calcBtn" onclick="calculate()">Calculate my funnel</button>
+      <div class="grid2">
+        <div class="field"><label>Payment / Transaction Fees (% of Revenue)</label><input type="number" id="txnFeePct" value="0" step="0.1"></div>
+        <div class="field"><label>Fulfilment / Logistics Cost per Order ($)</label><input type="number" id="fulfilCost" value="0" step="0.1"></div>
+      </div>
+
+      <button type="button" class="adv-toggle" id="advToggleBtn" onclick="toggleAdvanced()">
+        <span>&#9881; Advanced Settings &mdash; scenario assumptions</span><span class="car">&#9662;</span>
+      </button>
+      <div class="adv-panel" id="advPanel">
+        <div class="hint-box" style="margin-bottom:0">CTR, CPM and Conversion Rate are modelled independently for scenario analysis. In real campaigns, changes in one metric may affect others.</div>
+        <div class="adv-cols">
+          <div>
+            <div class="adv-col-title opt">Optimized scenario</div>
+            <div class="field"><label>CTR change (%)</label><input type="number" id="optCtr" value="30" step="1"></div>
+            <div class="field"><label>Conversion Rate change (%)</label><input type="number" id="optCvr" value="30" step="1"></div>
+            <div class="field"><label>CPM change (%) <span class="opt">Meta/Display only</span></label><input type="number" id="optCpm" value="0" step="1"></div>
+          </div>
+          <div>
+            <div class="adv-col-title neg">Neglected scenario</div>
+            <div class="field"><label>CTR change (%)</label><input type="number" id="negCtr" value="-20" step="1"></div>
+            <div class="field"><label>Conversion Rate change (%)</label><input type="number" id="negCvr" value="-20" step="1"></div>
+            <div class="field"><label>CPM change (%) <span class="opt">Meta/Display only</span></label><input type="number" id="negCpm" value="0" step="1"></div>
+          </div>
+        </div>
+      </div>
+
+      <button id="calcBtn" onclick="calculate()" style="margin-top:16px">Calculate my funnel</button>
       <div class="saveStatus" id="saveStatus" style="margin-top:10px"></div>
     </div>
 
     <div class="card" id="resultsCard">
       <h2>Three scenarios, one page</h2>
-      <div class="card-sub">"If Optimized" applies the typical upside once CTR and conversion rate are actively managed. "If Neglected" applies the typical decline when creative isn't refreshed and CRO isn't maintained &mdash; which is what happens to most accounts left on their own.</div>
+      <div class="card-sub">Compare how changes in CTR, conversion rate and CPM can impact revenue, acquisition cost and profitability. Optimized and Neglected scenarios use editable assumptions to model potential outcomes.</div>
+
+      <div class="summary-row" id="summaryRow"></div>
+
       <div class="res-table-wrap">
         <table class="res-table" id="resTable">
-          <thead>
-            <tr><th>Metric</th><th>Current</th><th class="col-opt">If Optimized</th><th class="col-neg">If Neglected</th></tr>
-          </thead>
+          <thead id="resTableHead"></thead>
           <tbody id="resTableBody"></tbody>
         </table>
       </div>
+
+      <div class="disclaimer-box">Scenario assumptions are illustrative and are intended to demonstrate the potential financial impact of changes in advertising and conversion performance. They are not guaranteed performance outcomes.</div>
 
       <div class="gap-card">
         <div class="gap-label">Profit gap: Optimized vs Neglected</div>
@@ -347,10 +431,12 @@ button#calcBtn:active{transform:scale(.99)}
         <div class="gap-sub">That's the real cost of active funnel management &mdash; or the cost of leaving it alone. This model uses simplified, linear assumptions to make the mechanics visible; treat it as a directional signal, not a guaranteed forecast.</div>
       </div>
 
+      <div class="break-even" id="breakEvenBlock"></div>
+
       <span class="saveStatus" id="saveStatus2"></span>
     </div>
 
-    <div class="card full-bleed">
+    <div class="card full-bleed" id="recCard" style="display:none">
      <div class="full-bleed-inner">
       <div class="rec-head">
         <h2>25 elements of a high-converting product page</h2>
@@ -453,10 +539,11 @@ button#calcBtn:active{transform:scale(.99)}
       <h4>How to use it</h4>
       <ol>
         <li>Pick your <b>Traffic Source</b>: Google Search (you pay per click, no real CPM) or Meta / Display (you pay per impression, CTR drives clicks). The calculator switches its logic automatically based on this choice.</li>
-        <li>Fill in your current, real numbers from your ad account and store &mdash; for Google Search, your CPC; for Meta/Display, your CPM and CTR. Then Monthly Ad Budget, Website Conversion Rate, Average Order Value (AOV), and Cost of Goods Sold as % of revenue.</li>
-        <li>Click <b>Calculate my funnel</b>. Everything else &mdash; Clicks, effective CPC, Purchases, CPA, Revenue, Costs, Profit, ROAS and ROI &mdash; is calculated automatically.</li>
-        <li>Two extra columns appear next to your current numbers. <b>If Optimized</b> shows the realistic upside once weak funnel steps get fixed (CTR and Conversion Rate improved). <b>If Neglected</b> shows what happens when the same steps degrade from fatigue, rising CPMs, or no optimization &mdash; which is what happens to most accounts left unmanaged.</li>
-        <li>Compare the three Profit and ROI numbers side by side. That gap is the real cost (or value) of active funnel management.</li>
+        <li>Fill in your current, real numbers from your ad account and store &mdash; for Google Search, your CPC; for Meta/Display, your CPM and CTR. Then Monthly Ad Budget, Website Conversion Rate, Average Order Value (AOV), Cost of Goods Sold, Fixed Monthly Costs, Payment/Transaction Fees, and Fulfilment Cost per Order.</li>
+        <li>Optionally open <b>Advanced Settings</b> to change the assumptions behind the Optimized and Neglected scenarios (how much CTR, Conversion Rate and CPM shift in each one). Sensible defaults are pre-filled.</li>
+        <li>Click <b>Calculate my funnel</b>. Everything else &mdash; Clicks, effective CPC, Estimated Purchases, CPA, Revenue, Costs, Contribution Profit, ROAS and Contribution ROI &mdash; is calculated automatically.</li>
+        <li>The <b>Optimized Scenario</b> column shows the upside if the assumptions above are hit. The <b>Neglected Scenario</b> column shows what happens if those same metrics slide by the assumed amount instead.</li>
+        <li>Compare the three Contribution Profit and Contribution ROI numbers side by side, and check the <b>Break-even Analysis</b> below the table to see how far your current numbers sit from break-even.</li>
       </ol>
 
       <h4>What each metric means</h4>
@@ -467,13 +554,16 @@ button#calcBtn:active{transform:scale(.99)}
         <li><b>CPC</b> &mdash; Cost per click. For Google Search, this is your input (you bid per click). For Meta/Display, it's calculated as Ad Budget divided by Clicks.</li>
         <li><b>Conversion Rate</b> &mdash; Share of website visitors who complete a purchase.</li>
         <li><b>AOV</b> &mdash; Average Order Value &mdash; average revenue per purchase.</li>
-        <li><b>CPA</b> &mdash; Cost per acquisition &mdash; Ad Budget divided by Purchases.</li>
+        <li><b>Estimated Purchases</b> &mdash; Clicks &times; Conversion Rate, kept unrounded so every downstream number stays accurate.</li>
+        <li><b>CPA</b> &mdash; Cost per acquisition &mdash; Ad Budget divided by Estimated Purchases.</li>
         <li><b>ROAS</b> &mdash; Return on Ad Spend &mdash; Revenue divided by Ad Budget.</li>
-        <li><b>ROI</b> &mdash; Return on Investment &mdash; Profit divided by Total Costs (ad spend + COGS + other costs).</li>
+        <li><b>Contribution Profit</b> &mdash; Revenue minus Ad Spend, COGS, and all modelled costs (fixed + variable). It reflects the profitability of the funnel itself, not your company's full net profit.</li>
+        <li><b>Contribution ROI</b> &mdash; Contribution Profit divided by Total Modelled Costs. Compares estimated contribution profit with all costs included in this model.</li>
+        <li><b>Break-even Revenue/ROAS/Purchases</b> &mdash; the revenue, ROAS and purchase volume needed just to cover Ad Spend and Fixed Costs, given your COGS % and transaction fee %.</li>
       </ul>
 
       <h4>A note on the numbers</h4>
-      <p>This model uses simplified, linear assumptions to make the mechanics visible. It's a directional diagnostic, not a media plan &mdash; real campaigns involve seasonality, audience saturation and creative fatigue that a static model can't capture. Treat the gap between scenarios as a signal of where to focus, not a guaranteed forecast.</p>
+      <p>CTR, CPM and Conversion Rate are modelled independently for scenario analysis &mdash; in real campaigns, changes in one metric may affect the others. This model uses simplified, linear assumptions to make the mechanics visible. It's a directional diagnostic, not a media plan &mdash; real campaigns involve seasonality, audience saturation and creative fatigue that a static model can't capture. Treat the gap between scenarios as a signal of where to focus, not a guaranteed forecast.</p>
     </div>
   </div>
 </div>
@@ -527,36 +617,69 @@ function setTrafficSource(src){
     : 'Google Search is pay-per-click — fill in your real CPC below, no CPM/CTR needed.';
 }
 
+/* ============ advanced settings toggle ============ */
+function toggleAdvanced(){
+  document.getElementById('advPanel').classList.toggle('open');
+  document.getElementById('advToggleBtn').classList.toggle('open');
+}
+
 /* ============ calculator (mirrors the Mon’Archi Funnel Health Check sheet) ============ */
-function fmtMoney(n){ return '$' + Math.round(n).toLocaleString('en-US'); }
-function fmtMoney2(n){ return '$' + n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+function fmtMoney(n){ const s = Math.round(Math.abs(n)).toLocaleString('en-US'); return (n<0?'-':'')+'$'+s; }
+function fmtMoney2(n){ const s = Math.abs(n).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}); return (n<0?'-':'')+'$'+s; }
 function fmtPct(n){ return (n*100).toFixed(1) + '%'; }
 function fmtPct2(n){ return (n*100).toFixed(2) + '%'; }
 function fmtX(n){ return n.toFixed(2) + 'x'; }
 function fmtInt(n){ return Math.round(n).toLocaleString('en-US'); }
+function fmt1(n){ return n.toLocaleString('en-US', {minimumFractionDigits:1, maximumFractionDigits:1}); }
+function fmtSigned(n){ return (n>=0?'+':'') + n.toFixed(0) + '%'; }
 
-function runScenario(adj, inputs){
-  const { trafficSource, budget, cpm, ctr, cpc, convRate, aov, cogsPct, otherCosts } = inputs;
-  let impressions=null, ctrEff=null, clicks, cpcEff;
+// assumptions = {ctrChange, cvrChange, cpmChange} in whole percent (e.g. 30, -20), not fractions
+function runScenario(assumptions, inputs){
+  const { trafficSource, budget, cpm, ctr, cpc, convRate, aov, cogsPct, fixedCosts, txnFeePct, fulfilCost } = inputs;
+  const { ctrChange, cvrChange, cpmChange } = assumptions;
+
+  let impressions=null, ctrEff=null, clicks, cpcEff, scenarioCpm=null;
   if (trafficSource === 'meta'){
-    impressions = budget / cpm * 1000;
-    ctrEff = ctr * (1+adj);
+    scenarioCpm = cpm * (1 + cpmChange/100);
+    impressions = budget / scenarioCpm * 1000;
+    ctrEff = ctr * (1 + ctrChange/100);
     clicks = impressions * ctrEff;
     cpcEff = budget / clicks;
   } else {
     cpcEff = cpc;
     clicks = budget / cpc;
   }
-  const crEff = convRate * (1+adj);
-  const purchases = clicks * crEff;
-  const cpa = budget / purchases;
-  const revenue = purchases * aov;
+
+  const crEff = convRate * (1 + cvrChange/100);
+  const estPurchases = clicks * crEff; // kept at full precision — never rounded before downstream math
+  const cpa = budget / estPurchases;
+  const revenue = estPurchases * aov;
   const roas = revenue / budget;
   const cogs = revenue * cogsPct;
+  const variableCosts = revenue * txnFeePct + estPurchases * fulfilCost;
+  const otherCosts = fixedCosts + variableCosts;
   const totalCosts = budget + cogs + otherCosts;
-  const profit = revenue - totalCosts;
-  const roi = profit / totalCosts;
-  return { impressions, ctrEff, clicks, cpcEff, crEff, purchases, cpa, revenue, roas, cogs, totalCosts, profit, roi };
+  // Contribution Profit = Revenue − Ad Spend − COGS − Variable Costs − Fixed Modelled Costs
+  const contributionProfit = revenue - budget - cogs - variableCosts - fixedCosts;
+  const contributionROI = contributionProfit / totalCosts;
+
+  return { impressions, ctrEff, clicks, cpcEff, crEff, estPurchases, cpa, revenue, roas, cogs,
+           variableCosts, otherCosts, totalCosts, contributionProfit, contributionROI, scenarioCpm };
+}
+
+function getAssumptions(){
+  return {
+    optimized: {
+      ctrChange: parseFloat(document.getElementById('optCtr').value) || 0,
+      cvrChange: parseFloat(document.getElementById('optCvr').value) || 0,
+      cpmChange: parseFloat(document.getElementById('optCpm').value) || 0
+    },
+    neglected: {
+      ctrChange: parseFloat(document.getElementById('negCtr').value) || 0,
+      cvrChange: parseFloat(document.getElementById('negCvr').value) || 0,
+      cpmChange: parseFloat(document.getElementById('negCpm').value) || 0
+    }
+  };
 }
 
 function calculate(){
@@ -569,47 +692,107 @@ function calculate(){
     convRate: (parseFloat(document.getElementById('convRate').value) || 0) / 100,
     aov: parseFloat(document.getElementById('aov').value) || 0,
     cogsPct: (parseFloat(document.getElementById('cogsPct').value) || 0) / 100,
-    otherCosts: parseFloat(document.getElementById('otherCosts').value) || 0
+    fixedCosts: parseFloat(document.getElementById('fixedCosts').value) || 0,
+    txnFeePct: (parseFloat(document.getElementById('txnFeePct').value) || 0) / 100,
+    fulfilCost: parseFloat(document.getElementById('fulfilCost').value) || 0
   };
+  const assumptions = getAssumptions();
 
-  const current = runScenario(0, inputs);
-  const optimized = runScenario(0.30, inputs);
-  const neglected = runScenario(-0.20, inputs);
-  const profitGap = optimized.profit - neglected.profit;
+  const current = runScenario({ctrChange:0, cvrChange:0, cpmChange:0}, inputs);
+  const optimized = runScenario(assumptions.optimized, inputs);
+  const neglected = runScenario(assumptions.neglected, inputs);
+  const profitGap = optimized.contributionProfit - neglected.contributionProfit;
 
+  // ---- dynamic table header (shows the actual editable assumptions used) ----
+  const thead = document.getElementById('resTableHead');
+  thead.innerHTML = `<tr>
+    <th>Metric</th>
+    <th>Current</th>
+    <th class="col-opt">Optimized Scenario<span class="hdr-sub">CTR ${fmtSigned(assumptions.optimized.ctrChange)} | CVR ${fmtSigned(assumptions.optimized.cvrChange)}</span></th>
+    <th class="col-neg">Neglected Scenario<span class="hdr-sub">CTR ${fmtSigned(assumptions.neglected.ctrChange)} | CVR ${fmtSigned(assumptions.neglected.cvrChange)}</span></th>
+  </tr>`;
+
+  // ---- table body ----
   const rows = [];
   if (inputs.trafficSource==='meta'){
     rows.push(['Impressions', fmtInt(current.impressions), fmtInt(optimized.impressions), fmtInt(neglected.impressions)]);
-    rows.push(['CTR (effective)', fmtPct2(current.ctrEff), fmtPct2(optimized.ctrEff), fmtPct2(neglected.ctrEff)]);
+    rows.push(['CTR (effective)',
+      fmtPct2(current.ctrEff),
+      fmtPct2(current.ctrEff)+' &rarr; '+fmtPct2(optimized.ctrEff)+'<br><small class="rel-change">'+fmtSigned(assumptions.optimized.ctrChange)+' relative</small>',
+      fmtPct2(current.ctrEff)+' &rarr; '+fmtPct2(neglected.ctrEff)+'<br><small class="rel-change">'+fmtSigned(assumptions.neglected.ctrChange)+' relative</small>'
+    ]);
   }
   rows.push(['Clicks', fmtInt(current.clicks), fmtInt(optimized.clicks), fmtInt(neglected.clicks)]);
   rows.push(['Cost per Click (effective)', fmtMoney2(current.cpcEff), fmtMoney2(optimized.cpcEff), fmtMoney2(neglected.cpcEff)]);
-  rows.push(['Conversion Rate (effective)', fmtPct2(current.crEff), fmtPct2(optimized.crEff), fmtPct2(neglected.crEff)]);
-  rows.push(['Purchases', fmtInt(current.purchases), fmtInt(optimized.purchases), fmtInt(neglected.purchases)]);
+  rows.push(['Conversion Rate (effective)',
+    fmtPct2(current.crEff),
+    fmtPct2(current.crEff)+' &rarr; '+fmtPct2(optimized.crEff)+'<br><small class="rel-change">'+fmtSigned(assumptions.optimized.cvrChange)+' relative</small>',
+    fmtPct2(current.crEff)+' &rarr; '+fmtPct2(neglected.crEff)+'<br><small class="rel-change">'+fmtSigned(assumptions.neglected.cvrChange)+' relative</small>'
+  ]);
+  rows.push(['Estimated Purchases', fmt1(current.estPurchases), fmt1(optimized.estPurchases), fmt1(neglected.estPurchases)]);
   rows.push(['Cost per Acquisition (CPA)', fmtMoney2(current.cpa), fmtMoney2(optimized.cpa), fmtMoney2(neglected.cpa)]);
   rows.push(['Revenue', fmtMoney(current.revenue), fmtMoney(optimized.revenue), fmtMoney(neglected.revenue)]);
   rows.push(['ROAS', fmtX(current.roas), fmtX(optimized.roas), fmtX(neglected.roas)]);
   rows.push(['Cost of Goods Sold', fmtMoney(current.cogs), fmtMoney(optimized.cogs), fmtMoney(neglected.cogs)]);
-  rows.push(['Total Costs (Ad + COGS + Other)', fmtMoney(current.totalCosts), fmtMoney(optimized.totalCosts), fmtMoney(neglected.totalCosts)]);
+  rows.push(['Other Costs (Fixed + Variable)', fmtMoney(current.otherCosts), fmtMoney(optimized.otherCosts), fmtMoney(neglected.otherCosts)]);
+  rows.push(['Total Modelled Costs', fmtMoney(current.totalCosts), fmtMoney(optimized.totalCosts), fmtMoney(neglected.totalCosts)]);
 
   const tbody = document.getElementById('resTableBody');
   tbody.innerHTML = rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td class="col-opt">${r[2]}</td><td class="col-neg">${r[3]}</td></tr>`).join('')
-    + `<tr class="hl"><td>Profit</td><td>${fmtMoney(current.profit)}</td><td class="col-opt">${fmtMoney(optimized.profit)}</td><td class="col-neg">${fmtMoney(neglected.profit)}</td></tr>`
-    + `<tr class="hl"><td>ROI</td><td>${fmtPct(current.roi)}</td><td class="col-opt">${fmtPct(optimized.roi)}</td><td class="col-neg">${fmtPct(neglected.roi)}</td></tr>`;
+    + `<tr class="hl"><td>Contribution Profit</td><td>${fmtMoney(current.contributionProfit)}</td><td class="col-opt">${fmtMoney(optimized.contributionProfit)}</td><td class="col-neg">${fmtMoney(neglected.contributionProfit)}</td></tr>`
+    + `<tr class="hl"><td>Contribution ROI <span class="info-ic" title="Contribution ROI compares estimated contribution profit with all costs included in this model.">&#9432;</span></td><td>${fmtPct(current.contributionROI)}</td><td class="col-opt">${fmtPct(optimized.contributionROI)}</td><td class="col-neg">${fmtPct(neglected.contributionROI)}</td></tr>`;
+
+  // ---- key summary row ----
+  document.getElementById('summaryRow').innerHTML = `
+    <div class="summary-card">
+      <div class="sc-label">Current</div>
+      <div class="sc-value">${fmt1(current.estPurchases)} estimated purchases | ${fmtX(current.roas)} ROAS | ${fmtMoney(current.contributionProfit)} contribution profit</div>
+    </div>
+    <div class="summary-card opt">
+      <div class="sc-label">Optimized</div>
+      <div class="sc-value">${fmt1(optimized.estPurchases)} estimated purchases | ${fmtX(optimized.roas)} ROAS | ${fmtMoney(optimized.contributionProfit)} contribution profit</div>
+    </div>
+    <div class="summary-card neg">
+      <div class="sc-label">Neglected</div>
+      <div class="sc-value">${fmt1(neglected.estPurchases)} estimated purchases | ${fmtX(neglected.roas)} ROAS | ${fmtMoney(neglected.contributionProfit)} contribution profit</div>
+    </div>`;
 
   document.getElementById('profitGapValue').textContent = fmtMoney(profitGap);
+
+  // ---- break-even analysis (based on Current scenario's cost structure) ----
+  const denom = Math.max(0.0001, 1 - inputs.cogsPct - inputs.txnFeePct);
+  const beRevenue = (inputs.budget + inputs.fixedCosts) / denom;
+  const beROAS = inputs.budget > 0 ? beRevenue / inputs.budget : 0;
+  const bePurchases = inputs.aov > 0 ? beRevenue / inputs.aov : 0;
+  const beGap = current.revenue - beRevenue;
+  const beGapClass = beGap >= 0 ? 'positive' : 'negative';
+  const beGapLabel = beGap >= 0
+    ? 'Above break-even by ' + fmtMoney(beGap)
+    : fmtMoney(Math.abs(beGap)) + ' short of break-even';
+
+  document.getElementById('breakEvenBlock').innerHTML = `
+    <h3>Break-even Analysis</h3>
+    <div class="be-grid">
+      <div class="be-stat"><div class="be-label">Break-even Revenue</div><div class="be-value">${fmtMoney(beRevenue)}</div></div>
+      <div class="be-stat"><div class="be-label">Break-even ROAS</div><div class="be-value">${fmtX(beROAS)}</div></div>
+      <div class="be-stat"><div class="be-label">Break-even Purchases</div><div class="be-value">${fmt1(bePurchases)}</div></div>
+      <div class="be-stat gap"><div class="be-label">Gap to Break-even (Current)</div><div class="be-value ${beGapClass}">${beGapLabel}</div></div>
+    </div>`;
+
   const resCard = document.getElementById('resultsCard');
   resCard.classList.add('show');
   if (typeof resCard.scrollIntoView === 'function') resCard.scrollIntoView({behavior:'smooth', block:'start'});
 
-  submitToSheet(inputs, current, optimized, neglected, profitGap);
+  document.getElementById('recCard').style.display = '';
+
+  submitToSheet(inputs, assumptions, current, optimized, neglected, profitGap, {beRevenue, beROAS, bePurchases, beGap});
 }
 
 /* ============ submit to Google Sheets (Apps Script Web App) ============ */
 // Deploy the Apps Script (see google-apps-script-backend.js) as a Web App and paste its URL below.
 const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbw86lv2aY-Tvi2icTYb_zAK10LSGdigztJ_B-135UHGsaUDyMOrH8o1nSYbgSxBiirQhg/exec";
 
-function submitToSheet(inputs, current, optimized, neglected, profitGap){
+function submitToSheet(inputs, assumptions, current, optimized, neglected, profitGap, breakEven){
   const statusEls = [document.getElementById('saveStatus'), document.getElementById('saveStatus2')];
   if (!SHEET_ENDPOINT || SHEET_ENDPOINT.indexOf('PASTE_') === 0){
     return; // not configured yet — calculator still works standalone
@@ -628,14 +811,32 @@ function submitToSheet(inputs, current, optimized, neglected, profitGap){
     convRate: inputs.convRate,
     aov: inputs.aov,
     cogsPct: inputs.cogsPct,
-    otherCosts: inputs.otherCosts,
-    currentProfit: current.profit,
-    optimizedProfit: optimized.profit,
-    neglectedProfit: neglected.profit,
+    fixedCosts: inputs.fixedCosts,
+    txnFeePct: inputs.txnFeePct,
+    fulfilCost: inputs.fulfilCost,
+    optCtrChange: assumptions.optimized.ctrChange,
+    optCvrChange: assumptions.optimized.cvrChange,
+    optCpmChange: assumptions.optimized.cpmChange,
+    negCtrChange: assumptions.neglected.ctrChange,
+    negCvrChange: assumptions.neglected.cvrChange,
+    negCpmChange: assumptions.neglected.cpmChange,
+    currentEstPurchases: current.estPurchases,
+    optimizedEstPurchases: optimized.estPurchases,
+    neglectedEstPurchases: neglected.estPurchases,
+    currentRevenue: current.revenue,
+    optimizedRevenue: optimized.revenue,
+    neglectedRevenue: neglected.revenue,
+    currentContributionProfit: current.contributionProfit,
+    optimizedContributionProfit: optimized.contributionProfit,
+    neglectedContributionProfit: neglected.contributionProfit,
     profitGap: profitGap,
-    currentROI: current.roi,
-    optimizedROI: optimized.roi,
-    neglectedROI: neglected.roi
+    currentContributionROI: current.contributionROI,
+    optimizedContributionROI: optimized.contributionROI,
+    neglectedContributionROI: neglected.contributionROI,
+    breakEvenRevenue: breakEven.beRevenue,
+    breakEvenROAS: breakEven.beROAS,
+    breakEvenPurchases: breakEven.bePurchases,
+    gapToBreakEven: breakEven.beGap
   };
   statusEls.forEach(el=>{ if(el) el.textContent = 'Saving...'; });
   fetch(SHEET_ENDPOINT, {
