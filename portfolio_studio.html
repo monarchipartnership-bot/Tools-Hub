@@ -377,39 +377,42 @@ input[type=color]{width:48px;height:30px;border:1px solid var(--line);border-rad
      values/labels can never overflow the 1000px-wide canvas. */
   function metricRowHero(ctx,cy,T,scale,maxWidth){
     const ms=metrics(); if(!ms.length) return; scale=scale||1; maxWidth=maxWidth||860;
-    function measure(valSize,labSize){
+    const LABEL_RATIO=0.72; // labels read clearly, just a step below the value — not tiny caption text
+    function measure(valSize){
+      const labSize=Math.max(15,Math.round(valSize*LABEL_RATIO));
       const valFont='800 '+valSize+'px "Space Grotesk",sans-serif';
       const labFont='700 '+labSize+'px "Space Mono",monospace';
       const widths=ms.map(m=>{
         ctx.font=valFont; const vw=ctx.measureText(m.v).width;
-        ctx.font=labFont; ls(ctx,2); const lw=ctx.measureText((m.l||"").toUpperCase()).width; ls(ctx,0);
+        ctx.font=labFont; ls(ctx,1.5); const lw=ctx.measureText((m.l||"").toUpperCase()).width; ls(ctx,0);
         return Math.max(vw,lw);
       });
       const gap=Math.round(valSize*0.85);
       const total=widths.reduce((a,b)=>a+b,0)+gap*Math.max(0,ms.length-1);
       return {widths,gap,total,valFont,labFont,valSize,labSize};
     }
-    let valSize=Math.round(48*scale), labSize=Math.round(12*scale);
-    let m=measure(valSize,labSize);
+    let valSize=Math.round(48*scale);
+    let m=measure(valSize);
     if(m.total>maxWidth){
       const r=maxWidth/m.total;
-      valSize=Math.max(20,Math.round(valSize*r)); labSize=Math.max(9,Math.round(labSize*r));
-      m=measure(valSize,labSize);
+      valSize=Math.max(22,Math.round(valSize*r));
+      m=measure(valSize);
     }
-    const widths=m.widths, gap=m.gap, valFont=m.valFont, labFont=m.labFont;
+    const {widths,gap,valFont,labFont,labSize}=m;
     let cx=500-m.total/2;
     ctx.textBaseline="alphabetic";
+    const labelY=cy+Math.round(valSize*0.22)+labSize;
     ms.forEach((mt,i)=>{
       const w=widths[i], mid=cx+w/2;
       ctx.textAlign="center";
       ctx.fillStyle=T.gold; ctx.font=valFont;
       ctx.fillText(mt.v, mid, cy);
-      ctx.fillStyle=T.mut; ls(ctx,2); ctx.font=labFont;
-      ctx.fillText((mt.l||"").toUpperCase(), mid, cy+labSize+14); ls(ctx,0);
+      ctx.fillStyle=T.mut; ls(ctx,1.5); ctx.font=labFont;
+      ctx.fillText((mt.l||"").toUpperCase(), mid, labelY); ls(ctx,0);
       if(i<ms.length-1){
         const dx=cx+w+gap/2;
         ctx.strokeStyle=T.stroke; ctx.lineWidth=1;
-        ctx.beginPath(); ctx.moveTo(dx,cy-valSize*0.72); ctx.lineTo(dx,cy+labSize+6); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(dx,cy-valSize*0.72); ctx.lineTo(dx,labelY+Math.round(labSize*0.25)); ctx.stroke();
       }
       cx+=w+gap;
     });
@@ -483,7 +486,7 @@ input[type=color]{width:48px;height:30px;border:1px solid var(--line);border-rad
       sl.slice(0,2).forEach(l=>{ ctx.fillText(l,500,ty); ty+=22; });
 
       ctx.fillStyle=T.gold; ctx.fillRect(477,ty+20,46,4);
-      metricRowHero(ctx,Math.min(ty+86,700),T,1);
+      metricRowHero(ctx,Math.min(ty+86,668),T,1);
       ctx.textAlign="left";
     },
     /* --- Square (1000x1000) cover set — same Showcase language (full-bleed
