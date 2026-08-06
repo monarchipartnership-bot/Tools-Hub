@@ -103,7 +103,7 @@ html{scroll-behavior:smooth}
 .chbox-title{font-family:"Montserrat",sans-serif;font-weight:600;font-size:1rem;margin-bottom:14px;color:var(--text)}
 
 .kg{display:grid;gap:10px}
-.kg2{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.kg2{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
 .kg2>*:last-child:nth-child(odd){grid-column:span 2}
 .kpi{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:11px 12px;min-width:0}
 .kl{font-family:"Inter",sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);margin-bottom:7px;
@@ -667,7 +667,7 @@ function updateEmptyHintClients(){
 }
 function addClientItem(preset){
   var id = clientNextId++;
-  var item = { id:id, platform:(preset&&preset.platform)||CLIENT_PLATFORMS[0], leadType:(preset&&preset.leadType)||LEAD_TYPES[0], text:(preset&&preset.text)||'' };
+  var item = { id:id, name:(preset&&preset.name)||'', platform:(preset&&preset.platform)||CLIENT_PLATFORMS[0], leadType:(preset&&preset.leadType)||LEAD_TYPES[0], text:(preset&&preset.text)||'' };
   CLIENTS.push(item);
   renderClientItem(item);
   updateEmptyHintClients();
@@ -678,6 +678,7 @@ function renderClientItem(item){
   var html = '<div class="item-box" data-id="'+item.id+'">'
     + '<button type="button" class="del-btn" title="Видалити">&times;</button>'
     + '<div class="client-fields">'
+      + '<div class="cf"><label>Ім\'я клієнта</label><input type="text" data-field="name" value="'+escHtml(item.name||'')+'" placeholder="напр. Acme Inc."></div>'
       + '<div class="cf"><label>Платформа</label><select data-field="platform">'
         + CLIENT_PLATFORMS.map(function(p){ return '<option value="'+p+'"'+(p===item.platform?' selected':'')+'>'+p+'</option>'; }).join('')
         + '</select></div>'
@@ -688,6 +689,7 @@ function renderClientItem(item){
     + '</div></div>';
   container.insertAdjacentHTML('beforeend', html);
   var box = container.lastElementChild;
+  box.querySelector('[data-field="name"]').addEventListener('input', function(e){ item.name = e.target.value; });
   box.querySelector('[data-field="platform"]').addEventListener('change', function(e){ item.platform = e.target.value; });
   box.querySelector('[data-field="leadType"]').addEventListener('change', function(e){ item.leadType = e.target.value; });
   box.querySelector('[data-field="text"]').addEventListener('input', function(e){ item.text = e.target.value; });
@@ -881,7 +883,7 @@ async function loadReportForCurrentWeek(){
           (data.tasks[section]||[]).forEach(function(it){ addTaskItem(section, it.text); });
         });
       }
-      (data.clients||[]).forEach(function(it){ addClientItem({platform:it.platform, leadType:it.leadType, text:it.text}); });
+      (data.clients||[]).forEach(function(it){ addClientItem({name:it.name, platform:it.platform, leadType:it.leadType, text:it.text}); });
       recalcAll();
       document.getElementById('saveState').textContent = 'Збережено ' + new Date(res.data.updated_at).toLocaleString('uk-UA');
     } else {
@@ -902,7 +904,7 @@ async function saveReport(btn){
     t_done:TASKS.t_done.map(function(it){return {text:it.text};}),
     t_next:TASKS.t_next.map(function(it){return {text:it.text};}),
     t_conc:TASKS.t_conc.map(function(it){return {text:it.text};}) };
-  data.clients = CLIENTS.map(function(it){ return {platform:it.platform, leadType:it.leadType, text:it.text}; });
+  data.clients = CLIENTS.map(function(it){ return {name:it.name||'', platform:it.platform, leadType:it.leadType, text:it.text}; });
   var payload={
     year:ym.y, month:ym.m, week_index:selectedWeekIndex,
     week_start:isoDate(w.start), week_end:isoDate(w.end),

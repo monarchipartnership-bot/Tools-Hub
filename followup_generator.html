@@ -217,6 +217,12 @@ const DEFAULT_PROJECTS = [
 const SHEET_ID = "1Yew_2fkbXp33WsaATGSLi52Vv2GkakaVKENnMMhc0MU";
 let PROJECTS = DEFAULT_PROJECTS;
 
+/* PROXY ENDPOINT — real browsers cannot call api.anthropic.com directly
+   (no CORS, requires a secret key). Point this at your own backend proxy
+   (e.g. a Cloudflare Worker) that forwards the request and attaches the
+   API key server-side. Replace the URL below once your proxy is live. */
+const API_ENDPOINT = "https://api.anthropic.com/v1/messages";
+
 function renderProjectList() {
   const container = document.getElementById('projectList');
   container.innerHTML = PROJECTS.map((p, i) => `
@@ -264,7 +270,7 @@ async function refreshProjects() {
 Включи всі непорожні рядки.`;
 
   try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const response = await fetch(API_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -382,7 +388,7 @@ ${projectsBlock}
 ${extraContext ? 'Додатковий контекст від користувача (обов\'язково врахуй):\n' + extraContext : ''}`;
 
   try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const response = await fetch(API_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

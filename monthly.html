@@ -101,13 +101,13 @@ html{scroll-behavior:smooth}
 .chbox-title{font-family:"Montserrat",sans-serif;font-weight:600;font-size:1rem;margin-bottom:14px;color:var(--text)}
 
 .kg{display:grid;gap:10px}
-.kg2{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.kg2{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
 .kg2>*:last-child:nth-child(odd){grid-column:span 2}
 .kpi{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:11px 12px;min-width:0}
 .kl{font-family:"Inter",sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);margin-bottom:7px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .kv{font-family:"Inter",sans-serif;font-size:1.1rem;font-weight:600;color:var(--text)}
-.pm-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px}
+.pm-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;flex-wrap:wrap}
 .ring-holder{flex-shrink:0}
 
 /* LinkedIn */
@@ -333,7 +333,7 @@ body.capturing .btn,body.capturing .topbar,body.capturing .sidebar{display:none!
       <section class="report-section" id="sec-clients">
         <div class="stitle">Клієнти</div>
         <div class="placeholder" style="max-width:none;margin-bottom:18px">
-          <p>Цей розділ заповнюється вручну для місяця &mdash; він не підсумовується з тижневих звітів.</p>
+          <p>Автоматично зібрано з клієнтів усіх тижневих звітів цього місяця &mdash; повторення одного й того ж клієнта об'єднані в один запис із хронологією дій за тижнями. Можна редагувати чи видаляти нижче.</p>
         </div>
         <div class="items" id="items-clients"></div>
         <div class="empty-hint" id="empty-clients" style="display:none">Немає клієнтів &mdash; додайте першого нижче</div>
@@ -343,7 +343,7 @@ body.capturing .btn,body.capturing .topbar,body.capturing .sidebar{display:none!
       <section class="report-section" id="sec-tasks">
         <div class="stitle">Задачі</div>
         <div class="placeholder" style="max-width:none;margin-bottom:18px">
-          <p>Цей розділ заповнюється вручну для місяця &mdash; він не підсумовується з тижневих звітів.</p>
+          <p>«Заплановано» та «Виконано» автоматично збираються з тижневих звітів цього місяця &mdash; повторювані та ті, що розвивались протягом кількох тижнів, об'єднані в один пункт. «Плани на наступний місяць» і «Висновки» заповнюються вручну; для висновків можна натиснути «Згенерувати підсумок», щоб отримати чернетку на основі задач і клієнтів місяця.</p>
         </div>
         <div class="task-grid">
           <div class="task-col">
@@ -365,6 +365,7 @@ body.capturing .btn,body.capturing .topbar,body.capturing .sidebar{display:none!
             <div class="ssub">Висновки</div>
             <div class="items" id="items-t_conc"></div>
             <button type="button" class="add-btn" onclick="addTaskItem('t_conc')">+ Додати пункт</button>
+            <button type="button" class="add-btn" onclick="generateMonthSummary()">✨ Згенерувати підсумок</button>
           </div>
         </div>
       </section>
@@ -610,7 +611,111 @@ function renderAllCards(){
   renderFinance();
 }
 
-/* ===== Tasks (manual, month-only) ===== */
+/* ===== aggregation helpers: group repeating/evolving clients & tasks from weekly_reports =====
+   Rule-based (no AI): entries are matched by normalized-text/substring/word-overlap similarity,
+   then chronologically joined into a single record instead of duplicating one per week. */
+function normText(s){ return String(s||'').toLowerCase().trim().replace(/\s+/g,' ').replace(/[""''.,!?;:()\-–—]/g,''); }
+var UA_STOPWORDS = {'та':1,'і':1,'й':1,'в':1,'у':1,'на':1,'для':1,'з':1,'із':1,'до':1,'по':1,'що':1,'це':1,'та й':1,
+  'the':1,'and':1,'for':1,'with':1,'to':1,'of':1,'a':1,'an':1,'in':1,'on':1};
+function sigWords(s){ return normText(s).split(' ').filter(function(w){ return w.length>=3 && !UA_STOPWORDS[w]; }); }
+function textSimilarity(a,b){
+  var na=normText(a), nb=normText(b);
+  if(!na || !nb) return 0;
+  if(na===nb) return 1;
+  if(na.length>4 && nb.length>4 && (na.indexOf(nb)>=0 || nb.indexOf(na)>=0)) return 0.85;
+  var wa=sigWords(a), wb=sigWords(b);
+  if(!wa.length || !wb.length) return 0;
+  var setB={}; wb.forEach(function(w){ setB[w]=1; });
+  var inter=0; wa.forEach(function(w){ if(setB[w]) inter++; });
+  var unionSet={}; wa.concat(wb).forEach(function(w){ unionSet[w]=1; });
+  var union=Object.keys(unionSet).length;
+  return union? inter/union : 0;
+}
+function groupBySimilarity(entries, threshold){
+  threshold = threshold||0.55;
+  var groups=[];
+  entries.forEach(function(e){
+    if(!String(e.text||'').trim()) return;
+    var best=null, bestScore=0;
+    groups.forEach(function(g){
+      var score=0;
+      g.forEach(function(m){ score=Math.max(score, textSimilarity(e.text,m.text)); });
+      if(score>bestScore){ bestScore=score; best=g; }
+    });
+    if(best && bestScore>=threshold) best.push(e);
+    else groups.push([e]);
+  });
+  groups.forEach(function(g){ g.sort(function(a,b){ return a.weekIndex-b.weekIndex; }); });
+  return groups;
+}
+function composeChronology(entries){
+  var runs=[];
+  entries.forEach(function(e){
+    var last=runs[runs.length-1];
+    if(last && normText(last.text)===normText(e.text) && e.weekIndex===last.to+1){ last.to=e.weekIndex; }
+    else runs.push({from:e.weekIndex, to:e.weekIndex, text:e.text});
+  });
+  if(runs.length===1 && runs[0].from===runs[0].to) return runs[0].text;
+  return runs.map(function(r){
+    var label = r.from===r.to ? ('Тиждень '+r.from) : ('Тижні '+r.from+'–'+r.to);
+    return label+': '+r.text;
+  }).join(' → ');
+}
+function aggregateTasksFromWeeks(rows, section){
+  var entries=[];
+  rows.forEach(function(row){
+    var d=row.data||{}, wi=row.week_index;
+    ((d.tasks&&d.tasks[section])||[]).forEach(function(it){
+      if(it && it.text && it.text.trim()) entries.push({weekIndex:wi, text:it.text});
+    });
+  });
+  return groupBySimilarity(entries).map(composeChronology).filter(Boolean);
+}
+function aggregateClientsFromWeeks(rows){
+  var byKey={}, order=[];
+  rows.forEach(function(row){
+    var d=row.data||{}, wi=row.week_index;
+    (d.clients||[]).forEach(function(c){
+      var key = normText(c.name||c.text||''); if(!key) return;
+      if(!byKey[key]){ byKey[key]=[]; order.push(key); }
+      byKey[key].push({weekIndex:wi, text:c.text||'', platform:c.platform, leadType:c.leadType, name:c.name});
+    });
+  });
+  return order.map(function(key){
+    var list = byKey[key].slice().sort(function(a,b){ return a.weekIndex-b.weekIndex; });
+    var last = list[list.length-1];
+    var combinedText = composeChronology(list.map(function(x){ return {weekIndex:x.weekIndex, text:x.text}; })) || '';
+    return { name:last.name||'', platform:last.platform, leadType:last.leadType, text:combinedText };
+  });
+}
+function pluralUA(n, one, few, many){
+  var m = Math.abs(n)%100, n1 = m%10;
+  if(m>10 && m<20) return many;
+  if(n1>1 && n1<5) return few;
+  if(n1===1) return one;
+  return many;
+}
+function generateMonthSummary(){
+  var doneCount = TASKS.t_done.length, planCount = TASKS.t_plan.length;
+  var rate = planCount ? Math.round(doneCount/planCount*100) : null;
+  var byLead = {}; CLIENTS.forEach(function(c){ var k=c.leadType||'—'; byLead[k]=(byLead[k]||0)+1; });
+  var leadBits = Object.keys(byLead).map(function(k){ return byLead[k]+' '+k.toLowerCase(); });
+  var ym = currentYM(); var monthName = MONTH_NAMES[ym.m-1];
+  var parts = [];
+  parts.push('За '+monthName+' '+ym.y+' виконано '+doneCount+' '+pluralUA(doneCount,'задачу','задачі','задач')
+    +(planCount? ' із '+planCount+' запланован'+(planCount===1?'ої':'их'):'')
+    +(rate!==null? ' ('+rate+'%).':'.'));
+  if(CLIENTS.length){
+    parts.push('Велась робота з '+CLIENTS.length+' '+pluralUA(CLIENTS.length,'клієнтом','клієнтами','клієнтами')
+      +(leadBits.length? ': '+leadBits.join(', ')+'.':'.'));
+  } else {
+    parts.push('Активної роботи з клієнтами за місяць не зафіксовано.');
+  }
+  addTaskItem('t_conc', parts.join(' '));
+}
+
+/* ===== Tasks: «Заплановано»/«Виконано» auto-aggregated from this month's weekly_reports
+   (deduped/merged, see helpers above); «Плани на наступний місяць»/«Висновки» stay manual ===== */
 var TASK_SECTIONS = ['t_plan','t_done','t_next','t_conc'];
 var TASKS = { t_plan:[], t_done:[], t_next:[], t_conc:[] };
 var taskNextId = 1;
@@ -658,7 +763,7 @@ function updateEmptyHintClients(){
 }
 function addClientItem(preset){
   var id = clientNextId++;
-  var item = { id:id, platform:(preset&&preset.platform)||CLIENT_PLATFORMS[0], leadType:(preset&&preset.leadType)||LEAD_TYPES[0], text:(preset&&preset.text)||'' };
+  var item = { id:id, name:(preset&&preset.name)||'', platform:(preset&&preset.platform)||CLIENT_PLATFORMS[0], leadType:(preset&&preset.leadType)||LEAD_TYPES[0], text:(preset&&preset.text)||'' };
   CLIENTS.push(item);
   renderClientItem(item);
   updateEmptyHintClients();
@@ -669,6 +774,7 @@ function renderClientItem(item){
   var html = '<div class="item-box" data-id="'+item.id+'">'
     + '<button type="button" class="del-btn" title="Видалити">&times;</button>'
     + '<div class="client-fields">'
+      + '<div class="cf"><label>Ім\'я клієнта</label><input type="text" data-field="name" value="'+escHtml(item.name||'')+'" placeholder="напр. Acme Inc."></div>'
       + '<div class="cf"><label>Платформа</label><select data-field="platform">'
         + CLIENT_PLATFORMS.map(function(p){ return '<option value="'+p+'"'+(p===item.platform?' selected':'')+'>'+p+'</option>'; }).join('')
         + '</select></div>'
@@ -679,6 +785,7 @@ function renderClientItem(item){
     + '</div></div>';
   container.insertAdjacentHTML('beforeend', html);
   var box = container.lastElementChild;
+  box.querySelector('[data-field="name"]').addEventListener('input', function(e){ item.name = e.target.value; });
   box.querySelector('[data-field="platform"]').addEventListener('change', function(e){ item.platform = e.target.value; });
   box.querySelector('[data-field="leadType"]').addEventListener('change', function(e){ item.leadType = e.target.value; });
   box.querySelector('[data-field="text"]').addEventListener('input', function(e){ item.text = e.target.value; });
@@ -751,28 +858,44 @@ function renderWeeksBadge(rows, expectedWeeks){
   }
 }
 
+var lastAggregated = { clients:[], t_plan:[], t_done:[] };
+
 async function loadMonthlySnapshot(ym){
   clearTasks();
   clearClients();
   document.getElementById('manager').value='';
-  if(!supa){ document.getElementById('saveState').textContent='Ще не збережено'; return; }
-  try{
-    var monthStart = isoDate(new Date(ym.y, ym.m-1, 1));
-    var res = await supa.from('monthly_reports').select('*').eq('month_start', monthStart).maybeSingle();
-    if(res.data){
-      var data = res.data.data||{};
-      if(data.tasks){
-        TASK_SECTIONS.forEach(function(section){
-          (data.tasks[section]||[]).forEach(function(it){ addTaskItem(section, it.text); });
-        });
+  var savedData = null;
+  if(supa){
+    try{
+      var monthStart = isoDate(new Date(ym.y, ym.m-1, 1));
+      var res = await supa.from('monthly_reports').select('*').eq('month_start', monthStart).maybeSingle();
+      if(res.data){
+        savedData = res.data.data||{};
+        document.getElementById('manager').value = res.data.author||'';
+        document.getElementById('saveState').textContent = 'Збережено ' + new Date(res.data.updated_at).toLocaleString('uk-UA');
+      } else {
+        document.getElementById('saveState').textContent = 'Ще не збережено';
       }
-      (data.clients||[]).forEach(function(it){ addClientItem({platform:it.platform, leadType:it.leadType, text:it.text}); });
-      document.getElementById('manager').value = res.data.author||'';
-      document.getElementById('saveState').textContent = 'Збережено ' + new Date(res.data.updated_at).toLocaleString('uk-UA');
-    } else {
-      document.getElementById('saveState').textContent = 'Ще не збережено';
-    }
-  }catch(e){ console.warn('loadMonthlySnapshot failed', e); document.getElementById('saveState').textContent='Ще не збережено'; }
+    }catch(e){ console.warn('loadMonthlySnapshot failed', e); document.getElementById('saveState').textContent='Ще не збережено'; }
+  } else {
+    document.getElementById('saveState').textContent='Ще не збережено';
+  }
+
+  // «Заплановано»/«Виконано»: prefer the fresh weekly rollup; fall back to whatever
+  // was manually saved before if this month has no matching weekly data yet.
+  ['t_plan','t_done'].forEach(function(section){
+    var fromAgg = lastAggregated[section]||[];
+    var list = fromAgg.length ? fromAgg
+      : ((savedData&&savedData.tasks&&savedData.tasks[section])||[]).map(function(it){ return it.text; });
+    list.forEach(function(text){ addTaskItem(section, text); });
+  });
+  // «Плани на наступний місяць»/«Висновки»: always manual, always from the saved snapshot.
+  ['t_next','t_conc'].forEach(function(section){
+    ((savedData&&savedData.tasks&&savedData.tasks[section])||[]).forEach(function(it){ addTaskItem(section, it.text); });
+  });
+  // Клієнти: prefer the fresh weekly rollup; fall back to previously saved manual entries.
+  var clientList = lastAggregated.clients.length ? lastAggregated.clients : ((savedData&&savedData.clients)||[]);
+  clientList.forEach(function(it){ addClientItem({name:it.name, platform:it.platform, leadType:it.leadType, text:it.text}); });
 }
 
 async function loadMonth(){
@@ -790,6 +913,11 @@ async function loadMonth(){
   computeSums(rows);
   renderAllCards();
   renderWeeksBadge(rows, expectedWeeks);
+  lastAggregated = {
+    clients: aggregateClientsFromWeeks(rows),
+    t_plan: aggregateTasksFromWeeks(rows,'t_plan'),
+    t_done: aggregateTasksFromWeeks(rows,'t_done')
+  };
   await loadMonthlySnapshot(ym);
 }
 function onYearMonthChange(){ loadMonth(); }
@@ -811,7 +939,7 @@ async function saveReport(btn){
       t_done:TASKS.t_done.map(function(it){return {text:it.text};}),
       t_next:TASKS.t_next.map(function(it){return {text:it.text};}),
       t_conc:TASKS.t_conc.map(function(it){return {text:it.text};}) },
-    clients: CLIENTS.map(function(it){ return {platform:it.platform, leadType:it.leadType, text:it.text}; })
+    clients: CLIENTS.map(function(it){ return {name:it.name||'', platform:it.platform, leadType:it.leadType, text:it.text}; })
   };
   var payload = {
     year:ym.y, month:ym.m, month_start:monthStart,

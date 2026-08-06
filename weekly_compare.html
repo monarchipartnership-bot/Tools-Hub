@@ -588,7 +588,7 @@ function renderClients(){
     var items = (s.data.clients) || [];
     if(!items.length) return '<td class="cmp-tasks-empty">&mdash;</td>';
     return '<td><ul class="cmp-tasks-list">'+items.map(function(it){
-      return '<li><span class="cmp-client-tag">'+escHtml(it.platform)+'</span> &middot; <span class="cmp-client-tag lead">'+escHtml(it.leadType)+'</span><br>'+escHtml(it.text)+'</li>';
+      return '<li>'+(it.name?'<b>'+escHtml(it.name)+'</b><br>':'')+'<span class="cmp-client-tag">'+escHtml(it.platform)+'</span> &middot; <span class="cmp-client-tag lead">'+escHtml(it.leadType)+'</span><br>'+escHtml(it.text)+'</li>';
     }).join('')+'</ul></td>';
   }).join('');
   var tableHtml = '<div class="cmp-table-wrap"><table class="cmp-table">'+tableHeadHTML()+'<tr><td class="rowlabel">Клієнти</td>'+cells+'</tr></table></div>';
